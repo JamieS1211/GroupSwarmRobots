@@ -102,9 +102,9 @@
  */
 
 void main(void) {
-    interrupts_Setup();
+    interrupts_Setup(); // Last setup function
     
-    while(1);
+    while();
     
     return;
 }
