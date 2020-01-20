@@ -104,7 +104,7 @@
 void main(void) {
     interrupts_Setup(); // Last setup function
     
-    while();
+    while(1);
     
     return;
 }
