@@ -72,8 +72,8 @@
  * Pin map with how used
  * 
  * 1  - VPP/MCLR/RE3                - [PROGRAMMER VPP]
- * 2  - RA0                         - [NONE]
- * 3  - RA1                         - [NONE]
+ * 2  - RA0                         - [LDR ADC]
+ * 3  - RA1                         - [Solar ADC]
  * 4  - RA2                         - [NONE]
  * 5  - RA3                         - [NONE]
  * 6  - RA4                         - [NONE]
