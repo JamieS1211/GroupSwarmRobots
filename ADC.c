@@ -5,15 +5,16 @@
  * Created on 20 January 2020, 17:34
  */
 
+#define _XTAL_FREQ 20000000
 
 #include <xc.h>
+#include <pic18f27K42.h>
 
 // Pages 602 - 619 - 639 in data sheet
 
 /*
  * Function sets up all ADC (Analog to Digital converter) settings.
  */
-
 void ADC_Setup(void) {
     // Setup ADC for LDR
     
@@ -33,30 +34,28 @@ void ADC_Setup(void) {
  * Sets up the item to be sampled by the ADC
  * Passed x to define item
  */
-void ADC_DestinationSetup(x) {
-    
-    if (x==0) {
+void ADC_DestinationSetup(int x) {
+    if (x == 0) {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 0x00; // RA0 is selected
-    }
-    else {
+    } else {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 000001; // RA1 is selected
     }
     
     // ADCON0 [ADC Control Register 0] - page 619
     ADCON0bits.ON = 1; // ON - ADC Enable
-    delay (20)   ---------------------HELP TO SET-UP-------------------
+   __delay_ms(20);
 }
 
 /*
  * Contains code to sample ADC - measuring light levels 
  * Passed x to specify item to sample
  */
-int ADC_Read(x) {
+int ADC_Read(int x) {
     /*
-     * x=0 - LDR (RA0)
-     * x=1 - Solar Panel (RA1) 
+     * x = 0 - LDR (RA0)
+     * x = 1 - Solar Panel (RA1) 
      */
     
     //Check if ADC_Setup has run
@@ -74,6 +73,7 @@ int ADC_Read(x) {
     
     while (ADCON0bits.GO); // Wait until ADC conversion completes
     ADCON0bits.ON = 0; // Turn back off ADC
-    return ADRESH, ADRESL -----------------HOW TO RETURN 2 VARIABLES? ------------
-    }
+    
+    return (ADRESH << 4) + ADRESL;
 }
+
