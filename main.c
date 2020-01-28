@@ -73,9 +73,9 @@
  * 
  * 1  - VPP/MCLR/RE3                - [PROGRAMMER VPP]
  * 2  - RA0                         - [LDR ADC]
- * 3  - RA1                         - [Solar ADC]
- * 4  - RA2                         - [NONE]
- * 5  - RA3                         - [NONE]
+ * 3  - RA1                         - [LDR 2 ADC]
+ * 4  - RA2                         - [Solar ADC]
+ * 5  - RA3                         - [Solar Isolation toggle]
  * 6  - RA4                         - [NONE]
  * 7  - RA5                         - [SS1 SPI]
  * 8  - VSS                         - [+ 5V]
