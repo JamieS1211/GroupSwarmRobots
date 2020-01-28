@@ -67,6 +67,14 @@
 // CONFIG5L
 #pragma config CP = OFF         // PFM and Data EEPROM Code Protection bit (PFM and Data EEPROM code protection disabled)
 
+/*
+ *  Ben
+ *  2 PWM pins (enable left & right)
+ *  4 pins (forward & back for left and right)
+ * 
+ * Chloe
+ * 2 pins (enable on either VL53L0X)
+ */
 
 /*
  * Pin map with how used
