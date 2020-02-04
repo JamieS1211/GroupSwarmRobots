@@ -2,3 +2,8 @@ dist
 build
 *.DS_Store
 
+nbproject/Makefile-default.mk
+nbproject/Makefile-genesis.properties
+nbproject/Makefile-local-default.mk
+nbproject/private/configurations.xml
+nbproject/private/private.xml
