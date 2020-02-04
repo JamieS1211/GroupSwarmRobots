@@ -9,7 +9,7 @@
 #include <xc.h>
 
 #include "globals.h"
-#include "i2C.h"
+#include "i2c.h"
 
 //Pages 545 - 578 - 597 in data sheet
 
@@ -18,8 +18,8 @@
  */
 void i2C_Setup(void) {
     // Select use of I2C 2 peripheral to RB1 and RB2 pins - Page 275 - 286
-    I2C2SCLPPS = 0b0 1001; // Page 280
-    I2C2SDAPPS = 0b0 1010;
+    I2C2SCLPPS = 0b01001; // Page 280
+    I2C2SDAPPS = 0b01010;
     
     // Set TRIS & ODCON bits - Page 548
     TRISBbits.TRISB1 = 0; // Page 265
@@ -45,7 +45,7 @@ void i2C_Setup(void) {
 void i2C_SendData(uint8_t i2C_address, uint8_t bytes[], uint8_t numberOfBytes) {
     I2C2CNT = numberOfBytes;
     
-    I2C2ADB1 = i2C_address & 0b 1111 1110; // Masks last bit to 0
+    I2C2ADB1 = i2C_address & 0b11111110; // Masks last bit to 0
     
     I2C2TXB = bytes[I2C2CNT - 1];
     I2C2CON0bits.S = 1;
@@ -67,7 +67,7 @@ void i2C_SendData(uint8_t i2C_address, uint8_t bytes[], uint8_t numberOfBytes) {
 void i2C_ReceiveData(uint8_t i2C_address, uint8_t *recievedBytesPointer, uint8_t numberOfReceivedBytes) {
     I2C2CNT = numberOfReceivedBytes;
     
-    I2C2ADB1 = i2C_address | 0b 0000 0001; // Masks last bit to 0
+    I2C2ADB1 = i2C_address | 0b00000001; // Masks last bit to 0
     
     
     while(I2C2STAT0bits.MMA == 1) {

@@ -15,6 +15,7 @@
 #include <xc.h>
 #include "globals.h"
 #include "interrupts.h"
+#include "i2c.h"
 
 // Production -> set configuration bits
 // CONFIG1L
@@ -110,6 +111,7 @@
  */
 
 void main(void) {
+    i2C_Setup();
     interrupts_Setup(); // Last setup function
     
     while(1);
