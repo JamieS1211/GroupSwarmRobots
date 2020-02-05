@@ -38,9 +38,15 @@ void ADC_DestinationSetup(int x) {
     if (x == 0) {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 0x00; // RA0 is selected
-    } else {
+    } else if (x === 1) {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 000001; // RA1 is selected
+    } else if (x == 2) {
+        // ADPCH [ADC Channel selection register] - page 625
+        ADPCH = 000002; // RA2 is selected
+        // ---------- Set RA3 High ---------
+    } else {
+        // ------- Throw Error Here -------
     }
     
     // ADCON0 [ADC Control Register 0] - page 619
@@ -54,8 +60,9 @@ void ADC_DestinationSetup(int x) {
  */
 int ADC_Read(int x) {
     /*
-     * x = 0 - LDR (RA0)
-     * x = 1 - Solar Panel (RA1) 
+     * x = 0 - LDR1 (RA0)
+     * x = 1 - LDR2 (RA1) 
+     * x = 2 - Solar Panel (RA2)
      */
     
     //Check if ADC_Setup has run
@@ -73,7 +80,9 @@ int ADC_Read(int x) {
     
     while (ADCON0bits.GO); // Wait until ADC conversion completes
     ADCON0bits.ON = 0; // Turn back off ADC
-    
+    if (RA3 = High){
+        RA3 = Low; // ---------- Fix; Toggle solar isolation pin --------
+    }
     return (ADRESH << 4) + ADRESL;
 }
 
