@@ -1,13 +1,15 @@
 /*
- * File:   position.h
+ * File:   compass.c
  * Author: willrice
  *
- * Created on February 7, 2020, 22:00
+ * Created on February 7, 2020, 22:15
  */
 
-#ifndef POSITION_H
-#define POSITION_H
 
+#include <xc.h> // Think is library type thing
+
+#include "globals.h"
+#include "position.h"
 
 //I'll probably write out the maths nicely else where
 
@@ -56,5 +58,3 @@ void ang_diff(void, void);
  * Returns shortest rotation between two angles
  */
 void ang_short(void);
-
-#endif //COMPASS_H
