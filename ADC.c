@@ -38,7 +38,7 @@ void ADC_DestinationSetup(int x) {
     if (x == 0) {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 0x00; // RA0 is selected
-    } else if (x === 1) {
+    } else if (x == 1) {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 000001; // RA1 is selected
     } else if (x == 2) {
@@ -80,9 +80,9 @@ int ADC_Read(int x) {
     
     while (ADCON0bits.GO); // Wait until ADC conversion completes
     ADCON0bits.ON = 0; // Turn back off ADC
-    if (RA3 = High){
-        RA3 = Low; // ---------- Fix; Toggle solar isolation pin --------
-    }
+    //if (RA3 = High){
+    //    RA3 = Low; // ---------- Fix; Toggle solar isolation pin --------
+    //}
     return (ADRESH << 4) + ADRESL;
 }
 
