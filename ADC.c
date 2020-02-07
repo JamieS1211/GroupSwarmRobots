@@ -21,7 +21,7 @@ void ADC_Setup(void) {
     // ADCON0 [ADC Control Register 0] - page 619
     ADCON0bits.CS = 1; // ADCRC Clock - Dedicated 600KHz clock for ADC module
     ADCON0bits.FM = 1; // Right justify results
-      
+       
     // TRISx [Tri-state control register] - page 265
     TRISAbits.TRISA0 = 1; // Set RA0 to Input
     
