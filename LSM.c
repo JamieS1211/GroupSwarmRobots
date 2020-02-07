@@ -8,6 +8,7 @@
 #define _XTAL_FREQ 20000000
 
 #include <xc.h>
+#include "globals.h"
 #include <pic18f27K42.h>
 #include <stdbool.h>
 

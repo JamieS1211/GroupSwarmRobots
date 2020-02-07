@@ -8,6 +8,7 @@
 #define _XTAL_FREQ 20000000
 
 #include <xc.h>
+#include "globals.h"
 #include <pic18f27K42.h>
 
 // Pages 602 - 619 - 639 in data sheet
