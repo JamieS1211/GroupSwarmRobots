@@ -9,6 +9,7 @@
       <itemPath>ADC.h</itemPath>
       <itemPath>i2c.h</itemPath>
       <itemPath>compass.h</itemPath>
+      <itemPath>position.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
