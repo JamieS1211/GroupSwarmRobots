@@ -11,10 +11,11 @@
 
 //I'll probably write out the maths nicely else where
 
+
 /*
  * Finds robot locations based on single transmission
  */
-void robo_find(void);
+void robo_find(int rMove);
 
 
 /*
