@@ -70,7 +70,7 @@
 
 /*
  *  Ben
- *  2 PWM pins (enable left & right)
+ *  2 PWM pins (enable left & right) - RC1 
  *  4 pins (forward & back for left and right)
  * 
  * Chloe
@@ -91,8 +91,8 @@
  * 9  - RA7                         - [NONE]
  * 10 - RA6                         - [NONE]
  * 11 - RC0                         - [NONE]
- * 12 - RC1                         - [NONE]
- * 13 - RC2                         - [NONE]
+ * 12 - RC1                         - [PWM]
+ * 13 - RC2                         - [PWM]
  * 14 - RC3                         - [SCK1 SPI]
  * 15 - RC4                         - [SDI1 SPI]
  * 16 - RC5                         - [NONE]
