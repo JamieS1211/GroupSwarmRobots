@@ -5,17 +5,9 @@
  * Created on February 7, 2020, 16:05
  * 
  * Modified based on:
- * HMC5883L.h - Header file for the HMC5883L Triple Axis Magnetometer Arduino Library.
- * Copyright (C) 2011 Love Electronics (loveelectronics.co.uk) / 2012 bildr.org (Arduino 1.0 compatible)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the version 3 GNU General Public License as
- * published by the Free Software Foundation.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * https://www.ccsinfo.com/forum/viewtopic.php?t=51156
+ * Declination angle is removed. Compass points to magnetic North
+ * Not true North
  */
 
 #ifndef COMPASS_H
@@ -24,52 +16,43 @@
 
 //Entire HMC5883L Compass Manual
 
-#define HMC5883L_Address 0x1E
-#define ConfigurationRegisterA 0x00
-#define ConfigurationRegisterB 0x01
-#define ModeRegister 0x02
-#define DataRegisterBegin 0x03
+// Defining addresses
+#define HMC5883L_READ_ADDR       0x3D
+#define HMC5883L_WRITE_ADDR      0x3C
+                           
+#define Config_Reg_A             0x00
+#define Config_Reg_B             0x01
+#define Mode_Reg                 0x02
+#define X_MSB_Reg                0x03
+#define X_LSB_Reg                0x04
+#define Z_MSB_Reg                0x05
+#define Z_LSB_Reg                0x06
+#define Y_MSB_Reg                0x07
+#define Y_LSB_Reg                0x08
+#define Status_Reg               0x09
+#define ID_Reg_A                 0x0A             
+#define ID_Reg_B                 0x0B
+#define ID_Reg_C                 0x0C
+       
+#define declination_angle     1.04   // For Exeter, UK, 2020  
 
-#define Measurement_Continuous 0x00
-#define Measurement_SingleShot 0x01
-#define Measurement_Idle 0x03
-
-#define ErrorCode_1 "Entered scale was not valid, valid gauss values are: 0.88, 1.3, 1.9, 2.5, 4.0, 4.7, 5.6, 8.1"
-#define ErrorCode_1_Num 1
-
-struct MagnetometerScaled
-{
-	float XAxis;
-	float YAxis;
-	float ZAxis;
-};
-
-struct MagnetometerRaw
-{
-	int XAxis;
-	int YAxis;
-	int ZAxis;
-};
-
-class HMC5883L
-{
-	public:
-	  HMC5883L();
-
-	  MagnetometerRaw ReadRawAxis();
-	  MagnetometerScaled ReadScaledAxis();
-  
-	  int SetMeasurementMode(uint8_t mode);
-	  int SetScale(float gauss);
-
-	  char* GetErrorText(int errorCode);
-
-	protected:
-	  void Write(int address, int byte);
-	  uint8_t* Read(int address, int length);
-
-	private:
-	  float m_Scale;
-};
+                                   
+#use I2C(MASTER, SDA = pin_B7, SCL = pin_B6)   
+                                             
+// Defining used variables
+register signed long X_axis = 0;
+register signed long Y_axis = 0;                                 
+register signed long Z_axis = 0;
+float m_scale = 1.0;
+       
+// Defining functions
+unsigned long make_word(unsigned char HB, unsigned char LB);
+void HMC5883L_init(); 
+unsigned char HMC5883L_read(unsigned char reg);
+void HMC5883L_write(unsigned char reg_address, unsigned char value);
+void HMC5883L_read_data();
+void HMC5883L_scale_axes();
+void HMC5883L_set_scale(float gauss);
+float HMC5883L_heading();
 
 #endif //COMPASS_H

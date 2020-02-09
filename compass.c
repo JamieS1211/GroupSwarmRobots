@@ -5,17 +5,9 @@
  * Created on February 7, 2020, 21:50
  * 
  * Modified based on:
- * HMC5883L.h - Header file for the HMC5883L Triple Axis Magnetometer Arduino Library.
- * Copyright (C) 2011 Love Electronics (loveelectronics.co.uk) / 2012 bildr.org (Arduino 1.0 compatible)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the version 3 GNU General Public License as
- * published by the Free Software Foundation.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * https://www.ccsinfo.com/forum/viewtopic.php?t=51156
+ * Declination angle is removed. Compass points to magnetic North
+ * Not true North
  */
 
 
@@ -23,125 +15,166 @@
 
 #include "globals.h"
 #include "compass.h"
+#include "math.h"
 
-//Entire HMC5883L Compass Manual
+                         
+unsigned long make_word(unsigned char HB, unsigned char LB)
+{                                     
+   register unsigned long val = 0;
+                              
+   val = HB;
+   val <<= 8;                         
+   val |= LB;         
+   return val;
+}                                 
 
-HMC5883L::HMC5883L()
-{
-  m_Scale = 1;
+                               
+void HMC5883L_init()
+{                                       
+   HMC5883L_write(Config_Reg_A, 0x70);
+   HMC5883L_write(Config_Reg_B, 0xA0);
+   HMC5883L_write(Mode_Reg, 0x00); 
+   HMC5883L_set_scale(1.3);
+}
+                                   
+
+unsigned char HMC5883L_read(unsigned char reg)
+{                                         
+   unsigned char val = 0;
+   
+   I2C_Start();
+   I2C_Write(HMC5883L_WRITE_ADDR);
+   I2C_Write(reg);
+   I2C_Start();
+   I2C_Write(HMC5883L_READ_ADDR);
+   val = I2C_Read(0);                       
+   I2C_Stop();
+   return(val);   
 }
 
-MagnetometerRaw HMC5883L::ReadRawAxis()
+                                 
+void HMC5883L_write(unsigned char reg_address, unsigned char value)
 {
-  uint8_t* buffer = Read(DataRegisterBegin, 6);
-  MagnetometerRaw raw = MagnetometerRaw();
-  raw.XAxis = (buffer[0] << 8) | buffer[1];
-  raw.ZAxis = (buffer[2] << 8) | buffer[3];
-  raw.YAxis = (buffer[4] << 8) | buffer[5];
-  return raw;
+   I2C_Start();
+   I2C_Write(HMC5883L_WRITE_ADDR);
+   I2C_Write(reg_address);
+   I2C_Write(value);
+   I2C_Stop();
+}                                           
+     
+void HMC5883L_read_data()
+{                         
+   unsigned char lsb = 0;
+   unsigned char msb = 0;
+   
+   I2C_Start();
+   I2C_Write(HMC5883L_WRITE_ADDR);
+   I2C_Write(X_MSB_Reg);           
+   I2C_Start();
+   I2C_Write(HMC5883L_READ_ADDR);
+   
+   msb = I2C_Read();
+   lsb = I2C_Read();
+   X_axis = make_word(msb, lsb);
+                          
+   msb = I2C_Read();
+   lsb = I2C_Read();
+   Z_axis = make_word(msb, lsb);
+                  
+   msb = I2C_Read();
+   lsb = I2C_Read(0);
+   Y_axis = make_word(msb, lsb);           
+                      
+   I2C_Stop();   
 }
 
-MagnetometerScaled HMC5883L::ReadScaledAxis()
-{
-  MagnetometerRaw raw = ReadRawAxis();
-  MagnetometerScaled scaled = MagnetometerScaled();
-  scaled.XAxis = raw.XAxis * m_Scale;
-  scaled.ZAxis = raw.ZAxis * m_Scale;
-  scaled.YAxis = raw.YAxis * m_Scale;
-  return scaled;
+
+void HMC5883L_scale_axes()
+{   
+         
+   X_axis *= m_scale;
+   Z_axis *= m_scale;                           
+   Y_Axis *= m_scale;
 }
 
-int HMC5883L::SetScale(float gauss)
-{
-	uint8_t regValue = 0x00;
-	if(gauss == 0.88)
-	{
-		regValue = 0x00;
-		m_Scale = 0.73;
-	}
-	else if(gauss == 1.3)
-	{
-		regValue = 0x01;
-		m_Scale = 0.92;
-	}
-	else if(gauss == 1.9)
-	{
-		regValue = 0x02;
-		m_Scale = 1.22;
-	}
-	else if(gauss == 2.5)
-	{
-		regValue = 0x03;
-		m_Scale = 1.52;
-	}
-	else if(gauss == 4.0)
-	{
-		regValue = 0x04;
-		m_Scale = 2.27;
-	}
-	else if(gauss == 4.7)
-	{
-		regValue = 0x05;
-		m_Scale = 2.56;
-	}
-	else if(gauss == 5.6)
-	{
-		regValue = 0x06;
-		m_Scale = 3.03;
-	}
-	else if(gauss == 8.1)
-	{
-		regValue = 0x07;
-		m_Scale = 4.35;
-	}
-	else
-		return ErrorCode_1_Num;
-	
-	// Setting is in the top 3 bits of the register.
-	regValue = regValue << 5;
-	Write(ConfigurationRegisterB, regValue);
-}
 
-int HMC5883L::SetMeasurementMode(uint8_t mode)
+void HMC5883L_set_scale(float gauss)                     
 {
-	Write(ModeRegister, mode);
-}
+   unsigned char value = 0;   
+   
+    if(gauss == 0.88)       
+    {                                           
+      value = 0x00;                     
+      m_scale = 0.73;
+   } 
+   
+   else if(gauss == 1.3)   
+   {
+      value = 0x01;
+      m_scale = 0.92;     
+   } 
+   
+   else if(gauss == 1.9)
+   {
+      value = 0x02;
+      m_scale = 1.22;
+   }
+   
+   else if(gauss == 2.5)
+   {
+      value = 0x03;
+      m_scale = 1.52;
+   } 
+   
+   else if(gauss == 4.0)
+   {
+      value = 0x04;
+      m_scale = 2.27;
+   }
+   
+   else if(gauss == 4.7)
+   {
+      value = 0x05;
+      m_scale = 2.56;
+   } 
+   
+   else if(gauss == 5.6)
+   {
+      value = 0x06;
+      m_scale = 3.03;
+   }   
+   
+   else if(gauss == 8.1)                                 
+   {
+      value = 0x07;
+      m_scale = 4.35;         
+   }       
+                                               
+   value <<= 5;
+   HMC5883L_write(Config_Reg_B, value);
+}     
 
-// Have to modify as wire.h is an arduino based thing
-//void HMC5883L::Write(int address, int data)
-//{
-//  Wire.beginTransmission(HMC5883L_Address);
-//  Wire.write(address);
-//  Wire.write(data);
-//  Wire.endTransmission();
-//}
-//
-//uint8_t* HMC5883L::Read(int address, int length)
-//{
-//  Wire.beginTransmission(HMC5883L_Address);
-//  Wire.write(address);
-//  Wire.endTransmission();
-//  
-//  Wire.beginTransmission(HMC5883L_Address);
-//  Wire.requestFrom(HMC5883L_Address, length);
-//
-//  uint8_t buffer[length];
-//  if(Wire.available() == length)
-//  {
-//	  for(uint8_t i = 0; i < length; i++)
-//	  {
-//		  buffer[i] = Wire.read();
-//	  }
-//  }
-//  Wire.endTransmission();
-//
-//  return buffer;
-//}
-
-char* HMC5883L::GetErrorText(int errorCode)
+                               
+float HMC5883L_heading()         
 {
-	if(ErrorCode_1_Num == 1)
-		return ErrorCode_1;
-	
-	return "Error not defined.";
-}
+   register float heading = 0.0;
+   
+   HMC5883L_read_data();
+   HMC5883L_scale_axes();
+   heading = atan2(Y_axis, X_axis);
+    heading += declination_angle;   
+                 
+    if(heading <= -M_PI)
+    {
+      heading += (2.0 * M_PI);
+    }
+   
+    if(heading > (2.0 * M_PI))               
+    {                           
+      heading -= (2.0 * M_PI);
+    }                   
+                   
+   heading *= (180.0 / M_PI);
+                  
+   return heading;
+}             
