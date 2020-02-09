@@ -64,29 +64,31 @@ float ang_diff(float ang1, float ang2)
 /*
  * Finds angle overlap between two lists of angles 
  */
-void ang_overlap(void, void);
+void ang_overlap();
 
 
 /*
  * Finds angle overlap between two lists of two lists of angles 
  */
-void ang2_overlap(void, void);
+void ang2_overlap();
 
 
 /*
  * Checks if angle inside list of 3 angles 
  */
-void ang_within(void, void);
+void ang_within();
+
 
 /*
  * Returns shortest rotation between two angles
  */
 void ang_short(void);
 
+
 /*
  * Returns if a polar coordinate lies in a circle with centre at polar position
  */
-void polar_in_polar(void,void,void,void);
+void polar_in_polar();
 
 
 /*
@@ -121,7 +123,7 @@ void rice_calc(int rMove, float phiMove, int r1, int r2)
     float inroot = -( pow(r1-r2,2)-pow(m,2) )*( pow(r1+r2,2)-pow(m,2) );
     float root = 0;
     if (inroot > 0) {
-        root = sqrt(insideroot);
+        root = sqrt(inroot);
     }
     
     // Calculating values for y/x
@@ -183,8 +185,8 @@ void find_error(int rMove, float phiMove, int r1, int r2, float rErr, float phiE
     }
     
     // Large Error
-    float max_angle = rice_calc(max_move, phiMove, r1, r2);
-    float min_angle = rice_calc(min_move, phiMove, r1, r2);
+    rice_calc(max_move, phiMove, r1, r2);
+    rice_calc(min_move, phiMove, r1, r2);
     
     // Returning
     // return [max_angle, min_angle]

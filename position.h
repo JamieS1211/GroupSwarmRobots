@@ -13,49 +13,62 @@
 
 
 /*
- * Finds robot locations based on single transmission
+ * Returns angle as a value between -pi and pi
  */
-void robo_find(int rMove);
+float ang_scale(float theta);
+
+
+/*
+ * Returns shortest from ang1 to ang2
+ */
+float ang_diff(float ang1, float ang2);
 
 
 /*
  * Finds angle overlap between two lists of angles 
  */
-void ang_overlap(void, void);
+void ang_overlap();
 
 
 /*
  * Finds angle overlap between two lists of two lists of angles 
  */
-void ang2_overlap(void, void);
+void ang2_overlap();
 
 
 /*
- * Checks if angle inside list of angles 
+ * Checks if angle inside list of 3 angles 
  */
-void ang_within(void, void);
+void ang_within();
 
-
-/*
- * Returns angle as a value between -pi and pi
- */
-void ang_scale(void);
-
-
-/*
- * Returns angle as a value between -pi and pi
- */
-void ang_scale(void);
-
-
-/*
- * Returns clockwise and anticlockwise difference between angles
- */
-void ang_diff(void, void);
 
 /*
  * Returns shortest rotation between two angles
  */
 void ang_short(void);
+
+
+/*
+ * Returns if a polar coordinate lies in a circle with centre at polar position
+ */
+void polar_in_polar();
+
+
+/*
+ * Calculates the min and max error given values for error.
+ */
+void rice_calc(int rMove, float phiMove, int r1, int r2);
+
+
+/*
+ * Calculates the min and max error given values for error.
+ */
+void find_error(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr);
+
+/*
+ * Finds robot locations based on single transmission
+ * Returns highest likely value with max and min
+ */
+void robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr);
 
 #endif //COMPASS_H
