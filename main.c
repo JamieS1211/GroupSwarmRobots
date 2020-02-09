@@ -113,7 +113,7 @@
 
 void main(void) {
     i2C_Setup();
-    motorsetup();
+    motor_Setup();
     interrupts_Setup(); // Last setup function
     
     while(1);

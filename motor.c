@@ -25,8 +25,8 @@ void motor_Setup(void) {
     PWM5CONbits.EN = 1; // page 359
     PWM6CONbits.EN = 1; 
     
-    setDutyCycleR;
-    setDutyCycleL;
+    setDutyCycleR(512); // 50% duty cycle = 512/1024
+    setDutyCycleL(512);
     
     PIR4bits.TMR2IF = 0; // page 141
     PIR7bits.TMR4IF = 0; // page 144
