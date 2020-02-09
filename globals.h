@@ -11,12 +11,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//Definitions for motor management - TO BE CHANGED
-//#define enableLeft LATBbits.LB7
-//#define leftForwards LATBbits.LB6
-//#define leftBackwards LATBbits.LB5
-//#define rightForwards LATBbits.LB4
-//#define rightBackwards LATBbits.LB3
-//#define enableRight LATBbits.LB2
+//Definitions for motor management
+#define leftForwards LATCbits.LATC0
+#define leftBackwards LATCbits.LATC7
+#define rightForwards LATCbits.LATC5
+#define rightBackwards LATCbits.LATC6
 
 #endif //GLOBALS_H

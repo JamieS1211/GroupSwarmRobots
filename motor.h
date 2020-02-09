@@ -8,54 +8,39 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-
-//Pages 342 - 351 - 355 in data sheet
+//Pages 355 - 359 - 361 in data sheet
 
 /*
- * motor setup - Page 348
- * corresponding TRIS bit cleared
+ * motor setup - Page 358
  */
 void motor_Setup(void);
 
-/*
- * motor basic movement function - Page 349
- */
-void move_dist(angle, distance);
+void setDutyCycleR(uint16_t dutyCycle);
+
+void setDutyCycleL(uint16_t dutyCycle);
 
 /*
- * motor movement to interrupt - Page 349
+ * motor basic movement function
  */
-void move(angle);
+void move_dist(uint16_t angle, uint8_t distance, bool slow);
 
 /*
- * motor spin in place - Page 349
+ * motor movement to interrupt
  */
-void motor_spin(angle);
+void move(uint16_t angle);
 
 /*
- * motor setup - Page 349
+ * motor spin in place
  */
-void motor_Setup(void);
+void motor_spin(uint16_t angle);
 
 /*
- * motor stop - Page 349
+ * motor stop
  */
 void motor_stop(void);
 
 /*
  * motor setup - Page 349
  */
-void motor_Setup(void);
-
-/*
- * motor setup - Page 349
- */
-void motor_slow(angle, distance);
-
-/*
- * motor setup - Page 349
- */
-void motor_reverse(angle);
-
-
+void motor_reverse(uint16_t angle);
 #endif //MOTOR_H

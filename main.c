@@ -16,6 +16,7 @@
 #include "globals.h"
 #include "interrupts.h"
 #include "i2c.h"
+#include "motor.h"
 
 // Production -> set configuration bits
 // CONFIG1L
@@ -90,14 +91,14 @@
  * 8  - VSS                         - [+ 5V]
  * 9  - RA7                         - [NONE]
  * 10 - RA6                         - [NONE]
- * 11 - RC0                         - [NONE]
+ * 11 - RC0                         - [Left Forward]
  * 12 - RC1                         - [PWM]
  * 13 - RC2                         - [PWM]
  * 14 - RC3                         - [SCK1 SPI]
  * 15 - RC4                         - [SDI1 SPI]
- * 16 - RC5                         - [NONE]
- * 17 - RC6                         - [NONE]
- * 18 - RC7                         - [NONE]
+ * 16 - RC5                         - [Right Forward]
+ * 17 - RC6                         - [Right Backward]
+ * 18 - RC7                         - [Left Backward]
  * 19 - VSS                         - [+ 0V]
  * 20 - VDD                         - [+ 5V]
  * 21 - RB0                         - [NONE]
@@ -112,6 +113,7 @@
 
 void main(void) {
     i2C_Setup();
+    motorsetup();
     interrupts_Setup(); // Last setup function
     
     while(1);
