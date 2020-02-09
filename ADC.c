@@ -38,7 +38,7 @@ void ADC_DestinationSetup(int x) {
     if (x == 0) {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 0x00; // RA0 is selected
-    } else if (x === 1) {
+    } else if (x == 1) {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 000001; // RA1 is selected
     } else if (x == 2) {
