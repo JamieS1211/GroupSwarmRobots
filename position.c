@@ -10,8 +10,84 @@
 
 #include "globals.h"
 #include "position.h"
+#include "math.h"
+#include "stdlib.h"
 
 //I'll probably write out the maths nicely else where
+
+/*
+ * Returns angle as a value between -pi and pi
+ */
+float ang_scale(float theta)
+/*
+ * Scales angle between -pi and pi
+ */
+{
+    while(1) {
+        if (theta <= -M_PI) {
+            theta = theta + 2*M_PI;
+        }
+        else if (theta > M_PI) {
+            theta = theta - 2*M_PI;
+        }
+        else {
+            break;
+        }
+    }
+    return theta;
+}
+
+
+/*
+ * Returns shortest from ang1 to ang2
+ */
+float ang_diff(float ang1, float ang2)
+{
+    // Ensuring angles in correct range
+    ang1 = ang_scale(ang1);
+    ang2 = ang_scale(ang2);
+    
+    // Calculating both directions
+    float diff1 = ang_scale(ang2 - ang1);
+    float diff2 = ang_scale(ang2 - ang1 + 2*M_PI);
+    
+    // Finding smallest and returning
+    if (abs(diff1) < abs(diff2)) {
+        return diff1;
+    }
+    else {
+        return diff2;
+    }
+}
+
+
+/*
+ * Finds angle overlap between two lists of angles 
+ */
+void ang_overlap(void, void);
+
+
+/*
+ * Finds angle overlap between two lists of two lists of angles 
+ */
+void ang2_overlap(void, void);
+
+
+/*
+ * Checks if angle inside list of 3 angles 
+ */
+void ang_within(void, void);
+
+/*
+ * Returns shortest rotation between two angles
+ */
+void ang_short(void);
+
+/*
+ * Returns if a polar coordinate lies in a circle with centre at polar position
+ */
+void polar_in_polar(void,void,void,void);
+
 
 /*
  * Calculates the min and max error given values for error.
@@ -42,12 +118,10 @@ void rice_calc(int rMove, float phiMove, int r1, int r2)
     float gam = -pow(r1,2)+pow(r2,2)+pow(m,2);
     
     // Ensuring root returns a real number (sometime close to zero due to rounding)
-    float inroot = -( pow(r1-r2,2)-pow(m,2) )*( pow(r1+r2,2)-pow(m,2) ); 
-    if (inroot < 0) {
-        float root = 0;
-    }
-    else {
-        float root = sqrt(insideroot);
+    float inroot = -( pow(r1-r2,2)-pow(m,2) )*( pow(r1+r2,2)-pow(m,2) );
+    float root = 0;
+    if (inroot > 0) {
+        root = sqrt(insideroot);
     }
     
     // Calculating values for y/x
@@ -55,8 +129,8 @@ void rice_calc(int rMove, float phiMove, int r1, int r2)
     float yx2 = -((xrel*(xrel*root - yrel*gam))/(+yrel*(xrel*root - yrel*gam) + pow(m,2)*gam) );
     
     // Calculating angles
-    float theta1 = math.atan(yx1);
-    float theta2 = math.atan(yx2); 
+    float theta1 = atan(yx1);
+    float theta2 = atan(yx2); 
     
     // Need to return
 }
@@ -156,48 +230,3 @@ void robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiEr
     // Shouldn't need to reformat depending on directory setup
     // Should just need to call the two functions
 }
-
-/*
- * Finds angle overlap between two lists of angles 
- */
-void ang_overlap(void, void);
-
-
-/*
- * Finds angle overlap between two lists of two lists of angles 
- */
-void ang2_overlap(void, void);
-
-
-/*
- * Checks if angle inside list of angles 
- */
-void ang_within(void, void);
-
-
-/*
- * Returns angle as a value between -pi and pi
- */
-void ang_scale(void);
-
-
-/*
- * Returns angle as a value between -pi and pi
- */
-void ang_scale(void);
-
-
-/*
- * Returns clockwise and anticlockwise difference between angles
- */
-void ang_diff(void, void);
-
-/*
- * Returns shortest rotation between two angles
- */
-void ang_short(void);
-
-/*
- * Returns if a polar coordinate lies in a circle with centre at polar position
- */
-void polar_in_polar(void,void,void,void);
