@@ -34,5 +34,18 @@ void __interrupt() interrupts_Event(void) {
     if (PIE3bits.TMR0IE && PIR3bits.TMR0IF) {
         // TMR0 Interrupt - must be software cleared
         PIR3bits.TMR0IF = 0;
+        
+        // Read compass
+        
+        // Read LiDAR
+        
+        // Make decision
+        
+        // Stop movement forwards
+        
+        // Turn
+        
+        // Move forwards
+        
     }
 }
