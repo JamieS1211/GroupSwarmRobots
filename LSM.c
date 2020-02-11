@@ -6,10 +6,12 @@
  */
 
 #define _XTAL_FREQ 20000000
+#define M_PI acos(-1.0)
 
 #include <xc.h>
 #include <pic18f27K42.h>
 #include <stdbool.h>
+#include <math.h>
 
 // Deal with all light source management scripts
 bool PowerFinding(void){
@@ -48,7 +50,58 @@ bool PowerFinding(void){
 
     // Repeat until threshold solar voltage is reached 
 
+    
+    if (ADC_Read(2) < 600){ // ------------Check how this works as binary passed---------
+        //if (knownSourceDistance < Threshold & sourceUncertainty < Threshold2){
+            //move(requiredTurn(sourceAngle), sourceDistance)
+        //}
+        //else {
+            
+        //}
+    }
+    while (ADC_Read(2) < 600) {
+        int previous = ADC_Read(0);
+        rotate(M_PI/6);
+        while (ADC_Read(0)< previous){
+            rotate(M_PI/6);
+            previous = ADC_Read(0);
+        }
+        rotate(-M_PI/6);
+        while (ADC_Read(0)< previous){
+            rotate(-M_PI/6);
+            previous = ADC_Read(0);
+        }
+        rotate(-M_PI/6);
+        
+        while (ADC_Read(0)<ADC_Read(1)){
+            move(0, 5);
+        }
+
+    }
+    return true;
 }
 
 
 //
+
+
+float requiredTurn(float angle){
+   bool current = comp_head();
+   
+   if (M_PI>(angle - current) > 0){
+       return angle - current;     
+   }
+   else if ((angle - current) >0){
+       return -(2*M_PI - (angle - current));
+   }
+   else if ( M_PI>(current - angle) >0){
+       return -(current - angle);
+   }
+   else if ((current - angle) > 0){
+       return (2*M_PI - (current - angle));
+   }
+}
+
+
+// Crude functionality, will get close to LS. Need to implement close finding after LDR's go blind.
+// And when to give up close finding to search somewhere else (How to do this) 
