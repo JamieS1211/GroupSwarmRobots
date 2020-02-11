@@ -10,7 +10,6 @@
 
 #include "globals.h"
 #include "position.h"
-#include "math.h"
 #include "stdlib.h"
 
 //I'll probably write out the maths nicely else where
