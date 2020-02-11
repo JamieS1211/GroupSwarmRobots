@@ -14,5 +14,6 @@
 void test_all();
 
 int test_ang_scale();
+int test_ang_diff();
 
 #endif //COMPASS_H
