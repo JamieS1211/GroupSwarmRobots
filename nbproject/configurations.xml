@@ -11,6 +11,7 @@
       <itemPath>compass.h</itemPath>
       <itemPath>position.h</itemPath>
       <itemPath>LSM.h</itemPath>
+      <itemPath>testing.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -26,6 +27,7 @@
       <itemPath>compass.c</itemPath>
       <itemPath>position.c</itemPath>
       <itemPath>LSM.c</itemPath>
+      <itemPath>testing.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -194,6 +196,12 @@
         <property key="programoptions.uselvpprogramming" value="false"/>
         <property key="voltagevalue" value="5.0"/>
       </PICkit3PlatformTool>
+      <Simulator>
+        <property key="W0004_CORE_WDT_RESET" value="report"/>
+        <property key="W0107_SIM_NOT_SUPPORTED" value="report"/>
+        <property key="W9602_COMP_DAC_SOURCE_UNAVAILABLE" value="report"/>
+        <property key="periphADC1.minTacq" value="4"/>
+      </Simulator>
       <XC8-CO>
         <property key="coverage-enable" value=""/>
       </XC8-CO>
