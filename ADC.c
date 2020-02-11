@@ -80,9 +80,9 @@ int ADC_Read(int x) {
     
     while (ADCON0bits.GO); // Wait until ADC conversion completes
     ADCON0bits.ON = 0; // Turn back off ADC
-    if (RA3 = High){
-        RA3 = Low; // ---------- Fix; Toggle solar isolation pin --------
-    }
+//    if (RA3 = High){
+//        RA3 = Low; // ---------- Fix; Toggle solar isolation pin --------
+//    }
     return (ADRESH << 4) + ADRESL;
 }
 

@@ -10,6 +10,7 @@
       <itemPath>i2c.h</itemPath>
       <itemPath>compass.h</itemPath>
       <itemPath>position.h</itemPath>
+      <itemPath>LSM.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -24,14 +25,13 @@
       <itemPath>i2c.c</itemPath>
       <itemPath>compass.c</itemPath>
       <itemPath>position.c</itemPath>
+      <itemPath>LSM.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>LSM.c</itemPath>
-    <itemPath>LSM.h</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -41,7 +41,7 @@
         <targetDevice>PIC18F27K42</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PICkit3PlatformTool</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.10</languageToolchainVersion>
         <platform>3</platform>
