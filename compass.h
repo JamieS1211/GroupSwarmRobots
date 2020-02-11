@@ -37,12 +37,12 @@
 #define declination_angle     1.04   // For Exeter, UK, 2020  
 
                                    
-#use I2C(MASTER, SDA = pin_B7, SCL = pin_B6)   
+//#use I2C(MASTER, SDA = pin_B7, SCL = pin_B6)   
                                              
 // Defining used variables
-register signed long X_axis = 0;
-register signed long Y_axis = 0;                                 
-register signed long Z_axis = 0;
+signed long X_axis = 0;
+signed long Y_axis = 0;                                 
+signed long Z_axis = 0;
 float m_scale = 1.0;
        
 // Defining functions
