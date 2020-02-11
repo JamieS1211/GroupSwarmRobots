@@ -42,24 +42,24 @@ unsigned char HMC5883L_read(unsigned char reg)
 {                                         
    unsigned char val = 0;
    
-   I2C_Start();
-   I2C_Write(HMC5883L_WRITE_ADDR);
-   I2C_Write(reg);
-   I2C_Start();
-   I2C_Write(HMC5883L_READ_ADDR);
-   val = I2C_Read(0);                       
-   I2C_Stop();
-   return(val);   
+//   I2C_Start();
+//   I2C_Write(HMC5883L_WRITE_ADDR);
+//   I2C_Write(reg);
+//   I2C_Start();
+//   I2C_Write(HMC5883L_READ_ADDR);
+//   val = I2C_Read(0);                       
+//   I2C_Stop();
+//   return(val);   
 }
 
                                  
 void HMC5883L_write(unsigned char reg_address, unsigned char value)
 {
-   I2C_Start();
-   I2C_Write(HMC5883L_WRITE_ADDR);
-   I2C_Write(reg_address);
-   I2C_Write(value);
-   I2C_Stop();
+//   I2C_Start();
+//   I2C_Write(HMC5883L_WRITE_ADDR);
+//   I2C_Write(reg_address);
+//   I2C_Write(value);
+//   I2C_Stop();
 }                                           
      
 void HMC5883L_read_data()
@@ -67,25 +67,25 @@ void HMC5883L_read_data()
    unsigned char lsb = 0;
    unsigned char msb = 0;
    
-   I2C_Start();
-   I2C_Write(HMC5883L_WRITE_ADDR);
-   I2C_Write(X_MSB_Reg);           
-   I2C_Start();
-   I2C_Write(HMC5883L_READ_ADDR);
-   
-   msb = I2C_Read();
-   lsb = I2C_Read();
-   X_axis = make_word(msb, lsb);
-                          
-   msb = I2C_Read();
-   lsb = I2C_Read();
-   Z_axis = make_word(msb, lsb);
-                  
-   msb = I2C_Read();
-   lsb = I2C_Read(0);
-   Y_axis = make_word(msb, lsb);           
-                      
-   I2C_Stop();   
+//   I2C_Start();
+//   I2C_Write(HMC5883L_WRITE_ADDR);
+//   I2C_Write(X_MSB_Reg);           
+//   I2C_Start();
+//   I2C_Write(HMC5883L_READ_ADDR);
+//   
+//   msb = I2C_Read();
+//   lsb = I2C_Read();
+//   X_axis = make_word(msb, lsb);
+//                          
+//   msb = I2C_Read();
+//   lsb = I2C_Read();
+//   Z_axis = make_word(msb, lsb);
+//                  
+//   msb = I2C_Read();
+//   lsb = I2C_Read(0);
+//   Y_axis = make_word(msb, lsb);           
+//                      
+//   I2C_Stop();   
 }
 
 
@@ -94,7 +94,7 @@ void HMC5883L_scale_axes()
          
    X_axis *= m_scale;
    Z_axis *= m_scale;                           
-   Y_Axis *= m_scale;
+   Y_axis *= m_scale;
 }
 
 

@@ -10,5 +10,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <math.h>
+#include <stdlib.h>
 
 #endif //GLOBALS_H
