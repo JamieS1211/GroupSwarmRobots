@@ -111,7 +111,7 @@ bool PowerFinding(void){
 
 
 float requiredTurn(float angle){
-   bool current = comp_head();
+   float current = comp_head();
    
    if (M_PI>(angle - current) > 0){
        return angle - current;     
@@ -124,6 +124,9 @@ float requiredTurn(float angle){
    }
    else if ((current - angle) > 0){
        return (2*M_PI - (current - angle));
+   }
+   else{
+       return 0;
    }
 }
 
