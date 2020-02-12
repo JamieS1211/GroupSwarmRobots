@@ -93,7 +93,7 @@ void polar_in_polar();
 /*
  * Calculates the min and max error given values for error.
  */
-void rice_calc(int rMove, float phiMove, int r1, int r2)
+struct twoangles rice_calc(int rMove, float phiMove, int r1, int r2)
 /*
  * Parameters
  * ----------
@@ -129,18 +129,19 @@ void rice_calc(int rMove, float phiMove, int r1, int r2)
     float yx1 = +((xrel*(xrel*root + yrel*gam))/(-yrel*(xrel*root - yrel*gam) + pow(m,2)*gam) );
     float yx2 = -((xrel*(xrel*root - yrel*gam))/(+yrel*(xrel*root - yrel*gam) + pow(m,2)*gam) );
     
-    // Calculating angles
-    float theta1 = atan(yx1);
-    float theta2 = atan(yx2); 
-    
     // Need to return
+    struct twoangles out;
+    out.angA = atan(yx1);
+    out.angB = atan(yx2);
+    
+    return out;
 }
 
 
 /*
  * Calculates the min and max error given values for error.
  */
-void find_error(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr)
+struct twooftwo find_error(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr)
 /*
  * Parameters
  * ----------
@@ -184,18 +185,24 @@ void find_error(int rMove, float phiMove, int r1, int r2, float rErr, float phiE
     }
     
     // Large Error
-    rice_calc(max_move, phiMove, r1, r2);
-    rice_calc(min_move, phiMove, r1, r2);
+    struct twoangles error1 = rice_calc(max_move, phiMove, r1, r2);
+    struct twoangles error2 = rice_calc(min_move, phiMove, r1, r2);
     
-    // Returning
-    // return [max_angle, min_angle]
+    // Reformatting and returning
+    struct twooftwo out;
+    out.group1.angA = error1.angA;
+    out.group1.angB = error2.angA;
+    out.group2.angA = error1.angB;
+    out.group2.angB = error2.angB;
+    
+    return out;
 }
 
 /*
  * Finds robot locations based on single transmission
  * Returns highest likely value with max and min
  */
-void robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr)
+struct twoofthree robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr)
 /*
  * Parameters
  * ----------
@@ -223,11 +230,65 @@ void robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiEr
  *          Offset2
  */
 {
-    // Must call error calc first
-    // errorcalc(rMove, phiMove, r1, r2, rErr, phiErr, tfErr);
-    // rice_calc(rMove, phiMove, r1, r2);
+    // Calculate mode and error
+    struct twoangles mode = rice_calc(rMove, phiMove, r1, r2);
+    struct twooftwo offset = find_error(rMove, phiMove, r1, r2, rErr, phiErr, tfErr);
     
     // Reformatting
-    // Shouldn't need to reformat depending on directory setup
-    // Should just need to call the two functions
+    struct threeangles directionA;
+    struct threeangles directionB;
+    
+    directionA.mean = mode.angA;
+    directionB.mean = mode.angB;
+    
+    // min is anticlockwise from mid
+    // max is clockwise from mid
+    if (abs(ang_diff(mode.angA, offset.group1.angA))<abs(ang_diff(mode.angA, offset.group1.angB))) {
+        if (ang_diff(mode.angA, offset.group1.angA)<0) {
+            directionA.offset_aclk = offset.group1.angA;
+            directionA.offset_clk = offset.group1.angB;
+        }
+        else {
+            directionA.offset_aclk = offset.group1.angB;
+            directionA.offset_clk = offset.group1.angA;
+        }
+    }
+    else {
+        if (ang_diff(mode.angA, offset.group1.angB)>0) {
+            directionA.offset_aclk = offset.group1.angA;
+            directionA.offset_clk = offset.group1.angB;
+        }
+        else {
+            directionA.offset_aclk = offset.group1.angB;
+            directionA.offset_clk = offset.group1.angA;
+        }
+    }
+    
+    if (abs(ang_diff(mode.angB, offset.group2.angA))<abs(ang_diff(mode.angB, offset.group2.angB))) {
+        if (ang_diff(mode.angB, offset.group2.angA)<0) {
+            directionB.offset_aclk = offset.group2.angA;
+            directionB.offset_clk = offset.group2.angB;
+        }
+        else {
+            directionB.offset_aclk = offset.group2.angB;
+            directionB.offset_clk = offset.group2.angA;
+        }
+    }
+    else {
+        if (ang_diff(mode.angB, offset.group2.angB)>0) {
+            directionB.offset_aclk = offset.group2.angA;
+            directionB.offset_clk = offset.group2.angB;
+        }
+        else {
+            directionB.offset_aclk = offset.group2.angB;
+            directionB.offset_clk = offset.group2.angA;
+        }
+    }
+    
+    // Creating output structure
+    struct twoofthree out;
+    out.group1 = directionA;
+    out.group2 = directionB;
+    
+    return out;
 }

@@ -13,7 +13,12 @@
  */
 void test_all();
 
+// Position testing
 int test_ang_scale();
 int test_ang_diff();
+// ...
+int test_rice_calc();
+int test_find_error();
+int test_robo_find();
 
 #endif //COMPASS_H

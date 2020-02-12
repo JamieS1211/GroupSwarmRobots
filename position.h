@@ -12,6 +12,28 @@
 //I'll probably write out the maths nicely else where
 
 
+// Structures
+struct twoangles {
+    float angA;
+    float angB;
+};
+
+struct threeangles {
+    float offset_aclk;
+    float mean;
+    float offset_clk;
+};
+
+struct twooftwo {
+    struct twoangles group1;
+    struct twoangles group2;
+};
+
+struct twoofthree {
+    struct threeangles group1;
+    struct threeangles group2;
+};
+
 /*
  * Returns angle as a value between -pi and pi
  */
@@ -57,18 +79,18 @@ void polar_in_polar();
 /*
  * Calculates the min and max error given values for error.
  */
-void rice_calc(int rMove, float phiMove, int r1, int r2);
+struct twoangles rice_calc(int rMove, float phiMove, int r1, int r2);
 
 
 /*
  * Calculates the min and max error given values for error.
  */
-void find_error(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr);
+struct twooftwo find_error(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr);
 
 /*
  * Finds robot locations based on single transmission
  * Returns highest likely value with max and min
  */
-void robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr);
+struct twoofthree robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr);
 
 #endif //COMPASS_H
