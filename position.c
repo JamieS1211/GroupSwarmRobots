@@ -39,6 +39,7 @@ float ang_scale(float theta)
 
 /*
  * Returns shortest from ang1 to ang2
+ * positive = aclk, negative = clk
  */
 float ang_diff(float ang1, float ang2)
 {
@@ -126,13 +127,15 @@ struct twoangles rice_calc(int rMove, float phiMove, int r1, int r2)
     }
     
     // Calculating values for y/x
-    float yx1 = +((xrel*(xrel*root + yrel*gam))/(-yrel*(xrel*root - yrel*gam) + pow(m,2)*gam) );
-    float yx2 = -((xrel*(xrel*root - yrel*gam))/(+yrel*(xrel*root - yrel*gam) + pow(m,2)*gam) );
+    float y1 = +(xrel*(xrel*root + yrel*gam));
+    float y2 = -(xrel*(xrel*root - yrel*gam));
+    float x1 = -yrel*(xrel*root - yrel*gam) + pow(m,2)*gam;
+    float x2 = +yrel*(xrel*root - yrel*gam) + pow(m,2)*gam;
     
     // Need to return
     struct twoangles out;
-    out.angA = atan(yx1);
-    out.angB = atan(yx2);
+    out.angA = atan2(y1,x1);
+    out.angB = atan2(y2,x2);
     
     return out;
 }
@@ -245,43 +248,43 @@ struct twoofthree robo_find(int rMove, float phiMove, int r1, int r2, float rErr
     // max is clockwise from mid
     if (abs(ang_diff(mode.angA, offset.group1.angA))<abs(ang_diff(mode.angA, offset.group1.angB))) {
         if (ang_diff(mode.angA, offset.group1.angA)<0) {
-            directionA.offset_aclk = offset.group1.angA;
-            directionA.offset_clk = offset.group1.angB;
-        }
-        else {
             directionA.offset_aclk = offset.group1.angB;
             directionA.offset_clk = offset.group1.angA;
+        }
+        else {
+            directionA.offset_aclk = offset.group1.angA;
+            directionA.offset_clk = offset.group1.angB;
         }
     }
     else {
         if (ang_diff(mode.angA, offset.group1.angB)>0) {
-            directionA.offset_aclk = offset.group1.angA;
-            directionA.offset_clk = offset.group1.angB;
-        }
-        else {
             directionA.offset_aclk = offset.group1.angB;
             directionA.offset_clk = offset.group1.angA;
+        }
+        else {
+            directionA.offset_aclk = offset.group1.angA;
+            directionA.offset_clk = offset.group1.angB;
         }
     }
     
     if (abs(ang_diff(mode.angB, offset.group2.angA))<abs(ang_diff(mode.angB, offset.group2.angB))) {
         if (ang_diff(mode.angB, offset.group2.angA)<0) {
-            directionB.offset_aclk = offset.group2.angA;
-            directionB.offset_clk = offset.group2.angB;
-        }
-        else {
             directionB.offset_aclk = offset.group2.angB;
             directionB.offset_clk = offset.group2.angA;
+        }
+        else {
+            directionB.offset_aclk = offset.group2.angA;
+            directionB.offset_clk = offset.group2.angB;
         }
     }
     else {
         if (ang_diff(mode.angB, offset.group2.angB)>0) {
-            directionB.offset_aclk = offset.group2.angA;
-            directionB.offset_clk = offset.group2.angB;
-        }
-        else {
             directionB.offset_aclk = offset.group2.angB;
             directionB.offset_clk = offset.group2.angA;
+        }
+        else {
+            directionB.offset_aclk = offset.group2.angA;
+            directionB.offset_clk = offset.group2.angB;
         }
     }
     

@@ -62,7 +62,7 @@ int test_rice_calc() {
     int y = 1;
     struct twoangles test1 = rice_calc(500, 1, 2000, 1700);
     struct twoangles test1_result;
-    test1_result.angA = -0.017122203;
+    test1_result.angA = 3.1244705;
     test1_result.angB = -1.1001899;
     
     if((test1.angA != test1_result.angA) && (test1.angB != test1_result.angB)) {
@@ -88,13 +88,13 @@ int test_robo_find() {
     int y = 1;
     struct twoofthree test1 = robo_find(500, 1, 2000, 1700, 0.2, 0, 100);
     test1 = test1;
-//    -0.18259862
-//    -0.017122203
-//    0.25993082
+//    -2.8816618338040927
+//    3.124470460808594
+//    2.958994035065673
 //
-//    0.99510324
-//    -1.1001899
-//    -0.83425146
+//    -0.834251461336172
+//    -1.1001900280453456
+//    -2.146489334641508
     
     return y;
 }

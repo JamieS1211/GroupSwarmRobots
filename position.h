@@ -42,6 +42,7 @@ float ang_scale(float theta);
 
 /*
  * Returns shortest from ang1 to ang2
+ * positive = aclk, negative = clk
  */
 float ang_diff(float ang1, float ang2);
 
@@ -89,7 +90,7 @@ struct twooftwo find_error(int rMove, float phiMove, int r1, int r2, float rErr,
 
 /*
  * Finds robot locations based on single transmission
- * Returns highest likely value with max and min
+ * Returns highest likely value with aclk and clk
  */
 struct twoofthree robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr);
 
