@@ -60,24 +60,48 @@ bool PowerFinding(void){
             
         //}
     }
-    while (ADC_Read(2) < 600) {
-        int previous = ADC_Read(0);
-        rotate(M_PI/6);
-        while (ADC_Read(0)< previous){
+    int iteration = 0;
+    while (ADC_Read(2) < 800) {
+        while (ADC_Read(2) < 600) {
+            // Long range closing use LDR's
+            int previous = ADC_Read(0);
             rotate(M_PI/6);
-            previous = ADC_Read(0);
-        }
-        rotate(-M_PI/6);
-        while (ADC_Read(0)< previous){
+            while (ADC_Read(0)< previous){
+                rotate(M_PI/6);
+                previous = ADC_Read(0);
+            }
             rotate(-M_PI/6);
-            previous = ADC_Read(0);
-        }
-        rotate(-M_PI/6);
-        
-        while (ADC_Read(0)<ADC_Read(1)){
-            move(0, 5);
-        }
+            while (ADC_Read(0)< previous){
+                rotate(-M_PI/6);
+                previous = ADC_Read(0);
+            }
+            rotate(-M_PI/6);
 
+            while (ADC_Read(0)<ADC_Read(1)){
+                move(0, 5);
+            }
+        }
+        //Short range closing using Solar
+        if (ADC_Read(2) > 800){
+            // Check if already ideal
+            return true;
+        }
+        
+        // --------   Check for improvement not for ultimate value
+        
+        while (iteration < 12){
+            move(M_PI/6, 1);
+            if (ADC_Read(2) > 800){
+                return true;
+            }
+            move(M_PI,1);
+            move(M_PI,0);
+            iteration +=1;
+        }
+        
+        // When max iterations reached move away:
+        
+        
     }
     return true;
 }
@@ -104,5 +128,6 @@ float requiredTurn(float angle){
 }
 
 
-// Crude functionality, will get close to LS. Need to implement close finding after LDR's go blind.
+// Crude functionality, will get close to LS. 
 // And when to give up close finding to search somewhere else (How to do this) 
+// Consider using differencing as well as single value? 
