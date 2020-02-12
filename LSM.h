@@ -13,5 +13,6 @@
  */
 bool PowerFinding(void);
 
+float requiredTurn(float angle);
 
 #endif 

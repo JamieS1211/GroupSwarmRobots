@@ -8,25 +8,29 @@
 #define _XTAL_FREQ 20000000
 
 #include <xc.h>
-#include <pic18f27K42.h>
-
+//#include <pic18f27K42.h>
+#include "ADC.h"
 // Pages 602 - 619 - 639 in data sheet
 
 /*
  * Function sets up all ADC (Analog to Digital converter) settings.
  */
 void ADC_Setup(void) {
-    // Setup ADC for LDR
-    
+    // Setup AD
     // ADCON0 [ADC Control Register 0] - page 619
     ADCON0bits.CS = 1; // ADCRC Clock - Dedicated 600KHz clock for ADC module
     ADCON0bits.FM = 1; // Right justify results
       
     // TRISx [Tri-state control register] - page 265
     TRISAbits.TRISA0 = 1; // Set RA0 to Input
+    TRISAbits.TRISA1 = 1; // Set RA1 to Input
+    TRISAbits.TRISA2 = 1; // Set RA2 to Input
+    TRISAbits.TRISA3 = 0; // Set RA3 to Output
     
     // ANSELA [Analog select port registers] - page 267
     ANSELAbits.ANSELA0 = 1; // Set RA0 as analog channel
+    ANSELAbits.ANSELA1 = 1; // Set RA1 as analog channel
+    ANSELAbits.ANSELA2 = 1; // Set RA2 as analog channel
             
 }
 
@@ -80,9 +84,10 @@ int ADC_Read(int x) {
     
     while (ADCON0bits.GO); // Wait until ADC conversion completes
     ADCON0bits.ON = 0; // Turn back off ADC
-//    if (RA3 = High){
-//        RA3 = Low; // ---------- Fix; Toggle solar isolation pin --------
-//    }
+    
+    if (PORTAbits.RA3 == 1){
+        LATAbits.LATA3 = 0; // ---------- Fix; Toggle solar isolation pin --------
+    }
     return (ADRESH << 4) + ADRESL;
 }
 

@@ -12,6 +12,7 @@
 #include <pic18f27K42.h>
 #include <stdbool.h>
 #include <math.h>
+#include "ADC.h"
 
 // Deal with all light source management scripts
 bool PowerFinding(void){
