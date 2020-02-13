@@ -13,6 +13,7 @@
       <itemPath>LSM.h</itemPath>
       <itemPath>testing.h</itemPath>
       <itemPath>envMem.h</itemPath>
+      <itemPath>motor.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
