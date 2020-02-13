@@ -6,6 +6,7 @@
  */
 
 #include <xc.h>
+#include "math.h"
 
 #include "globals.h"
 
@@ -50,7 +51,11 @@ void motor_Setup(void) {
     TRISCbits.TRISC0 = 0;
     TRISCbits.TRISC5 = 0;
     TRISCbits.TRISC6 = 0;
-    TRISCbits.TRISC7 = 0;    
+    TRISCbits.TRISC7 = 0; 
+    
+    // Timer 6 set-up - TO CHECK!!!!
+    T6CLKbits.CS3 = 0b001; // Fosc/4 page 336
+    T6CONbits.ON = 1; // page 339
 }
 
 void setDutyCycleR(uint16_t dutyCycle) {
@@ -66,17 +71,60 @@ void setDutyCycleL(uint16_t dutyCycle) {
 /*
  * motor basic movement function
  */
-void move_dist(uint16_t angle, uint8_t distance, bool slow);
+void move_dist(uint16_t angle, uint8_t distance, bool slow){
+    t6count = ; // T6 value starting from 0
+        
+    if (slow == true) {
+            setDutyCycleR(128); // Quarter duty cycle (128/1024)
+            setDutyCycleL(128);
+    }
+    motor_spin(angle);
+    for t6count <= calcdistt(distance) {
+        rightForwards = 1;
+        leftForwards = 1;
+    }
+    motor_save(angle, distance);
+}
 
 /*
- * motor movement to interrupt
+ * motor movement to interrupt timer T6
  */
-void move(uint16_t angle);
+void motor_move(uint16_t angle) {
+    motor_spin(angle);
+    while timer6 <= 4 { // 4 being arbitrary value for interrupt
+        rightForwards = 1;
+        leftForwards = 1;
+    }
+    motor_save(angle, distance);
+ }
 
 /*
- * motor spin in place
+ * motor spin in place for a desired shift in angle
  */
-void motor_spin(uint16_t angle);
+void motor_spin(uint16_t angle) {
+    t6count = ; // T6 value starting from 0
+    
+    if angle > 0 { // Anti-clockwise
+        for t6count <= calcanglet(angle) {
+            rightForwards = 1;
+            leftBackwards = 1;
+        }
+    }
+    if angle < 0 { // Clockwise
+        for t6count <= calcanglet(angle) {
+            rightBackwards = 1;
+            leftForwards = 1;
+        }
+    }
+    motor_save(angle, distance);
+}
+
+/*
+ * motor spin in place for a desired angle (?)
+ */
+void motor_bearing(uint16_t angle) {
+    
+}
 
 /*
  * motor stop
@@ -86,9 +134,61 @@ void motor_stop(void) {
     leftBackwards = 0;
     rightForwards = 0;
     rightBackwards = 0;
+    motor_save(angle, distance);
 }
 
 /*
- * motor setup - Page 349
+ * motor reverses (5cm) then spins to desired angle
  */
-void motor_reverse(uint16_t angle);
+void motor_reverse(uint16_t angle) {
+    t6count = ; // T6 counter
+    
+    while t6count <= calcdistt(5){
+        rightBackwards = 1;
+        leftBackwards = 1;
+    }
+    motor_spin(angle);
+    motor_save(angle, distance);
+}
+
+/*
+ * saving distance moved in vector direction as polar coordinates
+ */
+void motor_save(uint16_t angle, uint16_t distance);
+
+/*
+ * calculating time t
+ */
+long double calcanglet(uint16_t angle) {
+    int fstime = 10; // TO TEST - time taken to complete full rotation
+    double pi = M_PI; // pi
+    long double spintime = fstime / (2*pi/angle); // t/(2pi/angle)
+    return spintime;
+}
+
+/*
+ * calculating time needed to reach desired distance
+ */
+long double calcdistt(uint16_t distance){
+    int movetime = 10; // TO TEST - time taken to move 10 cm
+    long double disttime = movetime/(10/distance);
+    return disttime;
+}
+
+/*
+ * TESTER - infinite clockwise spin
+ */
+void spin_testCW(void){
+    rightBackwards = 1;
+    leftForwards = 1;
+}
+
+/*
+ * TESTER - move forward 20s
+ */
+void move_test(void){
+    while t6 < 20 { // Timer 6 check for 20s - FIX
+        rightForwards = 1;
+        leftBackwards = 1;
+    }
+}
