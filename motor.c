@@ -69,10 +69,10 @@ void setDutyCycleL(uint16_t dutyCycle) {
 }
 
 /*
- * motor basic movement function
+ * motor basic movement function w/ option to reduce speed
  */
 void move_dist(uint16_t angle, uint8_t distance, bool slow){
-    t6count = ; // T6 value starting from 0
+    int t6count = ; // T6 value starting from 0
         
     if (slow == true) {
             setDutyCycleR(128); // Quarter duty cycle (128/1024)
@@ -102,7 +102,7 @@ void motor_move(uint16_t angle) {
  * motor spin in place for a desired shift in angle
  */
 void motor_spin(uint16_t angle) {
-    t6count = ; // T6 value starting from 0
+    int t6count = ; // T6 value starting from 0
     
     if angle > 0 { // Anti-clockwise
         for t6count <= calcanglet(angle) {
@@ -141,7 +141,7 @@ void motor_stop(void) {
  * motor reverses (5cm) then spins to desired angle
  */
 void motor_reverse(uint16_t angle) {
-    t6count = ; // T6 counter
+    int t6count = ; // T6 counter
     
     while t6count <= calcdistt(5){
         rightBackwards = 1;
@@ -186,6 +186,7 @@ void spin_testCW(void){
 /*
  * TESTER - move forward 20s
  */
+
 void move_test(void){
     while t6 < 20 { // Timer 6 check for 20s - FIX
         rightForwards = 1;
