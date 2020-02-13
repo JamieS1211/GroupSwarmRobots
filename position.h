@@ -13,6 +13,11 @@
 
 
 // Structures
+struct polarcoord {
+    int radius;
+    float angle;
+};
+
 struct twoangles {
     float angA;
     float angB;
@@ -45,6 +50,25 @@ float ang_scale(float theta);
  * positive = aclk, negative = clk
  */
 float ang_diff(float ang1, float ang2);
+
+
+/*
+ * Returns addition of two polar coordinates
+ * To perform a subtraction multiply radiusB by -1
+ */
+struct polarcoord polar_add(int radiusA, float angleA, int radiusB, float angleB);
+
+
+/*
+ * Returns addition of two polar structures
+ */
+struct polarcoord polar_add_struct(struct polarcoord polarA, struct polarcoord polarB);
+
+
+/*
+ * Returns subtraction of two polar structures
+ */
+struct polarcoord polar_add_struct(struct polarcoord polarA, struct polarcoord polarB);
 
 
 /*

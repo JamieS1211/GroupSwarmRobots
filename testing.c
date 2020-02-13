@@ -20,6 +20,7 @@ void test_all(){
  */
     int testa1 = test_ang_scale();
     int testa2 = test_ang_diff();
+    int testa6 = test_polar_add();
     // ...
     int testa3 = test_rice_calc();
     int testa4 = test_find_error();
@@ -51,6 +52,26 @@ int test_ang_diff(){
     float test1_result = 1.0;
     
     if(test1 != test1_result){
+        y = 0;
+    }
+    return y;
+}
+
+int test_polar_add() {
+    int y = 1;
+    struct polarcoord test1 = polar_add(5,0,5,0);
+    // [10, 0.0]
+    struct polarcoord test2 = polar_add(5,0,-5,0);
+    // [0, 0.0]
+    struct polarcoord test3 = polar_add(5,0,5,1);
+    // [9, 0.5]
+    if (test1.radius != 10){
+        y = 0;
+    }
+    if (test2.radius != 0){
+        y = 0;
+    }
+    if (test3.radius != 9){
         y = 0;
     }
     return y;

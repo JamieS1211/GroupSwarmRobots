@@ -62,6 +62,92 @@ float ang_diff(float ang1, float ang2)
 
 
 /*
+ * Returns addition of two polar coordinates
+ * To perform a subtraction multiply radiusB by -1
+ */
+struct polarcoord polar_add(int radiusA, float angleA, int radiusB, float angleB)
+/*
+ * Parameters
+ * ----------
+ * radiusA
+ *      int in mm.
+ * angleA
+ *      Angle in radians.
+ * radiusB
+ *      int in mm. Multiply by -1 to perform polar subtraction.
+ * angleB
+ *      Angle in radians.
+ * 
+ * Returns
+ * -------
+ * struct polarcoord
+ *      int radius;
+ *      float angle;
+ */
+{
+    struct polarcoord out;
+    
+    // https://math.stackexchange.com/questions/1365622/adding-two-polar-vectors
+    out.radius = round(sqrt(pow(radiusA,2)+pow(radiusB,2)+(2*radiusA*radiusB*cos(angleB-angleA))));
+    out.angle = angleA + atan2(radiusB*sin(angleB-angleA),radiusA+(radiusB*cos(angleB-angleA)));
+    
+    return out;
+}
+
+
+/*
+ * Returns addition of two polar structures
+ */
+struct polarcoord polar_add_struct(struct polarcoord polarA, struct polarcoord polarB)
+/*
+ * Parameters
+ * ----------
+ * polarA
+ *      int radius;
+ *      float angle;
+ * polarB
+ *      int radius;
+ *      float angle;
+ * 
+ * Returns
+ * -------
+ * struct polarcoord
+ *      int radius;
+ *      float angle;
+ */
+{
+    struct polarcoord out = polar_add(polarA.radius, polarA.angle, polarB.radius, polarB.angle);
+    return out;
+}
+
+
+/*
+ * Returns subtraction of two polar structures
+ */
+struct polarcoord polar_sub_struct(struct polarcoord polarA, struct polarcoord polarB)
+/*
+ * Parameters
+ * ----------
+ * polarA
+ *      int radius;
+ *      float angle;
+ * polarB
+ *      int radius;
+ *      float angle;
+ * 
+ * Returns
+ * -------
+ * struct polarcoord
+ *      int radius;
+ *      float angle;
+ */
+{
+    struct polarcoord out = polar_add(polarA.radius, polarA.angle, (-1)*polarB.radius, polarB.angle);
+    return out;
+}
+
+
+/*
  * Finds angle overlap between two lists of angles 
  */
 void ang_overlap();
