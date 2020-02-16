@@ -21,6 +21,7 @@ void test_all(){
     int testa1 = test_ang_scale();
     int testa2 = test_ang_diff();
     int testa6 = test_polar_add();
+    int testa7 = test_ang_overlap();
     // ...
     int testa3 = test_rice_calc();
     int testa4 = test_find_error();
@@ -74,6 +75,21 @@ int test_polar_add() {
     if (test3.radius != 9){
         y = 0;
     }
+    return y;
+}
+
+int test_ang_overlap() {
+    int y = 1;
+    struct threeangles listA;
+    listA.offset_aclk = -2;
+    listA.mean = -3;
+    listA.offset_clk = 3;
+    struct threeangles listB;
+    listB.offset_aclk = -1;
+    listB.mean = -2;
+    listB.offset_clk = -3;
+    struct twoofthree test1 = ang_overlap(listA, listB);
+    
     return y;
 }
 

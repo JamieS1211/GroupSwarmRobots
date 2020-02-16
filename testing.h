@@ -17,6 +17,7 @@ void test_all();
 int test_ang_scale();
 int test_ang_diff();
 int test_polar_add();
+int test_ang_overlap();
 // ...
 int test_rice_calc();
 int test_find_error();

@@ -74,7 +74,7 @@ struct polarcoord polar_add_struct(struct polarcoord polarA, struct polarcoord p
 /*
  * Finds angle overlap between two lists of angles 
  */
-void ang_overlap();
+struct twoofthree ang_overlap();
 
 
 /*

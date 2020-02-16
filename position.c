@@ -150,7 +150,99 @@ struct polarcoord polar_sub_struct(struct polarcoord polarA, struct polarcoord p
 /*
  * Finds angle overlap between two lists of angles 
  */
-void ang_overlap();
+struct twoofthree ang_overlap(struct threeangles listA, struct threeangles listB)
+/*
+ * 
+ */
+{
+    // Defining calc variables and scaling
+    float A_aclk = ang_scale(listA.offset_aclk);
+    float A_mean = ang_scale(listA.mean);
+    float A_clk = ang_scale(listA.offset_clk);
+    
+    float B_aclk = ang_scale(listB.offset_aclk);
+    float B_mean = ang_scale(listB.mean);
+    float B_clk = ang_scale(listB.offset_clk);
+    
+    // If anticlockwise of A_aclk, move clockwise one full rotation
+    // I know writing a function would look nicer but angles hurt my brain
+    if (A_aclk < A_mean) {
+        A_mean -= 2*M_PI;
+    }
+    if (A_aclk < A_clk) {
+        A_clk -= 2*M_PI;
+    }
+    if (A_aclk < B_aclk) {
+        B_aclk -= 2*M_PI;
+    }
+    if (A_aclk < B_mean) {
+        B_mean -= 2*M_PI;
+    }
+    if (A_aclk < B_clk) {
+        B_clk -= 2*M_PI;
+    }
+    
+    float bounds[2][3] = {0};
+    //       A         A    B       B
+    //       ?        ?   ?      ?
+    if ((A_aclk-A_clk < A_aclk-B_aclk) & (A_aclk-A_clk < A_aclk-B_clk)) {
+    }
+    //       A    B    A    B
+    //       ?   ?###?   ?
+    else if ((A_aclk - A_clk >= A_aclk-B_aclk) && (A_aclk-A_clk < A_aclk-B_clk)) {
+        bounds[0][0] = B_aclk;
+        bounds[0][2] = A_aclk;
+    }
+    //       A  B   B  A
+    //       ? ?##? ?
+    else if ((A_aclk-B_clk >= A_aclk-B_aclk) && (A_aclk-B_clk < A_aclk-A_clk)) {
+        bounds[0][0] = B_aclk;
+        bounds[0][2] = B_clk;
+    }
+    //       A  B      A    B
+    //       ?#?     ?   ?
+    else if ((A_aclk-B_clk < A_clk-B_aclk) && (A_aclk-A_clk < A_aclk-B_aclk)) {
+        bounds[0][0] = A_aclk;
+        bounds[0][2] = B_clk;
+    }
+    //       A  B   B  A
+    //       ?#?  ?#?
+    else {
+        bounds[0][0] = A_aclk;
+        bounds[0][2] = B_clk;
+        bounds[1][0] = B_aclk;
+        bounds[1][2] = A_clk;
+    }
+    
+    // Looping through solutions to find mid points
+    for(int i = 0; i < sizeof(bounds)/sizeof(bounds[0]); i++){
+        // Find the mean value
+        float denom = (bounds[i][0] + A_mean - B_mean - bounds[i][2]);
+        if ( abs(denom) < 0.0001) {
+            bounds[i][1] = (bounds[i][0] + bounds[i][2])/2;
+        }
+        else {
+            bounds[i][1] = (bounds[i][0]*A_mean - B_mean*bounds[i][2])/(bounds[i][0] + A_mean - B_mean - bounds[i][2]);
+        }
+    }
+    
+    // formatting and returning
+    struct twoofthree out;
+    // Check if not empty
+    if (bounds[0][0]!=0 || bounds[0][2]!=0) {
+        out.group1.offset_aclk = bounds[0][0];
+        out.group1.mean = bounds[0][1];
+        out.group1.offset_clk = bounds[0][2];
+        
+        // Check if not empty but if first array empty then second array empty
+        if (bounds[0][0]!=0 || bounds[1][2]!=0) {
+            out.group2.offset_aclk = bounds[1][0];
+            out.group2.mean = bounds[1][1];
+            out.group2.offset_clk = bounds[1][2];
+        }
+    }
+    return out;
+}
 
 
 /*
