@@ -5,7 +5,7 @@
  * Created on February 7, 2020, 16:05
  * 
  * Modified based on:
- * https://www.ccsinfo.com/forum/viewtopic.php?t=51156
+ * https://github.com/dthain/QMC5883L
  * Declination angle is removed. Compass points to magnetic North
  * Not true North
  */
@@ -13,46 +13,28 @@
 #ifndef COMPASS_H
 #define COMPASS_H
 
+// Functions
+void comp_init();           // init()
+void comp_reset();          // reset()
+int  comp_ready();          // ready()
+void comp_reconfig();       // reconfig()
 
-//Entire HMC5883L Compass Manual
+float comp_head();            //readHeading()
+int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t ); //readRar()
 
-// Defining addresses
-#define HMC5883L_READ_ADDR       0x3D
-#define HMC5883L_WRITE_ADDR      0x3C
-                           
-#define Config_Reg_A             0x00
-#define Config_Reg_B             0x01
-#define Mode_Reg                 0x02
-#define X_MSB_Reg                0x03
-#define X_LSB_Reg                0x04
-#define Z_MSB_Reg                0x05
-#define Z_LSB_Reg                0x06
-#define Y_MSB_Reg                0x07
-#define Y_LSB_Reg                0x08
-#define Status_Reg               0x09
-#define ID_Reg_A                 0x0A             
-#define ID_Reg_B                 0x0B
-#define ID_Reg_C                 0x0C
-       
-#define declination_angle     1.04   // For Exeter, UK, 2020  
+void comp_resetCalibration();           //resetCalibration()
 
-                                   
-//#use I2C(MASTER, SDA = pin_B7, SCL = pin_B6)   
-                                             
-// Defining used variables
-signed long X_axis = 0;
-signed long Y_axis = 0;                                 
-signed long Z_axis = 0;
-float m_scale = 1.0;
-       
-// Defining functions
-unsigned long make_word(unsigned char HB, unsigned char LB);
-void HMC5883L_init(); 
-unsigned char HMC5883L_read(unsigned char reg);
-void HMC5883L_write(unsigned char reg_address, unsigned char value);
-void HMC5883L_read_data();
-void HMC5883L_scale_axes();
-void HMC5883L_set_scale(float gauss);
-float HMC5883L_heading();
+void comp_setSamplingRate( int rate );  //setSamplingRate()
+void comp_setRange( int range );        //setRange
+void comp_setOversampling( int ovl );   //setOversampling
+  
+// Variables
+int16_t xhigh, xlow;
+int16_t yhigh, ylow;
+uint8_t addr;
+uint8_t mode;
+uint8_t rate;
+uint8_t range;
+uint8_t oversampling;
 
-#endif //COMPASS_H
+#endif  //COMPASS_H

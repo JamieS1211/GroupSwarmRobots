@@ -4,8 +4,8 @@
  *
  * Created on February 7, 2020, 21:50
  * 
- * Modified based on:
- * https://www.ccsinfo.com/forum/viewtopic.php?t=51156
+* Modified based on:
+ * https://github.com/dthain/QMC5883L
  * Declination angle is removed. Compass points to magnetic North
  * Not true North
  */
@@ -17,164 +17,206 @@
 #include "compass.h"
 #include "math.h"
 
-                         
-unsigned long make_word(unsigned char HB, unsigned char LB)
-{                                     
-   register unsigned long val = 0;
-                              
-   val = HB;
-   val <<= 8;                         
-   val |= LB;         
-   return val;
-}                                 
+/*
+ * QMC5883L
+ * http://wiki.epalsite.com/images/7/72/QMC5883L-Datasheet-1.0.pdf
+ */
 
-                               
-void HMC5883L_init()
-{                                       
-   HMC5883L_write(Config_Reg_A, 0x70);
-   HMC5883L_write(Config_Reg_B, 0xA0);
-   HMC5883L_write(Mode_Reg, 0x00); 
-   HMC5883L_set_scale(1.3);
-}
-                                   
+/* The default I2C address of this chip */
+#define QMC5883L_ADDR 0x0D
 
-unsigned char HMC5883L_read(unsigned char reg)
-{                                         
-   unsigned char val = 0;
-   
-//   I2C_Start();
-//   I2C_Write(HMC5883L_WRITE_ADDR);
-//   I2C_Write(reg);
-//   I2C_Start();
-//   I2C_Write(HMC5883L_READ_ADDR);
-//   val = I2C_Read(0);                       
-//   I2C_Stop();
-//   return(val);   
-}
+/* Register numbers */
+#define QMC5883L_X_LSB 0
+#define QMC5883L_X_MSB 1
+#define QMC5883L_Y_LSB 2
+#define QMC5883L_Y_MSB 3
+#define QMC5883L_Z_LSB 4
+#define QMC5883L_Z_MSB 5
+#define QMC5883L_STATUS 6
+#define QMC5883L_TEMP_LSB 7
+#define QMC5883L_TEMP_MSB 8
+#define QMC5883L_CONFIG 9
+#define QMC5883L_CONFIG2 10
+#define QMC5883L_RESET 11
+#define QMC5883L_RESERVED 12
+#define QMC5883L_CHIP_ID 13
 
-                                 
-void HMC5883L_write(unsigned char reg_address, unsigned char value)
+/* Bit values for the STATUS register */
+#define QMC5883L_STATUS_DRDY 1
+#define QMC5883L_STATUS_OVL 2
+#define QMC5883L_STATUS_DOR 4
+
+/* Oversampling values for the CONFIG register */
+#define QMC5883L_CONFIG_OS512 0b00000000
+#define QMC5883L_CONFIG_OS256 0b01000000
+#define QMC5883L_CONFIG_OS128 0b10000000
+#define QMC5883L_CONFIG_OS64  0b11000000
+
+/* Range values for the CONFIG register */
+#define QMC5883L_CONFIG_2GAUSS 0b00000000
+#define QMC5883L_CONFIG_8GAUSS 0b00010000
+
+/* Rate values for the CONFIG register */
+#define QMC5883L_CONFIG_10HZ   0b00000000
+#define QMC5883L_CONFIG_50HZ   0b00000100
+#define QMC5883L_CONFIG_100HZ  0b00001000
+#define QMC5883L_CONFIG_200HZ  0b00001100
+
+/* Mode values for the CONFIG register */
+#define QMC5883L_CONFIG_STANDBY 0b00000000
+#define QMC5883L_CONFIG_CONT    0b00000001
+
+/* Apparently M_PI isn't available in all environments. */
+#ifndef M_PI
+#define M_PI 3.14159265358979323846264338327950288
+#endif
+
+static void write_register( int addr, int reg, int value )
 {
-//   I2C_Start();
-//   I2C_Write(HMC5883L_WRITE_ADDR);
-//   I2C_Write(reg_address);
-//   I2C_Write(value);
-//   I2C_Stop();
-}                                           
-     
-void HMC5883L_read_data()
-{                         
-   unsigned char lsb = 0;
-   unsigned char msb = 0;
-   
-//   I2C_Start();
-//   I2C_Write(HMC5883L_WRITE_ADDR);
-//   I2C_Write(X_MSB_Reg);           
-//   I2C_Start();
-//   I2C_Write(HMC5883L_READ_ADDR);
-//   
-//   msb = I2C_Read();
-//   lsb = I2C_Read();
-//   X_axis = make_word(msb, lsb);
-//                          
-//   msb = I2C_Read();
-//   lsb = I2C_Read();
-//   Z_axis = make_word(msb, lsb);
-//                  
-//   msb = I2C_Read();
-//   lsb = I2C_Read(0);
-//   Y_axis = make_word(msb, lsb);           
-//                      
-//   I2C_Stop();   
+//  Wire.beginTransmission(addr);
+//  Wire.write(reg);
+//  Wire.write(value);
+//  Wire.endTransmission();
 }
 
-
-void HMC5883L_scale_axes()
-{   
-         
-   X_axis *= m_scale;
-   Z_axis *= m_scale;                           
-   Y_axis *= m_scale;
+static int read_register( int addr, int reg, int count )
+{
+//  Wire.beginTransmission(addr);
+//  Wire.write(reg);
+//  Wire.endTransmission();
+//  
+//  Wire.requestFrom(addr,count);
+//  int n = Wire.available();
+//  if(n!=count) return 0;
+//
+//  return n;
 }
 
-
-void HMC5883L_set_scale(float gauss)                     
+void comp_reconfig()
 {
-   unsigned char value = 0;   
-   
-    if(gauss == 0.88)       
-    {                                           
-      value = 0x00;                     
-      m_scale = 0.73;
-   } 
-   
-   else if(gauss == 1.3)   
-   {
-      value = 0x01;
-      m_scale = 0.92;     
-   } 
-   
-   else if(gauss == 1.9)
-   {
-      value = 0x02;
-      m_scale = 1.22;
-   }
-   
-   else if(gauss == 2.5)
-   {
-      value = 0x03;
-      m_scale = 1.52;
-   } 
-   
-   else if(gauss == 4.0)
-   {
-      value = 0x04;
-      m_scale = 2.27;
-   }
-   
-   else if(gauss == 4.7)
-   {
-      value = 0x05;
-      m_scale = 2.56;
-   } 
-   
-   else if(gauss == 5.6)
-   {
-      value = 0x06;
-      m_scale = 3.03;
-   }   
-   
-   else if(gauss == 8.1)                                 
-   {
-      value = 0x07;
-      m_scale = 4.35;         
-   }       
-                                               
-   value <<= 5;
-   HMC5883L_write(Config_Reg_B, value);
-}     
+  write_register(addr,QMC5883L_CONFIG,oversampling|range|rate|mode);  
+}
 
-                               
-float HMC5883L_heading()         
+void comp_reset()
 {
-   register float heading = 0.0;
-   
-   HMC5883L_read_data();
-   HMC5883L_scale_axes();
-   heading = atan2(Y_axis, X_axis);
-    heading += declination_angle;   
-                 
-    if(heading <= -M_PI)
-    {
-      heading += (2.0 * M_PI);
-    }
-   
-    if(heading > (2.0 * M_PI))               
-    {                           
-      heading -= (2.0 * M_PI);
-    }                   
-                   
-   heading *= (180.0 / M_PI);
-                  
-   return heading;
-}             
+  write_register(addr,QMC5883L_RESET,0x01);
+  comp_reconfig();
+}
+
+void comp_setOversampling( int x )
+{
+  switch(x) {
+    case 512:
+      oversampling = QMC5883L_CONFIG_OS512;
+      break;
+    case 256:
+      oversampling = QMC5883L_CONFIG_OS256;
+      break;
+    case 128:
+      oversampling = QMC5883L_CONFIG_OS128;
+      break;
+    case 64:
+      oversampling = QMC5883L_CONFIG_OS64;
+      break;
+  } 
+  comp_reconfig();
+}
+
+void comp_setRange( int x )
+{
+  switch(x) {
+    case 2:
+      range = QMC5883L_CONFIG_2GAUSS;
+      break;
+    case 8:
+      range = QMC5883L_CONFIG_8GAUSS;
+      break;
+  }
+  comp_reconfig();
+}
+
+void comp_setSamplingRate( int x )
+{
+  switch(x) {
+    case 10:
+      rate = QMC5883L_CONFIG_10HZ;
+      break;
+    case 50:
+      rate = QMC5883L_CONFIG_50HZ;
+      break;
+    case 100:
+      rate = QMC5883L_CONFIG_100HZ;
+      break;
+    case 200:
+      rate = QMC5883L_CONFIG_200HZ;
+      break;
+  }
+  comp_reconfig();
+}
+
+void comp_init() {
+  /* This assumes the wire library has been initialized. */
+  addr = QMC5883L_ADDR;
+  oversampling = QMC5883L_CONFIG_OS512;
+  range = QMC5883L_CONFIG_2GAUSS;
+  rate = QMC5883L_CONFIG_50HZ;
+  mode = QMC5883L_CONFIG_CONT;
+  comp_reset();
+}
+
+int comp_ready()
+{
+//  if(!read_register(addr,QMC5883L_STATUS,1)) return 0;
+//  uint8_t status = Wire.read();
+//  return status & QMC5883L_STATUS_DRDY; 
+}
+
+int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t )
+{
+  while(!comp_ready()) {}
+
+  if(!read_register(addr,QMC5883L_X_LSB,6)) return 0;
+
+//  *x = Wire.read() | (Wire.read()<<8);
+//  *y = Wire.read() | (Wire.read()<<8);
+//  *z = Wire.read() | (Wire.read()<<8);
+
+  return 1;
+}
+
+void comp_resetCalibration() {
+  xhigh = yhigh = 0;
+  xlow = ylow = 0;
+}
+
+float comp_head()
+{
+  int16_t x, y, z, t;
+
+  if(!comp_readRaw(&x,&y,&z,&t)) return 0;
+
+  /* Update the observed boundaries of the measurements */
+
+  if(x<xlow) xlow = x;
+  if(x>xhigh) xhigh = x;
+  if(y<ylow) ylow = y;
+  if(y>yhigh) yhigh = y;
+
+  /* Bail out if not enough data is available. */
+  
+  if( xlow==xhigh || ylow==yhigh ) return 0;
+
+  /* Recenter the measurement by subtracting the average */
+
+  x -= (xhigh+xlow)/2;
+  y -= (yhigh+ylow)/2;
+
+  /* Rescale the measurement to the range observed. */
+  
+  float fx = (float)x/(xhigh-xlow);
+  float fy = (float)y/(yhigh-ylow);
+
+  float heading = atan2(fy,fx);
+  
+  return heading;
+}          
