@@ -31,21 +31,22 @@ void interrupts_Setup(void) {
  */
 void __interrupt() interrupts_Event(void) {
     
-    if (PIE3bits.TMR0IE && PIR3bits.TMR0IF) {
-        // TMR0 Interrupt - must be software cleared
-        PIR3bits.TMR0IF = 0;
-        
+    if (PIE9bits.TMR6IE && PIR9bits.TMR6IF) {
+        // Stop movement forwards
+        motor_stop();
         // Read compass
         
         // Read LiDAR
         
         // Make decision
         
-        // Stop movement forwards
-        
         // Turn
+        motor_spin();
         
         // Move forwards
+        motor_move();
         
+        // TMR6 Interrupt - must be software cleared
+        PIR9bits.TMR6IF = 0; // Reset timer (?)
     }
 }

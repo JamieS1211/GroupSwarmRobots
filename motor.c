@@ -53,9 +53,13 @@ void motor_Setup(void) {
     TRISCbits.TRISC6 = 0;
     TRISCbits.TRISC7 = 0; 
     
-    // Timer 6 set-up - TO CHECK!!!!
-    T6CLKbits.CS3 = 0b001; // Fosc/4 page 336
+    // Timer 6 set-up for ~2s
+    T6CLKbits.CS = 0b001; // Fosc/4 page 336
     T6CONbits.ON = 1; // page 339
+    T6CONbits.CKPS = 0b111; // pre-scalar (1:128) page 239
+    T6CONbits.OUTPS = 0b1111; // post-scalar (1:16) page  239
+    PIE9bits.TMR6IE = 1; // page 155
+    T6PR = 243; // arbitrary 243/245 page 338
 }
 
 void setDutyCycleR(uint16_t dutyCycle) {
@@ -142,13 +146,20 @@ void motor_stop(void) {
  */
 void motor_reverse(uint16_t angle) {
     int t6count = ; // T6 counter
-    
-    while t6count <= calcdistt(5){
+    int distance = 5;
+    while t6count <= calcdistt(distance){
         rightBackwards = 1;
         leftBackwards = 1;
     }
     motor_spin(angle);
     motor_save(angle, distance);
+}
+
+/*
+ * Escape from P2P charging
+ */
+void motor_escape(void){
+    
 }
 
 /*
@@ -186,7 +197,6 @@ void spin_testCW(void){
 /*
  * TESTER - move forward 20s
  */
-
 void move_test(void){
     while t6 < 20 { // Timer 6 check for 20s - FIX
         rightForwards = 1;
