@@ -12,7 +12,6 @@
       <itemPath>position.h</itemPath>
       <itemPath>LSM.h</itemPath>
       <itemPath>testing.h</itemPath>
-      <itemPath>envMem.h</itemPath>
       <itemPath>motor.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -30,7 +29,6 @@
       <itemPath>position.c</itemPath>
       <itemPath>LSM.c</itemPath>
       <itemPath>testing.c</itemPath>
-      <itemPath>envMem.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

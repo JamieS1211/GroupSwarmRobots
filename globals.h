@@ -12,7 +12,8 @@
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
-#include "envMem.h"
+
+#include "position.h"
 
 /* ~~~~~~~~~~~~~~~~~~
  * Environment Memory

@@ -15,11 +15,37 @@
 //I'll probably write out the maths nicely else where
 
 /*
- * Returns angle as a value between -pi and pi
+ * ------------------------
+ * --- envMem Functions ---
+ * ------------------------
+ */
+int update_place(int place, int array_length) {
+    place = place + 1;
+    if (place >= array_length) {
+        place = 0;
+    }
+    return place;
+}
+struct bubble update_bubble(struct bubble old, struct polarcoord newmove) {
+    
+}
+
+struct balloon update_balloon(struct balloon old, struct polarcoord newmove) {
+    
+}
+
+void update_envMem() {
+    
+}
+
+/*
+ * ------------------------
+ * ---- Math Functions ----
+ * ------------------------
  */
 float ang_scale(float theta)
 /*
- * Scales angle between -pi and pi
+ * Returns angle as a value between -pi and pi
  */
 {
     while(1) {
@@ -36,12 +62,11 @@ float ang_scale(float theta)
     return theta;
 }
 
-
+float ang_diff(float ang1, float ang2)
 /*
  * Returns shortest from ang1 to ang2
  * positive = aclk, negative = clk
  */
-float ang_diff(float ang1, float ang2)
 {
     // Ensuring angles in correct range
     ang1 = ang_scale(ang1);
@@ -60,13 +85,15 @@ float ang_diff(float ang1, float ang2)
     }
 }
 
-
 /*
- * Returns addition of two polar coordinates
- * To perform a subtraction multiply radiusB by -1
+ * ------------------------
+ * --- struct Functions ---
+ * ------------------------
  */
 struct polarcoord polar_add(int radiusA, float angleA, int radiusB, float angleB)
-/*
+/* Returns addition of two polar coordinates
+ * To perform a subtraction multiply radiusB by -1
+ * 
  * Parameters
  * ----------
  * radiusA
@@ -94,12 +121,9 @@ struct polarcoord polar_add(int radiusA, float angleA, int radiusB, float angleB
     return out;
 }
 
-
-/*
- * Returns addition of two polar structures
- */
 struct polarcoord polar_add_struct(struct polarcoord polarA, struct polarcoord polarB)
-/*
+/* Returns addition of two polar structures
+ * 
  * Parameters
  * ----------
  * polarA
@@ -120,12 +144,9 @@ struct polarcoord polar_add_struct(struct polarcoord polarA, struct polarcoord p
     return out;
 }
 
-
-/*
- * Returns subtraction of two polar structures
- */
 struct polarcoord polar_sub_struct(struct polarcoord polarA, struct polarcoord polarB)
-/*
+/* Returns subtraction of two polar structures
+ * 
  * Parameters
  * ----------
  * polarA
@@ -148,11 +169,13 @@ struct polarcoord polar_sub_struct(struct polarcoord polarA, struct polarcoord p
 
 
 /*
- * Finds angle overlap between two lists of angles 
+ * ------------------------
+ * ---- awful Functions ---
+ * ------------------------
  */
 struct twoofthree ang_overlap(struct threeangles listA, struct threeangles listB)
 /*
- * 
+ * returns overlap. Don't ask how it works
  */
 {
     // Defining calc variables and scaling
@@ -244,36 +267,9 @@ struct twoofthree ang_overlap(struct threeangles listA, struct threeangles listB
     return out;
 }
 
-
-/*
- * Finds angle overlap between two lists of two lists of angles 
- */
-void ang2_overlap();
-
-
-/*
- * Checks if angle inside list of 3 angles 
- */
-void ang_within();
-
-
-/*
- * Returns shortest rotation between two angles
- */
-void ang_short(void);
-
-
-/*
- * Returns if a polar coordinate lies in a circle with centre at polar position
- */
-void polar_in_polar();
-
-
-/*
- * Calculates the min and max error given values for error.
- */
 struct twoangles rice_calc(int rMove, float phiMove, int r1, int r2)
-/*
+/* Calculates the min and max error given values for error.
+ * 
  * Parameters
  * ----------
  * rMove
@@ -318,12 +314,9 @@ struct twoangles rice_calc(int rMove, float phiMove, int r1, int r2)
     return out;
 }
 
-
-/*
- * Calculates the min and max error given values for error.
- */
 struct twooftwo find_error(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr)
-/*
+/* Calculates the min and max error given values for error.
+ * 
  * Parameters
  * ----------
  * rMove
@@ -379,12 +372,10 @@ struct twooftwo find_error(int rMove, float phiMove, int r1, int r2, float rErr,
     return out;
 }
 
-/*
- * Finds robot locations based on single transmission
- * Returns highest likely value with max and min
- */
 struct twoofthree robo_find(int rMove, float phiMove, int r1, int r2, float rErr, float phiErr, int tfErr)
-/*
+/* Finds robot locations based on single transmission
+ * Returns highest likely value with max and min
+ * 
  * Parameters
  * ----------
  * rMove
