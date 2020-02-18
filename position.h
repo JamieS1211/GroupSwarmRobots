@@ -8,36 +8,9 @@
 #ifndef POSITION_H
 #define POSITION_H
 
+#include "envMem.h"
 
 //I'll probably write out the maths nicely else where
-
-
-// Structures
-struct polarcoord {
-    int radius;
-    float angle;
-};
-
-struct twoangles {
-    float angA;
-    float angB;
-};
-
-struct threeangles {
-    float offset_aclk;
-    float mean;
-    float offset_clk;
-};
-
-struct twooftwo {
-    struct twoangles group1;
-    struct twoangles group2;
-};
-
-struct twoofthree {
-    struct threeangles group1;
-    struct threeangles group2;
-};
 
 /*
  * Returns angle as a value between -pi and pi

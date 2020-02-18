@@ -8,11 +8,39 @@
 #ifndef ENVMEM_H
 #define ENVMEM_H
 
+#include "position.h"
+
 
 //I'll probably write out the maths nicely else where
 
 
-// Structures
+// Universal Structures
+struct polarcoord {
+    int radius;
+    float angle;
+};
+
+struct twoangles {
+    float angA;
+    float angB;
+};
+
+struct threeangles {
+    float offset_aclk;
+    float mean;
+    float offset_clk;
+};
+
+struct twooftwo {
+    struct twoangles group1;
+    struct twoangles group2;
+};
+
+struct twoofthree {
+    struct threeangles group1;
+    struct threeangles group2;
+};
+
 struct bubble {
     int radius;
     float angle;
@@ -22,28 +50,15 @@ struct bubble {
 struct balloon {
     int radius;
     struct threeangles angles;
-    int r_error;
 };
 
-struct moveMem {
-    struct bubble current; // Movement which is continously added to until offload
-    
-    // This whole part will be replaced with pointers
-    // I am just stupid
-    uint8_t pointyboi; // Pointer for latest position
-    struct bubble move0;
-    struct bubble move1;
-    struct bubble move2;
-    struct bubble move3;
-    // Will be allocatable to n number in global
-};
+// EnvMem functions
+int update_place(int place, int array_length);
 
-//// To add to moveMem
-//moveMem.current = polar_add_struct(moveMem.current,polar_coordinate);
-//
-//// To offload from current
-//moveMem.pointyboi -> moveMem.move0 = moveMem.current;
-//moveMem.current = 0;
+struct bubble update_bubble(struct bubble old, struct polarcoord newmove);
 
+struct balloon update_balloon(struct balloon old, struct polarcoord newmove);
+
+void update_envMem();
 
 #endif //ENVMEM_H
