@@ -1,13 +1,15 @@
 /* 
  * File:   Lidar.c
- * Author: Chloe
+ * Author: Chloe 
  *
  * Created on 07 February 2020
  */
+#include <xc.h>
+#include "stdint.h"
 
 #include "globals.h"
 #include "Lidar.h"
-#include "i2C.h"
+#include "i2c.h"
 
 
 #define SYSRANGE_START 0x00
@@ -55,35 +57,27 @@
 #define RESULT_PEAK_SIGNAL_RATE_REF_5 0xB5
 #define GLOBAL_CONFIG_REF_EN_START_SELECT 0xB6
 
-/*
- * Send data to VL5310X using I2C
- */
+
 void vl53l0x_I2C_SendData(uint8_t slave_address, uint8_t device_register, uint8_t value) {
     uint8_t data[2] = {device_register, value};
     i2C_SendData(slave_address, data, 2);
 }
 
-
-/*
- * Receive data from VL5310X using I2C
- */
-uint8_t vl53l0x_I2C_ReceiveData(uint8_t slave_address, uint8_t device_register) {
-    uint8_t sendData[1] = {device_register};
-    uint8_t recievedData[1] = {0x00};
-    i2C_ReceiveData(slave_address, sendData, 1, StopStart, recievedData, 1);  
+uint8_t Lidar_Read_Register(uint8_t slave_address, uint8_t register_value) {
+    uint8_t pointt;
+    uint8_t reg[1]={register_value};
+    i2C_SendData(slave_address, reg, 0x01);
+    i2C_ReceiveData(slave_address, &pointt, 0x01);
     
-    return recievedData[0];
+    uint8_t value=pointt;
+    return value;
 }
-
-
 /*
  * Setup VL5310X to desired settings using I2C
  */
 void vl5310x_Setup(uint8_t slave_address) {
     //TODO Find documentation that gives details and configure as desired (Possibly Peter knows?)
     vl5310x_Initialisation(slave_address);
-    
-    
     
     //SET TO CONTINEOUS AND HIGH ACCURACY
 	vl53l0x_I2C_SendData(slave_address, FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, 0x00);
@@ -180,14 +174,14 @@ void vl5310x_Initialisation(uint8_t slave_address) {
 	vl53l0x_I2C_SendData(slave_address, SYSTEM_SEQUENCE_CONFIG, 0x01);
 	vl53l0x_I2C_SendData(slave_address, SYSRANGE_START, 0x41);
     
-    while ((vl53l0x_I2C_ReceiveData(slave_address, INTERRUPT_STATUS) & 0x07) == 0);
+    while ((Lidar_Read_Register(slave_address, INTERRUPT_STATUS) & 0x07) == 0);
     
 	vl53l0x_I2C_SendData(slave_address, SYSTEM_INTERRUPT_CLEAR, 0x01);
 	vl53l0x_I2C_SendData(slave_address, SYSRANGE_START, 0x00);
 	vl53l0x_I2C_SendData(slave_address, SYSTEM_SEQUENCE_CONFIG, 0x02);
 	vl53l0x_I2C_SendData(slave_address, SYSRANGE_START, 0x01);
     
-    while ((vl53l0x_I2C_ReceiveData(slave_address, INTERRUPT_STATUS) & 0x07) == 0);
+    while ((Lidar_Read_Register(slave_address, INTERRUPT_STATUS) & 0x07) == 0);
     
 	vl53l0x_I2C_SendData(slave_address, SYSTEM_INTERRUPT_CLEAR, 0x01);
 	vl53l0x_I2C_SendData(slave_address, SYSRANGE_START, 0x00);
@@ -286,7 +280,7 @@ void vl5310x_Tuning(uint8_t slave_address) {
 
 
 /*
- * Read range from VL5310X
+ * Read range from VL5310X might need to change the way the function works for the new i2c
  */
 uint16_t vl5310x_ReadRange(uint8_t slave_address) {
 	vl53l0x_I2C_SendData(slave_address, POWER_MANAGEMENT_GO1_POWER_FORCE, 0x01);
@@ -298,10 +292,10 @@ uint16_t vl5310x_ReadRange(uint8_t slave_address) {
 	vl53l0x_I2C_SendData(slave_address, POWER_MANAGEMENT_GO1_POWER_FORCE, 0x00);
 	vl53l0x_I2C_SendData(slave_address, SYSRANGE_START, 0x01);
     
-    while ((vl53l0x_I2C_ReceiveData(slave_address, INTERRUPT_STATUS) & 0x07) == 0);
+  while ((Lidar_Read_Register(slave_address, INTERRUPT_STATUS) & 0x07) == 0);
     
-    uint8_t valueHI = vl53l0x_I2C_ReceiveData(slave_address, RANGE_RESULT_HI);
-    uint8_t valueLO = vl53l0x_I2C_ReceiveData(slave_address, RANGE_RESULT_LO);
+    uint8_t valueHI = Lidar_Read_Register(slave_address, RANGE_RESULT_HI);
+    uint8_t valueLO = Lidar_Read_Register(slave_address, RANGE_RESULT_LO);
     
 	vl53l0x_I2C_SendData(slave_address, SYSTEM_INTERRUPT_CLEAR, 0x01);
     
