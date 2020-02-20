@@ -27,15 +27,54 @@ int update_place(int place, int array_length) {
     return place;
 }
 struct bubble update_bubble(struct bubble old, struct polarcoord newmove) {
+    // Add to new structure for sub function
+    struct polarcoord oldpol = {old.radius, old.angle};
+    struct polarcoord new = polar_sub_struct(oldpol, newmove);
     
+    // Update error
+    old.r_error = old.r_error + (newmove.radius*moveError);
+        
+    // create output
+    struct bubble out = {new.radius, new.angle, old.r_error};
+    return out;
 }
 
 struct balloon update_balloon(struct balloon old, struct polarcoord newmove) {
+    // Update each three individually
+    struct polarcoord aclk = {old.radius, old.angles.offset_aclk};
+    struct polarcoord mean = {old.radius, old.angles.mean};
+    struct polarcoord clk = {old.radius, old.angles.offset_clk};
     
+    aclk = polar_sub_struct(aclk, newmove);
+    mean = polar_sub_struct(mean, newmove);
+    clk = polar_sub_struct(clk, newmove);
+    
+    // Update error
+    old.r_error = old.r_error + (newmove.radius*moveError);
+    
+    // create and return output
+    struct threeangles mid = {aclk.angle, mean.angle, clk.angle};
+    struct balloon out = {mean.radius, mid, old.r_error};
+    return out;
 }
 
-void update_envMem() {
+void update_envMem(struct polarcoord newmove) {
+    // Move Memory
+    // No actions required
     
+    // Light Memory
+    for (int i = 0; i < lit_Mem_size; i++) {
+        if ((lit_Mem[i].radius = 0) && (lit_Mem[i].angle = 0) && (lit_Mem[i].r_error = 0)) {
+            lit_Mem[i] = update_bubble(lit_Mem[i], newmove);
+        }
+    }
+    
+    // Object Memory
+    for (int i = 0; i < obj_Mem_size; i++) {
+        if ((obj_Mem[i].radius = 0) && (obj_Mem[i].angle = 0) && (obj_Mem[i].r_error = 0)) {
+            obj_Mem[i] = update_bubble(obj_Mem[i], newmove);
+        }
+    }
 }
 
 /*
@@ -208,7 +247,7 @@ struct twoofthree ang_overlap(struct threeangles listA, struct threeangles listB
     float bounds[2][3] = {0};
     //       A         A    B       B
     //       ?        ?   ?      ?
-    if ((A_aclk-A_clk < A_aclk-B_aclk) & (A_aclk-A_clk < A_aclk-B_clk)) {
+    if ((A_aclk-A_clk < A_aclk-B_aclk) && (A_aclk-A_clk < A_aclk-B_clk)) {
     }
     //       A    B    A    B
     //       ?   ?###?   ?

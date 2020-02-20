@@ -46,6 +46,7 @@ struct bubble {
 struct balloon {
     int radius;
     struct threeangles angles;
+    int r_error;
 };
 
 // EnvMem functions (used by others)
