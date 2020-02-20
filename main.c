@@ -13,10 +13,6 @@
  */
 
 #include <xc.h>
-#include "globals.h"
-#include "interrupts.h"
-#include "i2c.h"
-#include "testing.h"
 
 // Production -> set configuration bits
 // CONFIG1L
@@ -111,13 +107,19 @@
  * 28 - RB7/ICSPDAT                 - [NONE]
  */
 
+#define _XTAL_FREQ 20000000
+
 void main(void) {
-    i2C_Setup();
-    interrupts_Setup(); // Last setup function
     
-    test_all();
+    LATBbits.LATB5 = 0;
+    TRISBbits.TRISB5 = 0;
     
-    while(1);
+    while(1) {
+        LATBbits.LATB5 = 1;
+        __delay_ms(50);
+        LATBbits.LATB5 = 0;
+        __delay_ms(50);
+    }
     
     return;
 }
