@@ -13,6 +13,7 @@
 #include "globals.h"
 #include "i2c.h"
 #include "Lidar.h"
+#include "motor.h"
 
 
 void Lidar_Change_Address() {
@@ -55,6 +56,8 @@ void Lidar_Change_Address() {
 uint8_t collide_check(uint8_t distance) {
 uint16_t value = vl5310x_ReadRange(0x52);       //Lidar 1
 uint16_t value2 = vl5310x_ReadRange(0x0F);      //Lidar 2, on the right
+//Try to get 10 values for average
+//Ensure all numbers and one not wildly different
 
 uint8_t dist=distance+0x1F4;      //As can only move this at a time
 
@@ -66,18 +69,16 @@ else if (dist < value || dist < value2) {
    uint8_t check = 0x01;
     return check;           // You can move so send 1.
 }
-//Try to get 10 values for average
-//Ensure all numbers and one not wildly different
 
-//Change dependent on stopping distance
-//else if (value < 0x64 || value2 < 0x64 ) {    //Might not need just a stop function or at least stop then do something???
-//Stop
-//}
+else if (value < 0x64 || value2 < 0x64 ) {    //Change dependent on stopping distance
+    motor_stop();
+//Turn on the spot or something
+}
 
 //If only right reads a value, turn right. 
 
 else if (value2 < value) {
-    //Turn right
+//motor_spin()    //Turn right
  uint8_t  check = 0x00;
  return check;
 }
@@ -90,17 +91,4 @@ else if (value < value2) {
 else {
     //Invalid movement
 }
-
-/*
-If both sensor reads the same or similar value, object is dead ahead and cannnot fit through
-so only need to turn slighly to avoid.
-
-Remeber instead of letting the Lidar read
-Out of range, I set it to be a widely big 
-number which could help with coding.
-*/
-
-
-
-
 }

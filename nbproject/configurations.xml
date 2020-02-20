@@ -12,6 +12,7 @@
       <itemPath>position.h</itemPath>
       <itemPath>LSM.h</itemPath>
       <itemPath>Lidar.h</itemPath>
+      <itemPath>motor.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
