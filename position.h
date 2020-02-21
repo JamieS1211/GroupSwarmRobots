@@ -49,12 +49,24 @@ struct balloon {
     int r_error;
 };
 
+struct robot {
+    uint8_t id;
+    struct balloon loc;
+    struct balloon pos[4];
+    uint8_t pos_p;
+    struct bubble light[4];
+    uint8_t light_p;
+    struct bubble obj[4];
+    uint8_t obj_p;
+};
+
 // EnvMem functions (used by others)
-int update_place(int place, int array_length);
+int update_place(uint8_t place, uint8_t array_length);
 
 //envMem functions (used by self)
 struct bubble update_bubble(struct bubble old, struct polarcoord newmove);
 struct balloon update_balloon(struct balloon old, struct polarcoord newmove);
+struct robot update_robot(struct robot old, struct polarcoord newmove);
 void update_envMem();
 
 // Math functions used by others

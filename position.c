@@ -58,6 +58,38 @@ struct balloon update_balloon(struct balloon old, struct polarcoord newmove) {
     return out;
 }
 
+struct robot update_robot(struct robot old, struct polarcoord newmove) {
+    // Update location
+    old.loc = update_balloon(old.loc, newmove);
+    
+    // Update Position
+    uint8_t pos_size = sizeof(old.pos)/sizeof(struct balloon);
+    
+    for (int i = 0; i < pos_size; i++) {
+        if ((old.pos[i].radius = 0)) {
+            old.pos[i] = update_balloon(old.pos[i], newmove);
+        }
+    }    
+    
+    // Update Light
+    uint8_t light_size = sizeof(old.light)/sizeof(struct bubble);
+    
+    for (int i = 0; i < light_size; i++) {
+        if ((old.light[i].radius = 0) && (old.light[i].angle = 0) && (old.light[i].r_error = 0)) {
+            old.light[i] = update_bubble(old.light[i], newmove);
+        }
+    }
+    
+    // Update Objects
+    uint8_t obj_size = sizeof(old.obj)/sizeof(struct bubble);
+    
+    for (int i = 0; i < obj_size; i++) {
+        if ((old.obj[i].radius = 0) && (old.obj[i].angle = 0) && (old.obj[i].r_error = 0)) {
+            old.obj[i] = update_bubble(old.obj[i], newmove);
+        }
+    }
+}
+
 void update_envMem(struct polarcoord newmove) {
     // Move Memory
     // No actions required
