@@ -25,7 +25,7 @@ bool PowerFinding(void){
             
         //}
     //}
-    int iteration = 0;
+    uint8_t iteration = 0;
     while (ADC_Read(2) < 800) {
         while (ADC_Read(2) < 600) {
             // Long range closing use LDR's

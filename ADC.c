@@ -38,7 +38,7 @@ void ADC_Setup(void) {
  * Sets up the item to be sampled by the ADC
  * Passed x to define item
  */
-void ADC_DestinationSetup(int x) {
+void ADC_DestinationSetup(uint8_t x) {
     if (x == 0) {
         // ADPCH [ADC Channel selection register] - page 625
         ADPCH = 0x00; // RA0 is selected
@@ -62,7 +62,7 @@ void ADC_DestinationSetup(int x) {
  * Contains code to sample ADC - measuring light levels 
  * Passed x to specify item to sample
  */
-int ADC_Read(int x) {
+int ADC_Read(uint8_t x) {
     /*
      * x = 0 - LDR1 (RA0)
      * x = 1 - LDR2 (RA1) 
