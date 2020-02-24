@@ -10,12 +10,8 @@
  * Not true North
  */
 
-
-#include <xc.h> // Think is library type thing
-
 #include "globals.h"
-#include "compass.h"
-#include "math.h"
+#include "i2c.h"
 
 /*
  * QMC5883L
@@ -66,117 +62,31 @@
 #define QMC5883L_CONFIG_STANDBY 0b00000000
 #define QMC5883L_CONFIG_CONT    0b00000001
 
-/* Apparently M_PI isn't available in all environments. */
-#ifndef M_PI
-#define M_PI 3.14159265358979323846264338327950288
-#endif
-
-static void write_register( int addr, int reg, int value )
+void comp_reconfig_standby()
 {
-//  Wire.beginTransmission(addr);
-//  Wire.write(reg);
-//  Wire.write(value);
-//  Wire.endTransmission();
+    //write_register(address,register,value)
+    //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY);
+    uint8_t standbyte[1] = {QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY};
+    uint8_t addr = QMC5883L_ADDR;
+    //void i2C_SendData(addr, standbyte, 1);
 }
-
-static int read_register( int addr, int reg, int count )
-{
-//  Wire.beginTransmission(addr);
-//  Wire.write(reg);
-//  Wire.endTransmission();
-//  
-//  Wire.requestFrom(addr,count);
-//  int n = Wire.available();
-//  if(n!=count) return 0;
-//
-//  return n;
-}
-
-void comp_reconfig()
-{
-  write_register(addr,QMC5883L_CONFIG,oversampling|range|rate|mode);  
-}
-
+    
 void comp_reset()
 {
-  write_register(addr,QMC5883L_RESET,0x01);
-  comp_reconfig();
+    //write_register(QMC5883L_ADDR,QMC5883L_RESET,0x01);
+    comp_reconfig_standby();
 }
-
-void comp_setOversampling( int x )
+void comp_reconfig_cont()
 {
-  switch(x) {
-    case 512:
-      oversampling = QMC5883L_CONFIG_OS512;
-      break;
-    case 256:
-      oversampling = QMC5883L_CONFIG_OS256;
-      break;
-    case 128:
-      oversampling = QMC5883L_CONFIG_OS128;
-      break;
-    case 64:
-      oversampling = QMC5883L_CONFIG_OS64;
-      break;
-  } 
-  comp_reconfig();
-}
-
-void comp_setRange( int x )
-{
-  switch(x) {
-    case 2:
-      range = QMC5883L_CONFIG_2GAUSS;
-      break;
-    case 8:
-      range = QMC5883L_CONFIG_8GAUSS;
-      break;
-  }
-  comp_reconfig();
-}
-
-void comp_setSamplingRate( int x )
-{
-  switch(x) {
-    case 10:
-      rate = QMC5883L_CONFIG_10HZ;
-      break;
-    case 50:
-      rate = QMC5883L_CONFIG_50HZ;
-      break;
-    case 100:
-      rate = QMC5883L_CONFIG_100HZ;
-      break;
-    case 200:
-      rate = QMC5883L_CONFIG_200HZ;
-      break;
-  }
-  comp_reconfig();
-}
-
-void comp_init() {
-  /* This assumes the wire library has been initialized. */
-  addr = QMC5883L_ADDR;
-  oversampling = QMC5883L_CONFIG_OS512;
-  range = QMC5883L_CONFIG_2GAUSS;
-  rate = QMC5883L_CONFIG_50HZ;
-  mode = QMC5883L_CONFIG_CONT;
-  comp_reset();
-}
-
-int comp_ready()
-{
-//  if(!read_register(addr,QMC5883L_STATUS,1)) return 0;
-//  uint8_t status = Wire.read();
-//  return status & QMC5883L_STATUS_DRDY; 
+    //write_register(address,register,value)
+    //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
+    uint8_t contbyte[1] = {QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT};
+    uint8_t addr = QMC5883L_ADDR;
+    //void i2C_SendData(addr, contbyte, uint8_t 1);
 }
 
 int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t )
 {
-  while(!comp_ready()) {}
-
-  if(!read_register(addr,QMC5883L_X_LSB,6)) return 0;
-
 //  *x = Wire.read() | (Wire.read()<<8);
 //  *y = Wire.read() | (Wire.read()<<8);
 //  *z = Wire.read() | (Wire.read()<<8);
@@ -184,39 +94,20 @@ int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t )
   return 1;
 }
 
-void comp_resetCalibration() {
-  xhigh = yhigh = 0;
-  xlow = ylow = 0;
-}
-
 float comp_head()
 {
-  int16_t x, y, z, t;
+    // Compass to continous
+    comp_reconfig_cont();
+    
+    // Read
+    int16_t x, y, z, t;
+    comp_readRaw(&x,&y,&z,&t);
 
-  if(!comp_readRaw(&x,&y,&z,&t)) return 0;
-
-  /* Update the observed boundaries of the measurements */
-
-  if(x<xlow) xlow = x;
-  if(x>xhigh) xhigh = x;
-  if(y<ylow) ylow = y;
-  if(y>yhigh) yhigh = y;
-
-  /* Bail out if not enough data is available. */
+    // Compass to standby
+    comp_reconfig_standby();
+    
+    // Calculate angle
+    float heading = atan2(y,x);
   
-  if( xlow==xhigh || ylow==yhigh ) return 0;
-
-  /* Recenter the measurement by subtracting the average */
-
-  x -= (xhigh+xlow)/2;
-  y -= (yhigh+ylow)/2;
-
-  /* Rescale the measurement to the range observed. */
-  
-  float fx = (float)x/(xhigh-xlow);
-  float fy = (float)y/(yhigh-ylow);
-
-  float heading = atan2(fy,fx);
-  
-  return heading;
+    return heading;
 }          
