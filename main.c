@@ -17,6 +17,8 @@
 #include "interrupts.h"
 #include "i2c.h"
 #include "testing.h"
+#include "compass.h"
+#include "Collision.h"
 
 // Production -> set configuration bits
 // CONFIG1L
@@ -113,9 +115,12 @@
 
 void main(void) {
     i2C_Setup();
-    interrupts_Setup(); // Last setup function
+  //  interrupts_Setup(); // Last setup function
     
-    test_all();
+   // test_all();
+    vl5310x_Setup(0x52);
+    Lidar_Change_Address();
+    collide_check(600);
     
     while(1);
     

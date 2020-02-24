@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include <math.h>
 #include "ADC.h"
+#include "motor.h"
+#include "compass.h"
 
 // Deal with all light source management scripts
 bool PowerFinding(void){
@@ -43,7 +45,7 @@ bool PowerFinding(void){
             motor_spin(-M_PI/6);
 
             while (ADC_Read(0)<ADC_Read(1)){
-                motor_spin(0, 5);
+//                motor_spin(0, 5);
             }
         }
         //Short range closing using Solar
@@ -77,7 +79,7 @@ bool PowerFinding(void){
 float requiredTurn(float angle){
    float current = comp_head();
    
-   if (M_PI>(angle - current) > 0){
+   if (M_PI>(angle - current) &&  (angle - current) > 0){
        return angle - current;     
    }
    else if ((angle - current) >0){

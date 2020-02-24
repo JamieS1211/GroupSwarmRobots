@@ -46,6 +46,6 @@ uint8_t Lidar_Read_Register(uint8_t slave_address, uint8_t device_register);
  */
 uint16_t vl5310x_ReadRange(uint8_t slave_address);
 void Lidar_Change_Address();
-void collide();
+void collide_Check();
 
 #endif //VL53L0X

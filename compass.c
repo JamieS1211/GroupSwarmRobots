@@ -94,8 +94,7 @@ int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t )
   return 1;
 }
 
-float comp_head()
-{
+float comp_head() {
     // Compass to continous
     comp_reconfig_cont();
     
