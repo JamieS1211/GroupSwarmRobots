@@ -13,7 +13,9 @@
 #ifndef COMPASS_H
 #define COMPASS_H
 
-// Functions
+void comp_i2C_SendData(uint8_t slave_address, uint8_t device_register, uint8_t value);
+uint8_t comp_Read_Register(uint8_t slave_address, uint8_t register_value);
+
 void comp_reset();          // reset()
 void comp_reconfig_standby();       // reconfig()
 void comp_reconfig_cont();

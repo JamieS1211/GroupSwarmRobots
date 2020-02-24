@@ -62,36 +62,52 @@
 #define QMC5883L_CONFIG_STANDBY 0b00000000
 #define QMC5883L_CONFIG_CONT    0b00000001
 
+void comp_i2C_SendData(uint8_t slave_address, uint8_t device_register, uint8_t value) {
+    uint8_t data[2] = {device_register, value};
+    i2C_SendData(slave_address, data, 2);
+}
+
+int8_t comp_Read_Register(uint8_t slave_address, uint8_t register_value) {
+    uint8_t pointt;
+    uint8_t reg[1]={register_value};
+    i2C_SendData(slave_address, reg, 0x01);
+    i2C_ReceiveData(slave_address, &pointt, 0x01);
+    
+    uint8_t value=pointt;
+    return value;
+}
+
 void comp_reconfig_standby()
 {
     //write_register(address,register,value)
     //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY);
-    uint8_t standbyte[1] = {QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY};
-    uint8_t addr = QMC5883L_ADDR;
-    //void i2C_SendData(addr, standbyte, 1);
+    comp_i2C_SendData(QMC5883L_ADDR, QMC5883L_CONFIG, QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY);
+}
+
+void comp_reconfig_cont()
+{
+    //write_register(address,register,value)
+    //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
+    comp_i2C_SendData(QMC5883L_ADDR, QMC5883L_CONFIG, QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
 }
     
 void comp_reset()
 {
     //write_register(QMC5883L_ADDR,QMC5883L_RESET,0x01);
+    comp_i2C_SendData(QMC5883L_ADDR, QMC5883L_RESET, 0x01);
     comp_reconfig_standby();
 }
-void comp_reconfig_cont()
-{
-    //write_register(address,register,value)
-    //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
-    uint8_t contbyte[1] = {QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT};
-    uint8_t addr = QMC5883L_ADDR;
-    //void i2C_SendData(addr, contbyte, uint8_t 1);
-}
 
-int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t )
+void comp_readRaw( int16_t *x, int16_t *y)
 {
-//  *x = Wire.read() | (Wire.read()<<8);
-//  *y = Wire.read() | (Wire.read()<<8);
-//  *z = Wire.read() | (Wire.read()<<8);
-
-  return 1;
+    uint8_t x_lsb = comp_Read_Register(QMC5883L_ADDR, QMC5883L_X_LSB);
+    uint8_t x_msb = comp_Read_Register(QMC5883L_ADDR, QMC5883L_X_MSB);
+    
+    uint8_t y_lsb = comp_Read_Register(QMC5883L_ADDR, QMC5883L_Y_LSB);
+    uint8_t y_msb = comp_Read_Register(QMC5883L_ADDR, QMC5883L_Y_MSB);
+    
+    *x = (x_msb << 8) | x_lsb;
+    *y = (y_msb << 8) | y_lsb;
 }
 
 float comp_head()
@@ -100,8 +116,8 @@ float comp_head()
     comp_reconfig_cont();
     
     // Read
-    int16_t x, y, z, t;
-    comp_readRaw(&x,&y,&z,&t);
+    int16_t x, y;
+    comp_readRaw(&x,&y);
 
     // Compass to standby
     comp_reconfig_standby();
