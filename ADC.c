@@ -88,6 +88,6 @@ int ADC_Read(int x) {
     if (PORTAbits.RA3 == 1){
         LATAbits.LATA3 = 0; // ---------- Fix; Toggle solar isolation pin --------
     }
-    return (ADRESH << 4) + ADRESL;
+    return (ADRESH << 8) + ADRESL;
 }
 
