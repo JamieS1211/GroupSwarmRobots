@@ -19,7 +19,7 @@
  * --- envMem Functions ---
  * ------------------------
  */
-int update_place(int place, int array_length) {
+int update_place(uint8_t place, uint8_t array_length) {
     place = place + 1;
     if (place >= array_length) {
         place = 0;
