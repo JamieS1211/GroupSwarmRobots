@@ -31,7 +31,6 @@ void ADC_Setup(void) {
     ANSELAbits.ANSELA0 = 1; // Set RA0 as analog channel
     ANSELAbits.ANSELA1 = 1; // Set RA1 as analog channel
     ANSELAbits.ANSELA2 = 1; // Set RA2 as analog channel
-            
 }
 
 /*
@@ -73,8 +72,7 @@ int ADC_Read(int x) {
     // ADCRC Clock, ADCON0 [ADC Control Register 0] - page 619
     if (ADCON0bits.CS == 1){
         ADC_DestinationSetup(x); // Setup Destination for sampling, pass x
-    }
-    else {
+    } else {
         ADC_Setup(); // Perform initial ADC setup
         ADC_DestinationSetup(x); // Setup Destination for sampling, pass x
     }
@@ -88,6 +86,7 @@ int ADC_Read(int x) {
     if (PORTAbits.RA3 == 1){
         LATAbits.LATA3 = 0; // ---------- Fix; Toggle solar isolation pin --------
     }
+    
     return (ADRESH << 8) + ADRESL;
 }
 

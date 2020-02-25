@@ -62,8 +62,7 @@
 #define QMC5883L_CONFIG_STANDBY 0b00000000
 #define QMC5883L_CONFIG_CONT    0b00000001
 
-void comp_reconfig_standby()
-{
+void comp_reconfig_standby() {
     //write_register(address,register,value)
     //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY);
     uint8_t standbyte[1] = {QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY};
@@ -71,13 +70,11 @@ void comp_reconfig_standby()
     //void i2C_SendData(addr, standbyte, 1);
 }
     
-void comp_reset()
-{
+void comp_reset() {
     //write_register(QMC5883L_ADDR,QMC5883L_RESET,0x01);
     comp_reconfig_standby();
 }
-void comp_reconfig_cont()
-{
+void comp_reconfig_cont() {
     //write_register(address,register,value)
     //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
     uint8_t contbyte[1] = {QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT};
@@ -85,8 +82,7 @@ void comp_reconfig_cont()
     //void i2C_SendData(addr, contbyte, uint8_t 1);
 }
 
-int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t )
-{
+int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t ) {
 //  *x = Wire.read() | (Wire.read()<<8);
 //  *y = Wire.read() | (Wire.read()<<8);
 //  *z = Wire.read() | (Wire.read()<<8);
@@ -100,13 +96,13 @@ float comp_head() {
     
     // Read
     int16_t x, y, z, t;
-    comp_readRaw(&x,&y,&z,&t);
+    comp_readRaw(&x, &y, &z, &t);
 
     // Compass to standby
     comp_reconfig_standby();
     
     // Calculate angle
-    float heading = atan2(y,x);
+    float heading = atan2(y, x);
   
     return heading;
 }          
