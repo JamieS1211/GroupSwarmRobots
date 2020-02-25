@@ -86,7 +86,7 @@
  * 3  - RA1                         - [LDR 2 ADC]
  * 4  - RA2                         - [Solar ADC]
  * 5  - RA3                         - [Solar Isolation toggle]
- * 6  - RA4                         - [NONE]
+ * 6  - RA4                         - [ADC Toggle]
  * 7  - RA5                         - [SS1 SPI]
  * 8  - VSS                         - [+ 0V]
  * 9  - RA7                         - [XSHUT 1]
