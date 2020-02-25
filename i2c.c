@@ -19,7 +19,10 @@
 void i2C_Setup(void) {
     // Select use of I2C 2 peripheral to RB1 and RB2 pins - Page 275 - 286
     I2C2SCLPPS = 0b01001; // Page 280
-    I2C2SDAPPS = 0b01010;
+    I2C2SDAPPS = 0b01010; 
+    
+    RB1PPS = 0b100011; // Page 282
+    RB2PPS = 0b100100;   
     
     // Set TRIS & ODCON bits - Page 548
     TRISBbits.TRISB1 = 0; // Page 265
@@ -28,11 +31,17 @@ void i2C_Setup(void) {
     ODCONBbits.ODCB1 = 1; // Page 269
     ODCONBbits.ODCB2 = 1;
     
+    ANSELBbits.ANSELB1 = 0;
+    ANSELBbits.ANSELB2 = 0;
     
     I2C2CON0bits.EN = 1; // Enable I2C module 2
     I2C2CON0bits.MODE2 = 1; // Sets mode to 100 - 7-bit address single master
     I2C2CON0bits.MODE1 = 0;
     I2C2CON0bits.MODE0 = 0;
+    
+    I2C2CON1bits.ACKCNT = 1;
+        
+    I2C2CLKbits.CLK = 0b0011;
 }
 
 
