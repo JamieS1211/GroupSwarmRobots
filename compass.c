@@ -17,9 +17,22 @@
  * QMC5883L
  * http://wiki.epalsite.com/images/7/72/QMC5883L-Datasheet-1.0.pdf
  */
-
+//
+//        I2C2_WriteNBytes(0x0D, bytes, 2);
+//        
+//        uint8_t data[1] = {0};
+//        
+//        __delay_ms(1);
+//        
+//        //I2C2_WriteNBytes(0x0D, 0x0D, 1);
+//        //I2C2_ReadNBytes(0x0D, data, 1);
+//        //
+//        I2C2_ReadDataBlock(0x0D, 0x0D, &data, 1);
+//        //i2C_SendData(0x1A, bytes, 2);
+//        __delay_ms(500);
+//        
 /* The default I2C address of this chip */
-#define QMC5883L_ADDR 0x0D
+#define QMC5883L_ADDR 0x1D
 
 /* Register numbers */
 #define QMC5883L_X_LSB 0

@@ -21,8 +21,8 @@ void i2C_Setup(void) {
     I2C2SCLPPS = 0b01001; // Page 280
     I2C2SDAPPS = 0b01010; 
     
-    RB1PPS = 0b100011; // Page 282
-    RB2PPS = 0b100100;   
+    RB1PPS = 0b100011; // SCL - Page 282
+    RB2PPS = 0b100100; // SDA
     
     // Set TRIS & ODCON bits - Page 548
     TRISBbits.TRISB1 = 0; // Page 265
@@ -45,6 +45,7 @@ void i2C_Setup(void) {
 }
 
 
+#define _XTAL_FREQ 20000000
 
 /*
  * I2C send data - Page 568
@@ -60,8 +61,9 @@ void i2C_SendData(uint8_t i2C_address, uint8_t bytes[], uint8_t numberOfBytes) {
     I2C2CON0bits.S = 1;
     
     while(I2C2STAT0bits.MMA == 1) {
-        while(I2C2STAT1bits.TXBE == 0);
+        while(I2C2CON0bits.MDR == 0);
         
+        __delay_us(1);
         I2C2TXB = bytes[I2C2CNT - 1];
     }
 }

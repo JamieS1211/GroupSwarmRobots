@@ -19,6 +19,11 @@
 #include "testing.h"
 #include "compass.h"
 #include "Collision.h"
+#include "mcc_generated_files/i2c2_master.h"
+#include "mcc_generated_files/examples/i2c2_master_example.h"
+#include "mcc_generated_files/uart2.h"
+#include "mcc_generated_files/pin_manager.h"
+#include "mcc_generated_files/mcc.h"
 
 // Production -> set configuration bits
 // CONFIG1L
@@ -113,16 +118,41 @@
  * 28 - RB7/ICSPDAT                 - [NONE]
  */
 
+#define _XTAL_FREQ 20000000
 void main(void) {
-    i2C_Setup();
+//    i2C_Setup();
+//    I2C2_Initialize();
+    
+    SYSTEM_Initialize();
+    UART2_Initialize();
   //  interrupts_Setup(); // Last setup function
     
    // test_all();
-    vl5310x_Setup(0x52);
-    Lidar_Change_Address();
-    collide_check(600);
+    //vl5310x_Setup(0x52);
+    //Lidar_Change_Address();
+    //collide_check(600);
     
-    while(1);
+    //uint8_t bytes[1] = {0x09};
+    uint8_t bytes[2] = {0x0A,0x80};
+    
+    while(1) {
+//        I2C2_WriteNBytes(0x0D, bytes, 2);
+        
+//        uint8_t data[1] = {0};
+        
+        //I2C2_WriteNBytes(0x0D, 0x0D, 1);
+        //I2C2_ReadNBytes(0x0D, data, 1);
+        //
+//        I2C2_ReadDataBlock(0x0D, 0x0D, &data, 1);
+        //i2C_SendData(0x1A, bytes, 2);
+        __delay_ms(100);
+        
+        while(!UART2_is_tx_ready);
+        UART2_Write((int)'H');
+        UART2_Write(0x69);
+        UART2_Write(0x21);
+        UART2_Write(0x20);
+    };
     
     return;
 }
