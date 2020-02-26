@@ -13,7 +13,6 @@
 #include "globals.h"
 #include "ADC.h"
 #include "compass.h"
-#include "motor.h"
 
 // Deal with all light source management scripts
 bool PowerFinding(void){
