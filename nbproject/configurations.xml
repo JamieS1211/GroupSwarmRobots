@@ -14,6 +14,7 @@
       <itemPath>Lidar.h</itemPath>
       <itemPath>testing.h</itemPath>
       <itemPath>motor.h</itemPath>
+      <itemPath>Collision.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
