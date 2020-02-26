@@ -12,6 +12,7 @@
 
 #include "globals.h"
 #include "i2c.h"
+#include "compass.h"
 
 /*
  * QMC5883L
@@ -67,7 +68,7 @@ void comp_i2C_SendData(uint8_t slave_address, uint8_t device_register, uint8_t v
     i2C_SendData(slave_address, data, 2);
 }
 
-int8_t comp_Read_Register(uint8_t slave_address, uint8_t register_value) {
+uint8_t comp_Read_Register(uint8_t slave_address, uint8_t register_value) {
     uint8_t pointt;
     uint8_t reg[1]={register_value};
     i2C_SendData(slave_address, reg, 0x01);
