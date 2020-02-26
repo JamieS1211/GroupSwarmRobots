@@ -7,7 +7,8 @@
 
 #ifndef ADC_H
 #define ADC_H
-
+#include <xc.h>
+#include "globals.h"
 
 /*
  * Function sets up all ADC (Analog to Digital converter) settings.
