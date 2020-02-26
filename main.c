@@ -91,7 +91,7 @@
  * 8  - VSS                         - [+ 0V]
  * 9  - RA7                         - [XSHUT 1]
  * 10 - RA6                         - [XSHUT 2]
- * 11 - RC0                         - [NONE]
+ * 11 - RC0                         - [H-BRIDGE]
  * 12 - RC1                         - [NONE]
  * 13 - RC2                         - [NONE]
  * 14 - RC3                         - [SCK1 SPI]

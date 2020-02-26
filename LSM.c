@@ -98,3 +98,4 @@ float requiredTurn(float angle){
 // Crude functionality, will get close to LS. 
 // And when to give up close finding to search somewhere else (How to do this) 
 // Consider using differencing as well as single value? 
+// Full spin to find ideal point to prevent Rear light intensity increase issue
