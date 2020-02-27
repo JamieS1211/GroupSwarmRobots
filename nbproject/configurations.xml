@@ -31,6 +31,7 @@
       <itemPath>LSM.h</itemPath>
       <itemPath>Collision.h</itemPath>
       <itemPath>VL53L0X.h</itemPath>
+      <itemPath>cereal.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -66,6 +67,7 @@
       <itemPath>LSM.c</itemPath>
       <itemPath>Collision.c</itemPath>
       <itemPath>VL53L0X.c</itemPath>
+      <itemPath>cereal.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

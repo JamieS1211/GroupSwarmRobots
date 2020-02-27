@@ -19,6 +19,7 @@
 #include "mcc_generated_files/device_config.h"
 #include "mcc_generated_files/mcc.h"
 #include "VL53L0X.h"
+#include "cereal.h"
 
 void main(void) {
     SYSTEM_Initialize();
@@ -33,11 +34,13 @@ void main(void) {
     
     // Setup both VL53L0X modules
     //VL53L0X_Setup(0x00);
-    VL53L0X_Setup(0x29);
+//    VL53L0X_Setup(0x29);
     
     while(1) {
-        __delay_ms(500);
-        VL53L0X_ReadRange(0x29);
+//        __delay_ms(5000);
+//        VL53L0X_ReadRange(0x29);
+        char datboi[] = "pizza";
+        cereal_str(datboi);
     }
     
     return;

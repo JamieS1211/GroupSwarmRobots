@@ -8,12 +8,10 @@
  * https://www.arduino.cc/en/Reference/ASCIIchart
  */
 
-#include <stdio.h>
-
 #ifndef CEREAL_H
 #define CEREAL_H
 
-/* Unable to pass multiple varaiable types into functions so if there isn't a
+/* Unable to pass multiple variable types into functions so if there isn't a
  * suitable function, see below on how to send the data.
  * 
  * Variable
@@ -37,6 +35,27 @@
  * Text
  * ----
  * char string_name[string_length] = "string";
+ */
+
+/* Example
+ * -------
+ * int x = 58;
+ * 
+ * // First Serial print an ID. Try to keep short to save mem
+ * // Check is a valid ASCII character 
+ * // https://www.arduino.cc/en/Reference/ASCIIchart
+ * 
+ * char string[] = "x=";
+ * cereal_str(string);
+ * 
+ * // Next send the variable x which is an int
+ * 
+ * cereal_int(x);
+ * 
+ * // On the arduino Serial Port this will return
+ *      x=
+ *      int
+ *      58
  */
 
 // The main function for sending (called by all others)

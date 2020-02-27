@@ -11,8 +11,8 @@
  */
 
 #include "globals.h"
-#include "compass.h"
 #include "mcc_generated_files/examples/i2c2_master_example.h"
+#include "compass.h"
 
 /*
  * QMC5883L
@@ -123,4 +123,4 @@ float comp_head()
     float heading = atan2(y,x);
   
     return heading;
-}          
+}

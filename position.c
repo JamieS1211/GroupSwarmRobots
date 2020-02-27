@@ -66,7 +66,7 @@ struct robot update_robot(struct robot old, struct polarcoord newmove) {
     uint8_t pos_size = sizeof(old.pos)/sizeof(struct balloon);
     
     for (int i = 0; i < pos_size; i++) {
-        if ((old.pos[i].radius = 0)) {
+        if (old.pos[i].radius == 0) {
             old.pos[i] = update_balloon(old.pos[i], newmove);
         }
     }    
@@ -75,7 +75,7 @@ struct robot update_robot(struct robot old, struct polarcoord newmove) {
     uint8_t light_size = sizeof(old.light)/sizeof(struct bubble);
     
     for (int i = 0; i < light_size; i++) {
-        if ((old.light[i].radius = 0) && (old.light[i].angle = 0) && (old.light[i].r_error = 0)) {
+        if (old.light[i].radius == 0 && old.light[i].angle == 0 && old.light[i].r_error == 0) {
             old.light[i] = update_bubble(old.light[i], newmove);
         }
     }
@@ -84,10 +84,12 @@ struct robot update_robot(struct robot old, struct polarcoord newmove) {
     uint8_t obj_size = sizeof(old.obj)/sizeof(struct bubble);
     
     for (int i = 0; i < obj_size; i++) {
-        if ((old.obj[i].radius = 0) && (old.obj[i].angle = 0) && (old.obj[i].r_error = 0)) {
+        if (old.obj[i].radius == 0 && old.obj[i].angle == 0 && old.obj[i].r_error == 0) {
             old.obj[i] = update_bubble(old.obj[i], newmove);
         }
     }
+    
+    return old;
 }
 
 void update_envMem(struct polarcoord newmove) {
@@ -96,14 +98,14 @@ void update_envMem(struct polarcoord newmove) {
     
     // Light Memory
     for (int i = 0; i < lit_Mem_size; i++) {
-        if ((lit_Mem[i].radius = 0) && (lit_Mem[i].angle = 0) && (lit_Mem[i].r_error = 0)) {
+        if (lit_Mem[i].radius == 0 && lit_Mem[i].angle == 0 && lit_Mem[i].r_error == 0) {
             lit_Mem[i] = update_bubble(lit_Mem[i], newmove);
         }
     }
     
     // Object Memory
     for (int i = 0; i < obj_Mem_size; i++) {
-        if ((obj_Mem[i].radius = 0) && (obj_Mem[i].angle = 0) && (obj_Mem[i].r_error = 0)) {
+        if (obj_Mem[i].radius == 0 && obj_Mem[i].angle == 0 && obj_Mem[i].r_error == 0) {
             obj_Mem[i] = update_bubble(obj_Mem[i], newmove);
         }
     }
