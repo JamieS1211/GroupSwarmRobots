@@ -10,6 +10,7 @@
  * Not true North
  */
 
+#include <xc.h> // Make int16_t work
 #include "globals.h"
 #include "mcc_generated_files/examples/i2c2_master_example.h"
 #include "compass.h"
@@ -74,50 +75,50 @@ uint8_t comp_Read_Register(uint8_t slave_address, uint8_t register_value) {
     return value;
 }
 
-void comp_reconfig_standby()
-{
+void comp_reconfig_standby() {
     //write_register(address,register,value)
     //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY);
     comp_i2C_SendData(0x0D, 9, 0x80);
 }
 
-void comp_reconfig_cont()
-{
+void comp_reconfig_cont() {
     //write_register(address,register,value)
     //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
     comp_i2C_SendData(0x0D, 9, 0x81);
 }
     
-void comp_reset()
-{
+void comp_reset() {
     //write_register(QMC5883L_ADDR,QMC5883L_RESET,0x01);
     comp_i2C_SendData(0x0D, 11, 0x01);
     comp_reconfig_standby();
 }
 
-void comp_readRaw( int16_t *x, int16_t *y)
-{
-    uint8_t x_lsb = comp_Read_Register(0x0D, 0);
-    int8_t x_msb = comp_Read_Register(0x0D, 1);
-    
-    uint8_t y_lsb = comp_Read_Register(0x0D, 2);
-    int8_t y_msb = comp_Read_Register(0x0D, 3);
-    
-    *x = (x_msb << 8) + x_lsb;
-    *y = (y_msb << 8) + y_lsb;
-}
-
-float comp_head()
-{
-    // Compass to continous
+void comp_readRaw( int16_t *x, int16_t *y) {
+    // Set compass to read
     comp_reconfig_cont();
     
+    // May need to include a wait function
+    
+    // Read 2 axis values (may need to reconfigure if compass x isn't forwards)
+    // For future reference the First value in the MSB is +/-
+    uint8_t x_lsb = comp_Read_Register(0x0D, 0);
+    uint8_t x_msb = comp_Read_Register(0x0D, 1);
+    
+    uint8_t y_lsb = comp_Read_Register(0x0D, 2);
+    uint8_t y_msb = comp_Read_Register(0x0D, 3);
+    
+    // Turn compass to standby
+    comp_reconfig_standby();
+    
+    // Bit shift to values, returned via pointer
+    *x = ((int16_t)x_msb << 8) + x_lsb;
+    *y = ((int16_t)y_msb << 8) + y_lsb;
+}
+
+float comp_head() {
     // Read
     int16_t x, y;
     comp_readRaw(&x,&y);
-
-    // Compass to standby
-    comp_reconfig_standby();
     
     // Calculate angle
     float heading = atan2(y,x);
