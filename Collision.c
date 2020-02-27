@@ -39,7 +39,7 @@ void Lidar_Change_Address() {
     uint8_t receive = point;
     
     while (receive != 0x44) {
-       uint8_t data[1]={0x40};
+       uint8_t data[1] = {0x40};
        i2C_SendData(0x0F,data, 0x01);
        i2C_ReceiveData(0x0F, &point, 0x02);
        
@@ -59,13 +59,17 @@ void Lidar_Change_Address() {
 
 uint8_t collide_check(uint16_t distance) {
 uint16_t value = vl5310x_ReadRange(0x52);       //Lidar 1
-uint16_t value2 = vl5310x_ReadRange(0x0F);      //Lidar 2, on the right
+//uint16_t value2 = vl5310x_ReadRange(0x0F);      //Lidar 2, on the right
 //Try to get 10 values for average
 //Ensure all numbers and one not wildly different
 
-uint16_t dist=distance+500;      //As can only move this at a time
-
-if (distance > 500) {     //Value of 500, dont want to move more than this at a time.
+uint16_t dist = distance + 500;      //As can only move this at a time
+if (value>20) {
+    TRISBbits.TRISB5=0;
+    LATBbits.LATB5=1;
+}
+/*
+if (distance > 500) {     //Value of 500, don't want to move more than this at a time.
     //Send back invalid movement
 }
 
@@ -75,7 +79,7 @@ else if (dist < value || dist < value2) {
 }
 
 else if (value < 100 || value2 < 100 ) {    //Change dependent on stopping distance
-    motor_stop();
+    //motor_stop();
 //Turn on the spot or something
 }
 
@@ -95,4 +99,5 @@ else if (value < value2) {
 else {
     //Invalid movement
 }
+ */
 }
