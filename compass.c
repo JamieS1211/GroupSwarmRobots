@@ -78,33 +78,33 @@ void comp_reconfig_standby()
 {
     //write_register(address,register,value)
     //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY);
-    comp_i2C_SendData(QMC5883L_ADDR, QMC5883L_CONFIG, QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY);
+    comp_i2C_SendData(0x0D, 9, 0x80);
 }
 
 void comp_reconfig_cont()
 {
     //write_register(address,register,value)
     //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
-    comp_i2C_SendData(QMC5883L_ADDR, QMC5883L_CONFIG, QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
+    comp_i2C_SendData(0x0D, 9, 0x81);
 }
     
 void comp_reset()
 {
     //write_register(QMC5883L_ADDR,QMC5883L_RESET,0x01);
-    comp_i2C_SendData(QMC5883L_ADDR, QMC5883L_RESET, 0x01);
+    comp_i2C_SendData(0x0D, 11, 0x01);
     comp_reconfig_standby();
 }
 
 void comp_readRaw( int16_t *x, int16_t *y)
 {
-    uint8_t x_lsb = comp_Read_Register(QMC5883L_ADDR, QMC5883L_X_LSB);
-    uint8_t x_msb = comp_Read_Register(QMC5883L_ADDR, QMC5883L_X_MSB);
+    uint8_t x_lsb = comp_Read_Register(0x0D, 0);
+    int8_t x_msb = comp_Read_Register(0x0D, 1);
     
-    uint8_t y_lsb = comp_Read_Register(QMC5883L_ADDR, QMC5883L_Y_LSB);
-    uint8_t y_msb = comp_Read_Register(QMC5883L_ADDR, QMC5883L_Y_MSB);
+    uint8_t y_lsb = comp_Read_Register(0x0D, 2);
+    int8_t y_msb = comp_Read_Register(0x0D, 3);
     
-    *x = (x_msb << 8) | x_lsb;
-    *y = (y_msb << 8) | y_lsb;
+    *x = (x_msb << 8) + x_lsb;
+    *y = (y_msb << 8) + y_lsb;
 }
 
 float comp_head()
