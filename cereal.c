@@ -23,8 +23,11 @@
 // char string_name[string_length] = "string";
 void cereal_str(char string[])
 {
+    // Loops through an undefined length string input till it reaches:
+    // 36 = $ which signals end of tranmission
+    // 0 = Null which signals nothing stores
     int i = 0;
-    while (string[i]!=0){
+    while (string[i]!=36 && string[i]!=0){
         uint8_t txData = string[i];
         // Send function
         UART2_Write(txData);
@@ -35,7 +38,7 @@ void cereal_str(char string[])
 
 void cereal_int(int input) {
     // Serial the type
-    char typey[] = "int";
+    char typey[] = "int$";
     cereal_str(typey);
     
     // Formatting number
@@ -48,7 +51,7 @@ void cereal_int(int input) {
 
 void cereal_float(float input) {
     // Serial the type
-    char typey[] = "float";
+    char typey[] = "float$";
     cereal_str(typey);
     
     // Formatting number
@@ -61,7 +64,7 @@ void cereal_float(float input) {
 
 void cereal_uint8_t(uint8_t input) {
     // Serial the type
-    char typey[] = "uint8_t";
+    char typey[] = "uint8_t$";
     cereal_str(typey);
     
     // Formatting number
@@ -72,9 +75,22 @@ void cereal_uint8_t(uint8_t input) {
     cereal_str(string);
 }
 
+void cereal_int16_t(int16_t input) {
+    // Serial the type
+    char typey[] = "int16_t$";
+    cereal_str(typey);
+    
+    // Formatting number
+    char string[20] = {0};
+    sprintf(string, "%i", input);
+    
+    // Serial Number
+    cereal_str(string);
+}
+
 void cereal_size_t(size_t input) {
     // Serial the type
-    char typey[] = "size_t";
+    char typey[] = "size_t$";
     cereal_str(typey);
     
     // Formatting number

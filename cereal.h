@@ -44,8 +44,10 @@
  * // First Serial print an ID. Try to keep short to save mem
  * // Check is a valid ASCII character 
  * // https://www.arduino.cc/en/Reference/ASCIIchart
+ * // You must send an $ to end the character list
+ * // If you don't it will print all memory till it finds 0
  * 
- * char string[] = "x=";
+ * char string[3] = "x=$";
  * cereal_str(string);
  * 
  * // Next send the variable x which is an int
@@ -65,6 +67,7 @@ void cereal_str(char string[]);
 void cereal_int(int input);
 void cereal_float(float input);
 void cereal_uint8_t(uint8_t input);
+void cereal_int16_t(int16_t input);
 void cereal_size_t(size_t input);
 
 #endif  //CEREAL_H
