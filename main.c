@@ -19,6 +19,7 @@
 #include "testing.h"
 #include "Collision.h"
 #include "Lidar.h"
+#include "ADC.h"
 
 // Production -> set configuration bits
 // CONFIG1L
@@ -114,12 +115,32 @@
  */
 
 void main(void) {
-    i2C_Setup();
-    interrupts_Setup(); // Last setup function
-    Lidar_Change_Address();
     
     
-    while(1);
+    
+    while(1){
+        uint16_t value = ADC_Read(0);
+        if (value > 1000){
+            TRISAbits.TRISA5 = 0;
+            LATAbits.LATA5 = 1;
+        }
+        else{
+            TRISAbits.TRISA5 = 0;
+            LATAbits.LATA5 = 0;
+        }
+        uint16_t value2 = ADC_Read(1);
+        if (value2 > 1000){
+            TRISAbits.TRISA6 = 0;
+            LATAbits.LATA6 = 1;
+        }
+        else{
+            TRISAbits.TRISA6 = 0;
+            LATAbits.LATA6 = 0;
+        }
+        
+        
+        
+    }
     
     return;
 }

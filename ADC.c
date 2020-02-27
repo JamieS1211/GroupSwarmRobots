@@ -114,6 +114,6 @@ int ADC_Read(uint8_t x) {
     if (PORTAbits.RA4 ==1){
         LATAbits.LATA4 = 0;
     }
-    return (ADRESH << 4) + ADRESL;
+    return (ADRESH << 8) + ADRESL;
 }
 
