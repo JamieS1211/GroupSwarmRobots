@@ -8,12 +8,19 @@
 #ifndef COLLISION_H
 #define COLLISION_H
 
+#define _XTAL_FREQ 20000000
+#include <xc.h>
+#include <stdint.h>
+#include <pic18f27K42.h>
+#include <math.h>
+
 #include "globals.h"
+
 
 /* Change Address of one Lidar */
 void Lidar_Change_Address();
 
 /*Check if movement can be completed*/
-void collide_check(uint16_t distance);
+uint8_t collide_check(uint16_t distance);
 
-#endif //COLLISION
+#endif //COLLISION_H
