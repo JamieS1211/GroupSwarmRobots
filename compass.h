@@ -21,6 +21,6 @@ void comp_reconfig_standby();       // reconfig()
 void comp_reconfig_cont();
 
 float comp_head();            //readHeading()
-int comp_readRaw( int16_t *x, int16_t *y, int16_t *z, int16_t *t ); //readRar()
+void comp_readRaw( int16_t *x, int16_t *y); //readRar()
 
 #endif  //COMPASS_H
