@@ -25,6 +25,7 @@ void main(void) {
     SYSTEM_Initialize();
     OSCILLATOR_Initialize();
     PMD_Initialize();
+    UART2_Initialize();
     
     //LATBbits.LATB0 = 0; // Ensure manually controlled VL53L0X is off
     //__delay_ms(50);
@@ -34,13 +35,35 @@ void main(void) {
     
     // Setup both VL53L0X modules
     //VL53L0X_Setup(0x00);
-//    VL53L0X_Setup(0x29);
+    VL53L0X_Setup(0x29);
     
     while(1) {
-//        __delay_ms(5000);
-//        VL53L0X_ReadRange(0x29);
-        char datboi[] = "pizza";
-        cereal_str(datboi);
+        __delay_ms(100);
+    uint16_t value =0;
+    value = VL53L0X_ReadRange(0x29);
+    
+    if (value > 200 && value < 400) {
+        TRISAbits.TRISA4 = 0;
+        LATAbits.LATA4 = 1;
+    }
+    else {
+        LATAbits.LATA4 =0;
+    }
+    /* 
+     * if (value > 500) {
+        TRISAbits.TRISA5 = 0;
+        TRISAbits.TRISA5 = 1;
+    }
+     */
+        
+        
+        /*
+        while(!UART2_is_tx_ready());
+        UART2_Write((int)'H');
+        UART2_Write(0x69);
+        UART2_Write(0x21);
+        UART2_Write(0x20);
+          */
     }
     
     return;
