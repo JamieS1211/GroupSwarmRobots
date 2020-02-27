@@ -59,7 +59,6 @@
 #include "tmr2.h"
 #include "pwm5.h"
 #include "tmr0.h"
-#include "adcc.h"
 #include "uart2.h"
 #include "spi1.h"
 

@@ -49,6 +49,10 @@ void main(void) {
     else {
         LATAbits.LATA4 =0;
     }
+    
+    __delay_ms(200);
+    char string[1] = "i";
+    cereal_str(string);
     /* 
      * if (value > 500) {
         TRISAbits.TRISA5 = 0;
