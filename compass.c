@@ -11,8 +11,8 @@
  */
 
 #include "globals.h"
-#include "i2c.h"
 #include "compass.h"
+#include "mcc_generated_files/examples/i2c2_master_example.h"
 
 /*
  * QMC5883L
@@ -65,16 +65,12 @@
 
 void comp_i2C_SendData(uint8_t slave_address, uint8_t device_register, uint8_t value) {
     uint8_t data[2] = {device_register, value};
-    i2C_SendData(slave_address, data, 2);
+    I2C2_WriteNBytes(slave_address, data, 2);
 }
 
 uint8_t comp_Read_Register(uint8_t slave_address, uint8_t register_value) {
-    uint8_t pointt;
-    uint8_t reg[1]={register_value};
-    i2C_SendData(slave_address, reg, 0x01);
-    i2C_ReceiveData(slave_address, &pointt, 0x01);
-    
-    uint8_t value=pointt;
+    uint8_t value;    
+    I2C2_ReadDataBlock(slave_address, register_value, &value, 1);
     return value;
 }
 

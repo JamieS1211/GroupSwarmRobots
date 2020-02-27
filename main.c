@@ -12,112 +12,33 @@
  * PIC18(L)F26/27/45/46/47/55/56/57K42
  */
 
-#include <xc.h>
-#include "globals.h"
-#include "interrupts.h"
-#include "i2c.h"
-#include "testing.h"
+#pragma warning disable 520
+#pragma warning disable 2053
+#pragma warning disable 1498
 
-// Production -> set configuration bits
-// CONFIG1L
-#pragma config FEXTOSC = OFF        // External Oscillator Selection->Oscillator not enabled
-#pragma config RSTOSC = EXTOSC      // Reset Oscillator Selection->EXTOSC operating per FEXTOSC bits (device manufacturing default)
-
-// CONFIG1H
-#pragma config CLKOUTEN = OFF       // Clock out Enable bit->CLKOUT function is disabled
-#pragma config PR1WAY = ON          // PRLOCKED One-Way Set Enable bit->PRLOCK bit can be cleared and set only once
-#pragma config CSWEN = ON           // Clock Switch Enable bit->Writing to NOSC and NDIV is allowed
-#pragma config FCMEN = ON           // Fail-Safe Clock Monitor Enable bit->Fail-Safe Clock Monitor enabled
-
-// CONFIG2L
-#pragma config MCLRE = EXTMCLR      // MCLR Enable bit->If LVP = 0, MCLR pin is MCLR; If LVP = 1, RE3 pin function is MCLR 
-#pragma config PWRTS = PWRT_OFF     // Power-up timer selection bits->PWRT is disabled
-#pragma config MVECEN = OFF         // Multi-vector enable bit->Interrupt contoller does not use vector table to prioritze interrupts
-#pragma config IVT1WAY = ON         // IVTLOCK bit One-way set enable bit->IVTLOCK bit can be cleared and set only once
-#pragma config LPBOREN = OFF        // Low Power BOR Enable bit->ULPBOR disabled
-#pragma config BOREN = SBORDIS      // Brown-out Reset Enable bits->Brown-out Reset enabled , SBOREN bit is ignored
-
-// CONFIG2H
-#pragma config BORV = VBOR_2P45     // Brown-out Reset Voltage Selection bits->Brown-out Reset Voltage (VBOR) set to 2.45V
-#pragma config ZCD = OFF            // ZCD Disable bit->ZCD disabled. ZCD can be enabled by setting the ZCDSEN bit of ZCDCON
-#pragma config PPS1WAY = ON         // PPSLOCK bit One-Way Set Enable bit->PPSLOCK bit can be cleared and set only once; PPS registers remain locked after one clear/set cycle
-#pragma config STVREN = ON          // Stack Full/Underflow Reset Enable bit->Stack full/underflow will cause Reset
-#pragma config DEBUG = OFF          // Debugger Enable bit->Background debugger disabled
-#pragma config XINST = OFF          // Extended Instruction Set Enable bit->Extended Instruction Set and Indexed Addressing Mode disabled
-
-// CONFIG3L
-#pragma config WDTCPS = WDTCPS_31   // WDT Period selection bits->Divider ratio 1:65536; software control of WDTPS
-#pragma config WDTE = OFF           // WDT operating mode->WDT Disabled; SWDTEN is ignored
-
-// CONFIG3H
-#pragma config WDTCWS = WDTCWS_7    // WDT Window Select bits->window always open (100%); software control; keyed access not required
-#pragma config WDTCCS = SC          // WDT input clock selector->Software Control
-
-// CONFIG4L
-#pragma config BBSIZE = BBSIZE_512  // Boot Block Size selection bits->Boot Block size is 512 words
-#pragma config BBEN = OFF           // Boot Block enable bit->Boot block disabled
-#pragma config SAFEN = OFF          // Storage Area Flash enable bit->SAF disabled
-#pragma config WRTAPP = OFF         // Application Block write protection bit->Application Block not write protected
-
-// CONFIG4H
-#pragma config WRTB = OFF           // Configuration Register Write Protection bit->Configuration registers (300000-30000Bh) not write-protected
-#pragma config WRTC = OFF           // Boot Block Write Protection bit->Boot Block (000000-0007FFh) not write-protected
-#pragma config WRTD = OFF           // Data EEPROM Write Protection bit->Data EEPROM not write-protected
-#pragma config WRTSAF = OFF         // SAF Write protection bit->SAF not Write Protected
-#pragma config LVP = ON             // Low Voltage Programming Enable bit->Low voltage programming enabled. MCLR/VPP pin function is MCLR. MCLRE configuration bit is ignored
-
-// CONFIG5L
-#pragma config CP = OFF             // PFM and Data EEPROM Code Protection bit->PFM and Data EEPROM code protection disabled
-
-/*
- *  Ben
- *  2 PWM pins (enable left & right)
- *  4 pins (forward & back for left and right)
- * 
- * Chloe
- * 2 pins (enable on either VL53L0X)
- */
-
-/*
- * Pin map with how used
- * 
- * 1  - VPP/MCLR/RE3                - [PROGRAMMER VPP]
- * 2  - RA0                         - [LDR ADC]
- * 3  - RA1                         - [LDR 2 ADC]
- * 4  - RA2                         - [Solar ADC]
- * 5  - RA3                         - [Solar Isolation toggle]
- * 6  - RA4                         - [ADC Toggle]
- * 7  - RA5                         - [SS1 SPI]
- * 8  - VSS                         - [+ 0V]
- * 9  - RA7                         - [XSHUT 1]
- * 10 - RA6                         - [XSHUT 2]
- * 11 - RC0                         - [H-BRIDGE]
- * 12 - RC1                         - [NONE]
- * 13 - RC2                         - [NONE]
- * 14 - RC3                         - [SCK1 SPI]
- * 15 - RC4                         - [SDI1 SPI]
- * 16 - RC5                         - [NONE]
- * 17 - RC6                         - [NONE]
- * 18 - RC7                         - [NONE]
- * 19 - VSS                         - [+ 0V]
- * 20 - VDD                         - [+ 5V]
- * 21 - RB0                         - [NONE]
- * 22 - RB1                         - [SCL2 I2C]
- * 23 - RB2                         - [SDA2 I2C]
- * 24 - RB3                         - [NONE]
- * 25 - RB4                         - [NONE]
- * 26 - RB5                         - [NONE]
- * 27 - RB6/ICSPCLK                 - [NONE]
- * 28 - RB7/ICSPDAT                 - [NONE]
- */
+#include "mcc_generated_files/device_config.h"
+#include "mcc_generated_files/mcc.h"
+#include "VL53L0X.h"
 
 void main(void) {
-    i2C_Setup();
-    interrupts_Setup(); // Last setup function
+    SYSTEM_Initialize();
+    OSCILLATOR_Initialize();
+    PMD_Initialize();
     
-    test_all();
+    //LATBbits.LATB0 = 0; // Ensure manually controlled VL53L0X is off
+    //__delay_ms(50);
+    //VL53L0X_Change_Address(0x52, 0x00); // Change the address from default to 0
+    //__delay_ms(50);
+    //LATBbits.LATB0 = 1; // Re-enable manually controlled VL53L0X
     
-    while(1);
+    // Setup both VL53L0X modules
+    //VL53L0X_Setup(0x00);
+    VL53L0X_Setup(0x29);
+    
+    while(1) {
+        __delay_ms(500);
+        VL53L0X_ReadRange(0x29);
+    }
     
     return;
 }

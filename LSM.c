@@ -25,27 +25,33 @@ bool PowerFinding(void){
             
         //}
     //}
+    
     uint8_t iteration = 0;
     while (ADC_Read(2) < 800) {
         while (ADC_Read(2) < 600) {
             // Long range closing use LDR's
             int previous = ADC_Read(0);
-            motor_spin(M_PI/6);
+            //motor_spin(M_PI/6);
+            
             while (ADC_Read(0)< previous){
-                motor_spin(M_PI/6);
+                //motor_spin(M_PI/6);
                 previous = ADC_Read(0);
             }
-            motor_spin(-M_PI/6);
+            
+            //motor_spin(-M_PI/6);
+            
             while (ADC_Read(0)< previous){
-                motor_spin(-M_PI/6);
+                //motor_spin(-M_PI/6);
                 previous = ADC_Read(0);
             }
-            motor_spin(-M_PI/6);
+            
+            //motor_spin(-M_PI/6);
 
             while (ADC_Read(0)<ADC_Read(1)){
-                motor_spin(0, 5);
+                //motor_spin(0, 5);
             }
         }
+        
         //Short range closing using Solar
         if (ADC_Read(2) > 800){
             // Check if already ideal
@@ -55,23 +61,20 @@ bool PowerFinding(void){
         // --------   Check for improvement not for ultimate value
         
         while (iteration < 12){
-            move_dist(M_PI/6, 1, 0); 
+            //move_dist(M_PI/6, 1, 0); 
             if (ADC_Read(2) > 800){
                 return true;
             }
-            move_dist(M_PI,1, 0);
-            move_dist(M_PI,0, 0);
+            //move_dist(M_PI,1, 0);
+            //move_dist(M_PI,0, 0);
             iteration +=1;
         }
         
         // When max iterations reached move away:
-        
-        
     }
+    
     return true;
 }
-
-
 
 
 float requiredTurn(float angle){

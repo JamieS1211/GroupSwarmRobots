@@ -18,8 +18,8 @@
 void ADC_Setup(void) {
     // Setup ADC
     // FVRCON [Fixed Reference Voltage Set-up] - page 599
-    FVRCONbits.CDAFVR = 10; // Set to 2.048V
-    FVRCONbits.ADFVR = 10; // Set to 2.048V
+    FVRCONbits.CDAFVR = 0b10; // Set to 2.048V
+    FVRCONbits.ADFVR = 0b10; // Set to 2.048V
     FVRCONbits.EN = 1; // Turn on fixed reference voltage
     
     // ADCON0 [ADC Control Register 0] - page 619
@@ -69,7 +69,7 @@ void ADC_DestinationSetup(uint8_t x) {
         //Isolate Solar Panel
         LATAbits.LATA3 = 1;
         // ADPCH [ADC Channel selection register] - page 625
-        ADPCH = 010000; // ----------------------FIX PIN ALLOCATION!!!!!!!!!--------------------
+        ADPCHbits.ADPCH = 0b10000; // ----------------------FIX PIN ALLOCATION!!!!!!!!!--------------------
     
     } else {
         // ------- Throw Error Here -------
