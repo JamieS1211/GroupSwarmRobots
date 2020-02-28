@@ -34,6 +34,7 @@ void cereal_str(char string[])
         i += 1;
     }
     UART2_Write(13);    // Arduino Carriage return
+    UART2_Write(10);
 }
 
 void cereal_int(int input) {
@@ -98,5 +99,18 @@ void cereal_size_t(size_t input) {
     sprintf(string, "%u", input);
     
     // Serial number
+    cereal_str(string);
+}
+
+void cereal_hex(uint8_t input) {
+    // Serial the type
+    char typey[] = "hex$";
+    cereal_str(typey);
+    
+    // Formatting number
+    char string[20] = {0};
+    sprintf(string, "%x", input);
+    
+    // Serial Number
     cereal_str(string);
 }
