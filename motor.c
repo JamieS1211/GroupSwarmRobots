@@ -189,17 +189,20 @@ long double calcdistt(uint16_t distance){
 /*
  * TESTER - infinite clockwise spin
  */
-void spin_testCW(void){
+void spin_test(void){
     rightBackwards = 1;
     leftForwards = 1;
+    rightForwards = 0;
+    leftBackwards = 0;
 }
 
 /*
  * TESTER - move forward 20s
  */
 void move_test(void){
-    while t6 < 20 { // Timer 6 check for 20s - FIX
-        rightForwards = 1;
-        leftBackwards = 1;
+    rightForwards = 1;
+    leftForwards = 1;
+    rightBackwards = 0;
+    leftBackwards = 0;
     }
 }
