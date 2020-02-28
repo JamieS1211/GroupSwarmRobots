@@ -62,129 +62,129 @@ void motor_Setup(void) {
     T6PR = 243; // arbitrary 243/245 page 338
 }
 
-void setDutyCycleR(uint16_t dutyCycle) {
-    PWM5DCH = dutyCycle >> 2;
-    PWM5DCL = (dutyCycle & 0b11) << 6;
-}
-
-void setDutyCycleL(uint16_t dutyCycle) {
-    PWM6DCH = dutyCycle >> 2;
-    PWM6DCL = (dutyCycle & 0b11) << 6;
-}
-
-/*
- * motor basic movement function w/ option to reduce speed
- */
-void move_dist(uint16_t angle, uint8_t distance, bool slow){
-    int t6count = ; // T6 value starting from 0
-        
-    if (slow == true) {
-            setDutyCycleR(128); // Quarter duty cycle (128/1024)
-            setDutyCycleL(128);
-    }
-    motor_spin(angle);
-    for t6count <= calcdistt(distance) {
-        rightForwards = 1;
-        leftForwards = 1;
-    }
-    motor_save(angle, distance);
-}
-
-/*
- * motor movement to interrupt timer T6
- */
-void motor_move(uint16_t angle) {
-    motor_spin(angle);
-    while timer6 <= 4 { // 4 being arbitrary value for interrupt
-        rightForwards = 1;
-        leftForwards = 1;
-    }
-    motor_save(angle, distance);
- }
-
-/*
- * motor spin in place for a desired shift in angle
- */
-void motor_spin(uint16_t angle) {
-    int t6count = ; // T6 value starting from 0
-    
-    if angle > 0 { // Anti-clockwise
-        for t6count <= calcanglet(angle) {
-            rightForwards = 1;
-            leftBackwards = 1;
-        }
-    }
-    if angle < 0 { // Clockwise
-        for t6count <= calcanglet(angle) {
-            rightBackwards = 1;
-            leftForwards = 1;
-        }
-    }
-    motor_save(angle, distance);
-}
-
-/*
- * motor spin in place for a desired angle (?)
- */
-void motor_bearing(uint16_t angle) {
-    
-}
-
-/*
- * motor stop
- */
-void motor_stop(void) {
-    leftForwards = 0;
-    leftBackwards = 0;
-    rightForwards = 0;
-    rightBackwards = 0;
-    motor_save(angle, distance);
-}
-
-/*
- * motor reverses (5cm) then spins to desired angle
- */
-void motor_reverse(uint16_t angle) {
-    int t6count = ; // T6 counter
-    int distance = 5;
-    while t6count <= calcdistt(distance){
-        rightBackwards = 1;
-        leftBackwards = 1;
-    }
-    motor_spin(angle);
-    motor_save(angle, distance);
-}
-
-/*
- * Escape from P2P charging
- */
-void motor_escape(void){
-    
-}
-
-/*
- * saving distance moved in vector direction as polar coordinates
- */
-void motor_save(uint16_t angle, uint16_t distance);
-
-/*
- * calculating time t
- */
-long double calcanglet(uint16_t angle) {
-    int fstime = 10; // TO TEST - time taken to complete full rotation
-    double pi = M_PI; // pi
-    long double spintime = fstime / (2*pi/angle); // t/(2pi/angle)
-    return spintime;
-}
-
-/*
- * calculating time needed to reach desired distance
- */
-long double calcdistt(uint16_t distance){
-    int movetime = 10; // TO TEST - time taken to move 10 cm
-    long double disttime = movetime/(10/distance);
-    return disttime;
-}
+//void setDutyCycleR(uint16_t dutyCycle) {
+//    PWM5DCH = dutyCycle >> 2;
+//    PWM5DCL = (dutyCycle & 0b11) << 6;
+//}
+//
+//void setDutyCycleL(uint16_t dutyCycle) {
+//    PWM6DCH = dutyCycle >> 2;
+//    PWM6DCL = (dutyCycle & 0b11) << 6;
+//}
+//
+///*
+// * motor basic movement function w/ option to reduce speed
+// */
+//void move_dist(uint16_t angle, uint8_t distance, bool slow){
+//    int t6count = ; // T6 value starting from 0
+//        
+//    if (slow == true) {
+//            setDutyCycleR(128); // Quarter duty cycle (128/1024)
+//            setDutyCycleL(128);
+//    }
+//    motor_spin(angle);
+//    for t6count <= calcdistt(distance) {
+//        rightForwards = 1;
+//        leftForwards = 1;
+//    }
+//    motor_save(angle, distance);
+//}
+//
+///*
+// * motor movement to interrupt timer T6
+// */
+//void motor_move(uint16_t angle) {
+//    motor_spin(angle);
+//    while timer6 <= 4 { // 4 being arbitrary value for interrupt
+//        rightForwards = 1;
+//        leftForwards = 1;
+//    }
+//    motor_save(angle, distance);
+// }
+//
+///*
+// * motor spin in place for a desired shift in angle
+// */
+//void motor_spin(uint16_t angle) {
+//    int t6count = ; // T6 value starting from 0
+//    
+//    if angle > 0 { // Anti-clockwise
+//        for t6count <= calcanglet(angle) {
+//            rightForwards = 1;
+//            leftBackwards = 1;
+//        }
+//    }
+//    if angle < 0 { // Clockwise
+//        for t6count <= calcanglet(angle) {
+//            rightBackwards = 1;
+//            leftForwards = 1;
+//        }
+//    }
+//    motor_save(angle, distance);
+//}
+//
+///*
+// * motor spin in place for a desired angle (?)
+// */
+//void motor_bearing(uint16_t angle) {
+//    
+//}
+//
+///*
+// * motor stop
+// */
+//void motor_stop(void) {
+//    leftForwards = 0;
+//    leftBackwards = 0;
+//    rightForwards = 0;
+//    rightBackwards = 0;
+//    motor_save(angle, distance);
+//}
+//
+///*
+// * motor reverses (5cm) then spins to desired angle
+// */
+//void motor_reverse(uint16_t angle) {
+//    int t6count = ; // T6 counter
+//    int distance = 5;
+//    while t6count <= calcdistt(distance){
+//        rightBackwards = 1;
+//        leftBackwards = 1;
+//    }
+//    motor_spin(angle);
+//    motor_save(angle, distance);
+//}
+//
+///*
+// * Escape from P2P charging
+// */
+//void motor_escape(void){
+//    
+//}
+//
+///*
+// * saving distance moved in vector direction as polar coordinates
+// */
+//void motor_save(uint16_t angle, uint16_t distance);
+//
+///*
+// * calculating time t
+// */
+//long double calcanglet(uint16_t angle) {
+//    int fstime = 10; // TO TEST - time taken to complete full rotation
+//    double pi = M_PI; // pi
+//    long double spintime = fstime / (2*pi/angle); // t/(2pi/angle)
+//    return spintime;
+//}
+//
+///*
+// * calculating time needed to reach desired distance
+// */
+//long double calcdistt(uint16_t distance){
+//    int movetime = 10; // TO TEST - time taken to move 10 cm
+//    long double disttime = movetime/(10/distance);
+//    return disttime;
+//}
 
 /*
  * TESTER - infinite clockwise spin
@@ -204,5 +204,4 @@ void move_test(void){
     leftForwards = 1;
     rightBackwards = 0;
     leftBackwards = 0;
-    }
 }
