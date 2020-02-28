@@ -34,7 +34,6 @@ void cereal_str(char string[])
         i += 1;
     }
     UART2_Write(13);    // Arduino Carriage return
-    UART2_Write(10);
 }
 
 void cereal_int(int input) {
