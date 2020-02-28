@@ -79,7 +79,26 @@ uint8_t VL53L0X_Read_Register(uint8_t slave_address, uint8_t register_value) {
 /*
  * Change the I2C address of the VL53L0X 
  */
-void VL53L0X_Change_Address(uint8_t oldAddress, uint8_t newAddress) {
+void VL53L0X_Change_Address(uint8_t newAddress) {
+    uint8_t receive;
+    uint8_t point;
+    while (receive != 0x44) {
+       uint8_t data[1] = {0x40};
+       I2C2_WriteNBytes(newAddress,data, 0x01);
+       I2C2_ReadNBytes(newAddress, &point, 0x02);
+       
+       receive = point;
+}
+    uint8_t data2[2]={0x0B, 0x01};
+    uint8_t data3[2]={0x00, 0x00};
+    uint8_t data4[2]={0x01, 0xE8};
+        I2C2_WriteNBytes(0x0F, data2, 0x02);
+        I2C2_WriteNBytes(0x0F, data3, 0x02);
+        I2C2_WriteNBytes(0x0F, data4, 0x02);
+        
+    LATAbits.LATA7=1; //Lidar 1 high
+    
+    VL53L0X_Setup(0x52);
 }
 
 

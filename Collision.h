@@ -8,7 +8,6 @@
 #ifndef COLLISION_H
 #define COLLISION_H
 
-#define _XTAL_FREQ 20000000
 #include <xc.h>
 #include <stdint.h>
 #include <pic18f27K42.h>

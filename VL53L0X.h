@@ -25,7 +25,7 @@ uint8_t VL53L0X_Read_Register(uint8_t slave_address, uint8_t register_value);
 /*
  * Change the I2C address of the VL53L0X 
  */
-void VL53L0X_Change_Address(uint8_t oldAddress, uint8_t newAddress);
+void VL53L0X_Change_Address (uint8_t newAddress);
 
 
 /*
