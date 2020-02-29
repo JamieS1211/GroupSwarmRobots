@@ -114,3 +114,16 @@ void cereal_hex(uint8_t input) {
     // Serial Number
     cereal_str(string);
 }
+
+void cereal_uint16_t(uint16_t input) {
+    // Serial the type
+    char typey[] = "uint16_t$";
+    cereal_str(typey);
+    
+    // Formatting number
+    char string[20] = {0};
+    sprintf(string, "%u", input);
+    
+    // Serial Number
+    cereal_str(string);
+}

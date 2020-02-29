@@ -70,5 +70,6 @@ void cereal_uint8_t(uint8_t input);
 void cereal_int16_t(int16_t input);
 void cereal_size_t(size_t input);
 void cereal_hex(uint8_t input);
+void cereal_uint16_t(uint16_t input);
 
 #endif  //CEREAL_H

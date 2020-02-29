@@ -63,17 +63,20 @@ void main(void) {
     SYSTEM_Initialize();
     OSCILLATOR_Initialize();
     PMD_Initialize();
-    UART2_Initialize();
+    comp_reset();
+    cereal_str("Initialize Complete$");
     
-    //LATBbits.LATB0 = 0; // Ensure manually controlled VL53L0X is off
-    //__delay_ms(50);
-    //VL53L0X_Change_Address(0x52, 0x00); // Change the address from default to 0
-    //__delay_ms(50);
-    //LATBbits.LATB0 = 1; // Re-enable manually controlled VL53L0X
+    LATBbits.LATB0 = 0; // Ensure manually controlled VL53L0X is off
+    __delay_ms(50);
+    VL53L0X_Change_Address(0x29, 0x28); // Change the address from default to 0
+    __delay_ms(50);
+    LATBbits.LATB0 = 1; // Re-enable manually controlled VL53L0X
+    __delay_ms(50);
     
     // Setup both VL53L0X modules
-    //VL53L0X_Setup(0x00);
+    VL53L0X_Setup(0x28);
     //VL53L0X_Setup(0x29);
+    
     
     // While loop testing ADC then Lidar then compass
     while(1){
@@ -99,19 +102,31 @@ void main(void) {
 //        }
 //        
         // Lidar Testing
-        __delay_ms(100);
-       // uint16_t pizza = VL53L0X_ReadRange(0x29);
-        uint16_t pizza = ADC_Read(0);
-        pizza = round(pizza/1.092);
-        cereal_int(pizza);
-
-//        // COmpass Testing
-//        __delay_ms(100);
-//        float compassboi = comp_head();
-//        comp_reset();
-//        cereal_float(compassboi);
         
-        __delay_ms(600);
+        //uint16_t VL53L0X_2_dist = VL53L0X_ReadRange(0x29);
+        uint16_t VL53L0X_1_dist = VL53L0X_ReadRange(0x28);
+        
+        //cereal_uint16_t(VL53L0X_2_dist);
+        cereal_uint16_t(VL53L0X_1_dist);
+        //uint16_t bread = VL53L0X_ReadRange(0x00);
+        //cereal_uint16_t(bread);
+//        uint16_t pizza = ADC_Read(0);
+//        pizza = round(pizza/1.092);
+        
+        // Compass reading
+        cereal_str("Compass Test$");
+        float z = comp_head();
+        cereal_float(z);
+        int16_t x;
+        int16_t y;
+        comp_readRaw(&x, &y);
+        cereal_str("x$");
+        cereal_int16_t(x);
+        cereal_str("y$");
+        cereal_int16_t(y);
+
+
+        __delay_ms(1000);
         
     } // End of testing loop
     
