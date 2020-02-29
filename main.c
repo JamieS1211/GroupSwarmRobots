@@ -112,19 +112,6 @@ void main(void) {
         //cereal_uint16_t(bread);
 //        uint16_t pizza = ADC_Read(0);
 //        pizza = round(pizza/1.092);
-        
-        // Compass reading
-        cereal_str("Compass Test$");
-        float z = comp_head();
-        cereal_float(z);
-        int16_t x;
-        int16_t y;
-        comp_readRaw(&x, &y);
-        cereal_str("x$");
-        cereal_int16_t(x);
-        cereal_str("y$");
-        cereal_int16_t(y);
-
 
         __delay_ms(1000);
         
