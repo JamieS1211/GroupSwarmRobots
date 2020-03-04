@@ -63,7 +63,7 @@ void main(void) {
     SYSTEM_Initialize();
     OSCILLATOR_Initialize();
     PMD_Initialize();
-    comp_reset();
+    //comp_reset();
     cereal_str("Initialize Complete$");
     
     LATBbits.LATB0 = 0; // Ensure manually controlled VL53L0X is off
@@ -75,46 +75,19 @@ void main(void) {
     
     // Setup both VL53L0X modules
     VL53L0X_Setup(0x28);
-    //VL53L0X_Setup(0x29);
+    VL53L0X_Setup(0x29);
     
     
     // While loop testing ADC then Lidar then compass
     while(1){
-        
-//        // ADC testing
-//        uint16_t value = ADC_Read(0);
-//        if (value > 1000){
-//            TRISAbits.TRISA5 = 0;
-//            LATAbits.LATA5 = 1;
-//        }
-//        else{
-//            TRISAbits.TRISA5 = 0;
-//            LATAbits.LATA5 = 0;
-//        }
-//        uint16_t value2 = ADC_Read(1);
-//        if (value2 > 1000){
-//            TRISAbits.TRISA6 = 0;
-//            LATAbits.LATA6 = 1;
-//        }
-//        else{
-//            TRISAbits.TRISA6 = 0;
-//            LATAbits.LATA6 = 0;
-//        }
-//        
         // Lidar Testing
-        
-        //uint16_t VL53L0X_2_dist = VL53L0X_ReadRange(0x29);
+        uint16_t VL53L0X_2_dist = VL53L0X_ReadRange(0x29);
         uint16_t VL53L0X_1_dist = VL53L0X_ReadRange(0x28);
         
-        //cereal_uint16_t(VL53L0X_2_dist);
+        cereal_uint16_t(VL53L0X_2_dist);
         cereal_uint16_t(VL53L0X_1_dist);
-        //uint16_t bread = VL53L0X_ReadRange(0x00);
-        //cereal_uint16_t(bread);
-//        uint16_t pizza = ADC_Read(0);
-//        pizza = round(pizza/1.092);
 
         __delay_ms(1000);
-        
     } // End of testing loop
     
     return;
