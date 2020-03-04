@@ -26,12 +26,12 @@
  * 9  - RA7                         - [XSHUT 1]
  * 10 - RA6                         - [XSHUT 2]
  * 11 - RC0                         - [NONE]
- * 12 - RC1                         - [NONE] ?      THE BEN ZONE
- * 13 - RC2                         - [NONE] ?      ------------
- * 14 - RC3                         - [SCK1 SPI] ?  ------------
- * 15 - RC4                         - [SDI1 SPI] ?  ------------
- * 16 - RC5                         - [NONE] ?      ------------
- * 17 - RC6                         - [NONE] ?      ------------
+ * 12 - RC1                         - [L Motor]      THE BEN ZONE
+ * 13 - RC2                         - [L Motor]      ------------
+ * 14 - RC3                         - [None]         ------------
+ * 15 - RC4                         - [Enable Motors]------------
+ * 16 - RC5                         - [R Motor]      ------------
+ * 17 - RC6                         - [R Motor]      ------------
  * 18 - RC7                         - [NONE]
  * 19 - VSS                         - [+ 0V]
  * 20 - VDD                         - [+ 5V]
@@ -58,79 +58,16 @@
 #include "VL53L0X.h"
 #include "cereal.h"
 #include "compass.h"
+#include "motor.h"
 
 void main(void) {
     SYSTEM_Initialize();
-    OSCILLATOR_Initialize();
-    PMD_Initialize();
-    UART2_Initialize();
     
-    //LATBbits.LATB0 = 0; // Ensure manually controlled VL53L0X is off
-    //__delay_ms(50);
-    //VL53L0X_Change_Address(0x52, 0x00); // Change the address from default to 0
-    //__delay_ms(50);
-    //LATBbits.LATB0 = 1; // Re-enable manually controlled VL53L0X
-    
-    // Setup both VL53L0X modules
-    //VL53L0X_Setup(0x00);
-    //VL53L0X_Setup(0x29);
-    
-    // While loop testing ADC then Lidar then compass
     while(1){
-        
-//        // ADC testing
-//        uint16_t value = ADC_Read(0);
-//        if (value > 1000){
-//            TRISAbits.TRISA5 = 0;
-//            LATAbits.LATA5 = 1;
-//        }
-//        else{
-//            TRISAbits.TRISA5 = 0;
-//            LATAbits.LATA5 = 0;
-//        }
-//        uint16_t value2 = ADC_Read(1);
-//        if (value2 > 1000){
-//            TRISAbits.TRISA6 = 0;
-//            LATAbits.LATA6 = 1;
-//        }
-//        else{
-//            TRISAbits.TRISA6 = 0;
-//            LATAbits.LATA6 = 0;
-//        }
-//        
-//        // Lidar Testing
-//        __delay_ms(100);
-//        uint16_t pizza = VL53L0X_ReadRange(0x29);
-//        
-//        // Compass testing
-//        __delay_ms(200);
-//        comp_reset();
-//        float ang = comp_head();
-//        
-//        if (ang>1){
-//            TRISAbits.TRISA7 = 0;
-//            LATAbits.LATA7 = 1;
-//        }
-//        else {
-//            TRISAbits.TRISA7 = 0;
-//            LATAbits.LATA7 = 0;
-//        }
-        // Bit shift testing
-        // These create an arithmetic overflow but dw it is all cash money
-        int16_t aim = 0b1110011010011001;
-        uint8_t x_lsb = 0b10011001;
-        uint8_t x_msb = 0b11100110;
-        int16_t x = ((int16_t)x_msb << 8) + x_lsb;
-        cereal_int16_t(aim);
-        cereal_int16_t(x);
-
-        // UART testing
-        __delay_ms(200);
-        UART2_Write(105);
-        __delay_ms(200);
-        char string[4]="hi $";
-        cereal_str(string);
-        
+        spin_test();
+        __delay_ms(2000);
+        move_test();
+        __delay_ms(2000);
     } // End of testing loop
     
     return;

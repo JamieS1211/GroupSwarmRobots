@@ -197,6 +197,8 @@ void spin_test(void){
     leftForwards = 1;
     rightForwards = 0;
     leftBackwards = 0;
+    __delay_ms(1000);
+    motor_stop();
 }
 
 /*
@@ -208,4 +210,5 @@ void move_test(void){
     rightBackwards = 0;
     leftBackwards = 0;
     __delay_ms(1000);
+    motor_stop();
 }
