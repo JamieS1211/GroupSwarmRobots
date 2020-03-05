@@ -79,10 +79,18 @@ void collision(void) {
         // Turn on the spot or something
         motor_stop();
     }
-    if (value2 < value) {  
+    else if (value2 < value) {  
         motor_spin(-0.785); //Turn right
     }
-    if (value < value2) { 
+    else if (value < value2) { 
+        motor_spin(0.785);
 
 }
+    else if (value == value2) {
+        move_test();
+    }
+    else {
+        
+        cereal_str("help$");
+    }
 }
