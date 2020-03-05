@@ -82,16 +82,16 @@ void main(void) {
     // While loop testing ADC then Lidar then compass
     while(1){
         // Lidar Testing
-        uint16_t VL53L0X_2_dist = VL53L0X_ReadRange(0x29);
-        uint16_t VL53L0X_1_dist = VL53L0X_ReadRange(0x28);
+        //uint16_t VL53L0X_2_dist = VL53L0X_ReadRange(0x29);
+        //uint16_t VL53L0X_1_dist = VL53L0X_ReadRange(0x28);
         
         uint16_t bVoltage = ADC_Read(0);
         
-        cereal_uint16_t(VL53L0X_2_dist);
-        cereal_uint16_t(VL53L0X_1_dist);
+        //cereal_uint16_t(VL53L0X_2_dist);
+        //cereal_uint16_t(VL53L0X_1_dist);
 
         spin_test();
-        __delay_ms(2000);
+        //__delay_ms(2000);
         cereal_uint16_t(bVoltage);
         move_test();
         __delay_ms(2000);

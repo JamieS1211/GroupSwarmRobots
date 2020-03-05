@@ -18,11 +18,12 @@
 void ADC_Setup(void) {
     // Setup ADC
     // FVRCON [Fixed Reference Voltage Set-up] - page 599
-    FVRCONbits.CDAFVR = 0b10; // Set to 2.048V
-    FVRCONbits.ADFVR = 0b10; // Set to 2.048V
-    FVRCONbits.EN = 1; // Turn on fixed reference voltage
-    FVRCONbits.CDAFVR = 0b10; // Set to 2.048V
-    FVRCONbits.ADFVR = 0b10; // Set to 2.048V
+    //FVRCONbits.CDAFVR = 2; // Set to 2.048V
+    //FVRCONbits.ADFVR = 2; // Set to 2.048V
+    //FVRCONbits.EN = 1; // Turn on fixed reference voltage
+    //FVRCONbits.CDAFVR = 2; // Set to 2.048V
+    //FVRCONbits.ADFVR = 2; // Set to 2.048V
+    FVRCON = 0xfa;
     while (FVRCONbits.RDY == 0) {
         __delay_ms(20);
     }
@@ -33,7 +34,7 @@ void ADC_Setup(void) {
       
     // TRISx [Tri-state control register] - page 265
     
-    
+    ADREFbits.PREF = 3;
     // UPDATE FOR NEW PINS TOO!!!!---------------------------------
     TRISAbits.TRISA0 = 1; // Set RA0 to Input
     TRISAbits.TRISA1 = 1; // Set RA1 to Input
