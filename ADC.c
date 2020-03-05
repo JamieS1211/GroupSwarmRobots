@@ -21,6 +21,11 @@ void ADC_Setup(void) {
     FVRCONbits.CDAFVR = 0b10; // Set to 2.048V
     FVRCONbits.ADFVR = 0b10; // Set to 2.048V
     FVRCONbits.EN = 1; // Turn on fixed reference voltage
+    FVRCONbits.CDAFVR = 0b10; // Set to 2.048V
+    FVRCONbits.ADFVR = 0b10; // Set to 2.048V
+    while (FVRCONbits.RDY == 0) {
+        __delay_ms(20);
+    }
     
     // ADCON0 [ADC Control Register 0] - page 619
     ADCON0bits.CS = 1; // ADCRC Clock - Dedicated 600KHz clock for ADC module
