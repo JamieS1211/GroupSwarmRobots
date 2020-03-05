@@ -46,10 +46,10 @@ uint8_t collide_check(uint16_t distance) {
         // Turn on the spot or something
         motor_stop();
     } else if (value2 < value) {  
-        motor_spin(-0.785)    //Turn right
+        motor_spin(-0.785);    //Turn right
         return 0;
     } else if (value < value2) { 
-        motor_spin(0.785)
+        motor_spin(0.785);
     } else {
         return 2;
     }
