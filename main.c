@@ -67,12 +67,9 @@ void main(void) {
     //comp_reset();
     cereal_str("Initialize Complete$");
     
-    LATBbits.LATB0 = 0; // Ensure manually controlled VL53L0X is off
-    __delay_ms(50);
+ 
     VL53L0X_Change_Address(0x29, 0x28); // Change the address from default to 0
-    __delay_ms(50);
-    LATBbits.LATB0 = 1; // Re-enable manually controlled VL53L0X
-    __delay_ms(50);
+
     
     // Setup both VL53L0X modules
     VL53L0X_Setup(0x28);
@@ -82,19 +79,15 @@ void main(void) {
     // While loop testing ADC then Lidar then compass
     while(1){
         // Lidar Testing
-        //uint16_t VL53L0X_2_dist = VL53L0X_ReadRange(0x29);
-        //uint16_t VL53L0X_1_dist = VL53L0X_ReadRange(0x28);
+        collision();
         
-        uint16_t bVoltage = ADC_Read(0);
+        //uint16_t bVoltage = ADC_Read(0);
         
-        //cereal_uint16_t(VL53L0X_2_dist);
-        //cereal_uint16_t(VL53L0X_1_dist);
-
-        spin_test();
-        //__delay_ms(2000);
-        cereal_uint16_t(bVoltage);
+        //spin_test();
+        //__delay_ms(100);
+        //cereal_uint16_t(bVoltage);
         move_test();
-        __delay_ms(2000);
+        __delay_ms(100);
     } // End of testing loop
     
     return;
