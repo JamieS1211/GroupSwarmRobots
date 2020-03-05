@@ -26,12 +26,12 @@
  * 9  - RA7                         - [XSHUT 1]
  * 10 - RA6                         - [XSHUT 2]
  * 11 - RC0                         - [NONE]
- * 12 - RC1                         - [NONE] ?      THE BEN ZONE
- * 13 - RC2                         - [NONE] ?      ------------
- * 14 - RC3                         - [SCK1 SPI] ?  ------------
- * 15 - RC4                         - [SDI1 SPI] ?  ------------
- * 16 - RC5                         - [NONE] ?      ------------
- * 17 - RC6                         - [NONE] ?      ------------
+ * 12 - RC1                         - [L Motor]      THE BEN ZONE
+ * 13 - RC2                         - [L Motor]      ------------
+ * 14 - RC3                         - [None]         ------------
+ * 15 - RC4                         - [Enable Motors]------------
+ * 16 - RC5                         - [R Motor]      ------------
+ * 17 - RC6                         - [R Motor]      ------------
  * 18 - RC7                         - [NONE]
  * 19 - VSS                         - [+ 0V]
  * 20 - VDD                         - [+ 5V]
@@ -58,6 +58,7 @@
 #include "VL53L0X.h"
 #include "cereal.h"
 #include "compass.h"
+#include "motor.h"
 
 void main(void) {
     SYSTEM_Initialize();
@@ -87,7 +88,10 @@ void main(void) {
         cereal_uint16_t(VL53L0X_2_dist);
         cereal_uint16_t(VL53L0X_1_dist);
 
-        __delay_ms(1000);
+        spin_test();
+        __delay_ms(2000);
+        move_test();
+        __delay_ms(2000);
     } // End of testing loop
     
     return;

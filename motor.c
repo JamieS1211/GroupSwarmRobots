@@ -7,10 +7,24 @@
 
 #include <xc.h>
 #include "math.h"
+#include "mcc_generated_files/examples/i2c2_master_example.h"
+#include "compass.h"
+#include "mcc_generated_files/mcc.h"
+#include "position.h"
 
 #include "globals.h"
 
 //Pages 355 - 359 - 361 in data sheet
+
+void setDutyCycleR(uint16_t dutyCycle) {
+    PWM5DCH = dutyCycle >> 2;
+    PWM5DCL = (dutyCycle & 0b11) << 6;
+}
+
+void setDutyCycleL(uint16_t dutyCycle) {
+    PWM6DCH = dutyCycle >> 2;
+    PWM6DCL = (dutyCycle & 0b11) << 6;
+}
 
 /*
  * motor setup - Page 358
@@ -52,139 +66,128 @@ void motor_Setup(void) {
     TRISCbits.TRISC5 = 0;
     TRISCbits.TRISC6 = 0;
     TRISCbits.TRISC7 = 0; 
-    
-    // Timer 6 set-up for ~2s
-    T6CLKbits.CS = 0b001; // Fosc/4 page 336
-    T6CONbits.ON = 1; // page 339
-    T6CONbits.CKPS = 0b111; // pre-scalar (1:128) page 239
-    T6CONbits.OUTPS = 0b1111; // post-scalar (1:16) page  239
-    PIE9bits.TMR6IE = 1; // page 155
-    T6PR = 243; // arbitrary 243/245 page 338
 }
 
-//void setDutyCycleR(uint16_t dutyCycle) {
-//    PWM5DCH = dutyCycle >> 2;
-//    PWM5DCL = (dutyCycle & 0b11) << 6;
-//}
-//
-//void setDutyCycleL(uint16_t dutyCycle) {
-//    PWM6DCH = dutyCycle >> 2;
-//    PWM6DCL = (dutyCycle & 0b11) << 6;
-//}
-//
-///*
-// * motor basic movement function w/ option to reduce speed
-// */
-//void move_dist(uint16_t angle, uint8_t distance, bool slow){
-//    int t6count = ; // T6 value starting from 0
-//        
-//    if (slow == true) {
-//            setDutyCycleR(128); // Quarter duty cycle (128/1024)
-//            setDutyCycleL(128);
-//    }
-//    motor_spin(angle);
-//    for t6count <= calcdistt(distance) {
-//        rightForwards = 1;
-//        leftForwards = 1;
-//    }
-//    motor_save(angle, distance);
-//}
-//
-///*
-// * motor movement to interrupt timer T6
-// */
-//void motor_move(uint16_t angle) {
-//    motor_spin(angle);
-//    while timer6 <= 4 { // 4 being arbitrary value for interrupt
-//        rightForwards = 1;
-//        leftForwards = 1;
-//    }
-//    motor_save(angle, distance);
-// }
-//
-///*
-// * motor spin in place for a desired shift in angle
-// */
-//void motor_spin(uint16_t angle) {
-//    int t6count = ; // T6 value starting from 0
-//    
-//    if angle > 0 { // Anti-clockwise
-//        for t6count <= calcanglet(angle) {
-//            rightForwards = 1;
-//            leftBackwards = 1;
-//        }
-//    }
-//    if angle < 0 { // Clockwise
-//        for t6count <= calcanglet(angle) {
-//            rightBackwards = 1;
-//            leftForwards = 1;
-//        }
-//    }
-//    motor_save(angle, distance);
-//}
-//
-///*
-// * motor spin in place for a desired angle (?)
-// */
-//void motor_bearing(uint16_t angle) {
-//    
-//}
-//
-///*
-// * motor stop
-// */
-//void motor_stop(void) {
-//    leftForwards = 0;
-//    leftBackwards = 0;
-//    rightForwards = 0;
-//    rightBackwards = 0;
-//    motor_save(angle, distance);
-//}
-//
-///*
-// * motor reverses (5cm) then spins to desired angle
-// */
-//void motor_reverse(uint16_t angle) {
-//    int t6count = ; // T6 counter
-//    int distance = 5;
-//    while t6count <= calcdistt(distance){
-//        rightBackwards = 1;
-//        leftBackwards = 1;
-//    }
-//    motor_spin(angle);
-//    motor_save(angle, distance);
-//}
-//
-///*
-// * Escape from P2P charging
-// */
-//void motor_escape(void){
-//    
-//}
-//
-///*
-// * saving distance moved in vector direction as polar coordinates
-// */
-//void motor_save(uint16_t angle, uint16_t distance);
-//
-///*
-// * calculating time t
-// */
-//long double calcanglet(uint16_t angle) {
-//    int fstime = 10; // TO TEST - time taken to complete full rotation
-//    double pi = M_PI; // pi
-//    long double spintime = fstime / (2*pi/angle); // t/(2pi/angle)
-//    return spintime;
-//}
-//
-///*
-// * calculating time needed to reach desired distance
-// */
-//long double calcdistt(uint16_t distance){
-//    int movetime = 10; // TO TEST - time taken to move 10 cm
-//    long double disttime = movetime/(10/distance);
-//    return disttime;
-//}
+/*
+ * calculating time needed to reach desired distance
+ */
+long double calcdistt(int distance){
+    int movetime = 10; // TO TEST - time taken to move 10 cm
+    long double disttime = movetime/(10/distance);
+    return disttime;
+}
+
+/*
+ * calculating time t
+ */
+long double calcanglet(float angle) {
+    int fstime = 10; // TO TEST - time taken to complete full rotation
+    double pi = M_PI; // pi
+    long double spintime = fstime / (2*pi/angle); // t/(2pi/angle)
+    return spintime;
+}
+
+/*
+ * motor stop
+ */
+void motor_stop(void) {
+    leftForwards = 0;
+    leftBackwards = 0;
+    rightForwards = 0;
+    rightBackwards = 0;
+}
+
+/*
+ * saving distance moved in vector direction as polar coordinates
+ */
+void motor_save(float angle, int distance){
+    struct polarcoord temp = {0}; // Created new polar coord space in mem
+    temp.angle = angle;
+    temp.radius = distance;
+        
+    currMove = polar_add_struct(currMove, temp); // Update current movement
+}
+
+/*
+ * motor spin in place for a desired shift in angle
+ */
+void motor_spin(float angle) {
+    if (angle > 0) { // Anti-clockwise
+        rightForwards = 1;
+        leftBackwards = 1;
+    }
+    else { // Clockwise
+        rightBackwards = 1;
+        leftForwards = 1;
+    }
+    
+    int ctime = calcanglet(angle);
+    for (int t = 0; t < ctime; t++){
+        __delay_ms(1);        
+    }
+    motor_stop();
+    motor_save(angle, 0);
+}
+
+/*
+ * motor basic movement function w/ option to reduce speed
+ */
+void move_dist(float angle, int distance, bool slow){      
+    if (slow == true) {
+            setDutyCycleR(128); // Quarter duty cycle (128/1024)
+            setDutyCycleL(128);
+    }
+    motor_spin(angle);
+    rightForwards = 1;
+    leftForwards = 1;
+    int ctime = calcdistt(distance);
+    
+    for (int t = 0; t < ctime; t++){
+        __delay_ms(1);        
+    }
+    motor_stop();
+    motor_save(angle, distance);
+}
+
+/*
+ * motor movement to interrupt timer T6
+ */
+void motor_move(float angle) {
+    motor_spin(angle);
+    rightForwards = 1;
+    leftForwards = 1;
+    __delay_ms(1);
+    motor_stop();
+    motor_save(angle, 0);
+ }
+
+/*
+ * motor spin in place for a desired angle (?)
+ */
+void motor_bearing(float angle) {
+    float curr_head = comp_head();
+    float spin_amount = ang_diff(angle, curr_head);
+    motor_spin(spin_amount);
+    motor_save(angle, 0);
+}
+
+/*
+ * motor reverses (5cm) then spins to desired angle
+ */
+void motor_reverse(float angle) {
+    rightBackwards = 1;
+    leftBackwards = 1;
+    __delay_ms(5000); // VALIDATE !!! FIgure out time taken for 5cm
+    motor_save(0, -5);
+    motor_spin(angle);
+}
+
+/*
+ * Escape from P2P charging
+ */
+void motor_escape(void){
+    
+}
 
 /*
  * TESTER - infinite clockwise spin
@@ -194,6 +197,8 @@ void spin_test(void){
     leftForwards = 1;
     rightForwards = 0;
     leftBackwards = 0;
+    __delay_ms(1000);
+    motor_stop();
 }
 
 /*
@@ -204,4 +209,6 @@ void move_test(void){
     leftForwards = 1;
     rightBackwards = 0;
     leftBackwards = 0;
+    __delay_ms(1000);
+    motor_stop();
 }

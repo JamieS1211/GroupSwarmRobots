@@ -10,6 +10,7 @@
 
 //Pages 355 - 359 - 361 in data sheet
 
+
 /*
  * motor setup - Page 358
  */
@@ -20,24 +21,24 @@ void setDutyCycleR(uint16_t dutyCycle);
 void setDutyCycleL(uint16_t dutyCycle);
 
 /*
- * motor basic movement function
+ * motor basic movement function w/ option to reduce speed
  */
-void move_dist(uint16_t angle, uint8_t distance, bool slow);
+void move_dist(float angle, int distance, bool slow);
 
 /*
  * motor movement to interrupt timer T6
  */
-void motor_move(uint16_t angle);
+void motor_move(float angle);
 
 /*
  * motor spin in place for a desired shift in angle
  */
-void motor_spin(uint16_t angle);
+void motor_spin(float angle);
 
 /*
  * motor spin in place for a desired angle (?)
  */
-void motor_bearing(uint16_t angle);
+void motor_bearing(float angle);
 
 /*
  * motor stop
@@ -45,32 +46,38 @@ void motor_bearing(uint16_t angle);
 void motor_stop(void);
 
 /*
- * motor reverses (1s) then spins to desired angle
+ * motor reverses (5cm) then spins to desired angle
  */
-void motor_reverse(uint16_t angle);
+void motor_reverse(float angle);
 
 /*
- * saving distance moved in direction
+ * Escape from P2P charging
  */
-void motor_save(uint16_t angle, uint16_t distance);
+void motor_escape(void);
 
 /*
- * calculating time needed to spin to desired angle
+ * saving distance moved in vector direction as polar coordinates
  */
-long double calcanglet(uint16_t angle);
+void motor_save(float angle, int distance);
+
+/*
+ * calculating time t
+ */
+long double calcanglet(float angle);
 
 /*
  * calculating time needed to reach desired distance
  */
-long double calcdistt(uint16_t distance);
+long double calcdistt(int distance);
 
 /*
  * TESTER - infinite clockwise spin
  */
-void spin_testCW(void);
+void spin_test(void);
 
 /*
- * TESTER - move forward for 20s
+ * TESTER - move forward 20s
  */
 void move_test(void);
+
 #endif //MOTOR_H
