@@ -13,7 +13,7 @@
   @Description:
     This header file provides implementations for driver APIs for all modules selected in the GUI.
     Generation Information :
-        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.79.0
+        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.78.1
         Device            :  PIC18F27K42
         Driver Version    :  2.00
     The generated drivers are tested against the following:
@@ -53,10 +53,9 @@ void SYSTEM_Initialize(void)
     PMD_Initialize();
     PIN_MANAGER_Initialize();
     OSCILLATOR_Initialize();
-    PWM6_Initialize();
-    TMR4_Initialize();
     PWM5_Initialize();
     TMR2_Initialize();
+    EXT_INT_Initialize();
     TMR0_Initialize();
     UART2_Initialize();
     SPI1_Initialize();

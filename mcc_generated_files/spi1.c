@@ -13,7 +13,7 @@
   @Description
     This header file provides implementations for driver APIs for SPI1.
     Generation Information :
-        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.79.0
+        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.78.1
         Device            :  PIC18F27K42
         Driver Version    :  1.0.0
     The generated drivers are tested against the following:
@@ -73,7 +73,7 @@ void SPI1_Initialize(void)
     SPI1CLK = 0x00;
     //BAUD 0; 
     SPI1BAUD = 0x00;
-    TRISBbits.TRISB3 = 0;
+    TRISCbits.TRISC0 = 0;
 }
 
 bool SPI1_Open(spi1_modes_t spi1UniqueConfiguration)
@@ -85,7 +85,7 @@ bool SPI1_Open(spi1_modes_t spi1UniqueConfiguration)
         SPI1CON2 = spi1_configuration[spi1UniqueConfiguration].con2 | (_SPI1CON2_SPI1RXR_MASK | _SPI1CON2_SPI1TXR_MASK);
         SPI1CLK  = 0x00;
         SPI1BAUD = spi1_configuration[spi1UniqueConfiguration].baud;        
-        TRISBbits.TRISB3 = spi1_configuration[spi1UniqueConfiguration].operation;
+        TRISCbits.TRISC0 = spi1_configuration[spi1UniqueConfiguration].operation;
         SPI1CON0bits.EN = 1;
         return true;
     }
@@ -110,10 +110,8 @@ void SPI1_ExchangeBlock(void *block, size_t blockSize)
     uint8_t *data = block;
     while(blockSize--)
     {
-        SPI1TCNTL = 1;
-        SPI1TXB = *data;
-        while(!PIR2bits.SPI1RXIF);
-        *data++ = SPI1RXB;
+        *data = SPI1_ExchangeByte(*data );
+        data++;
     }
 }
 

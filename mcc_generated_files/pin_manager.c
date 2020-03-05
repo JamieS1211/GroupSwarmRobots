@@ -13,7 +13,7 @@
   Description:
     This header file provides implementations for pin APIs for all pins selected in the GUI.
     Generation Information :
-        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.79.0
+        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.78.1
         Device            :  PIC18F27K42
         Driver Version    :  2.11
     The generated drivers are tested against the following:
@@ -64,16 +64,16 @@ void PIN_MANAGER_Initialize(void)
     /**
     TRISx registers
     */
-    TRISA = 0xFF;
-    TRISB = 0x84;
-    TRISC = 0x81;
+    TRISA = 0xBF;
+    TRISB = 0x80;
+    TRISC = 0x6A;
 
     /**
     ANSELx registers
     */
-    ANSELC = 0xFF;
-    ANSELB = 0x03;
-    ANSELA = 0xFF;
+    ANSELC = 0xFC;
+    ANSELB = 0x0F;
+    ANSELA = 0x7F;
 
     /**
     WPUx registers
@@ -121,16 +121,16 @@ void PIN_MANAGER_Initialize(void)
     
 	
     U2RXPPS = 0x0F;   //RB7->UART2:RX2;    
-    SPI1SCKPPS = 0x0B;   //RB3->SPI1:SCK1;    
+    RC0PPS = 0x1E;   //RC0->SPI1:SCK1;    
+    SPI1SCKPPS = 0x10;   //RC0->SPI1:SCK1;    
     I2C2SCLPPS = 0x0D;   //RB5->I2C2:SCL2;    
-    RB1PPS = 0x1F;   //RB1->SPI1:SDO1;    
     RB6PPS = 0x16;   //RB6->UART2:TX2;    
-    RC3PPS = 0x0D;   //RC3->PWM5:PWM5;    
+    INT0PPS = 0x07;   //RA7->EXT_INT:INT0;    
     RB5PPS = 0x23;   //RB5->I2C2:SCL2;    
-    RC4PPS = 0x0E;   //RC4->PWM6:PWM6;    
-    RB3PPS = 0x1E;   //RB3->SPI1:SCK1;    
+    RC4PPS = 0x0D;   //RC4->PWM5:PWM5;    
     RB4PPS = 0x24;   //RB4->I2C2:SDA2;    
-    SPI1SDIPPS = 0x0A;   //RB2->SPI1:SDI1;    
+    RC2PPS = 0x1F;   //RC2->SPI1:SDO1;    
+    SPI1SDIPPS = 0x11;   //RC1->SPI1:SDI1;    
     I2C2SDAPPS = 0x0C;   //RB4->I2C2:SDA2;    
 }
   
