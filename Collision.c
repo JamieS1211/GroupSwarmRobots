@@ -57,8 +57,8 @@ uint8_t collide_check(uint16_t distance) {
 }
 
 void collision(void) {
-    uint16_t value = VL53L0X_ReadRange(0x52);       //Lidar 1
-    uint16_t value2 = VL53L0X_ReadRange(0x00);      //Lidar 2, on the right
+    uint16_t value = VL53L0X_ReadRange(0x28);       //Lidar 1
+    uint16_t value2 = VL53L0X_ReadRange(0x29);      //Lidar 2, on the right
     
     cereal_int16_t(value);
     int input = 1;
