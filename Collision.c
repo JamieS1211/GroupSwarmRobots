@@ -55,3 +55,34 @@ uint8_t collide_check(uint16_t distance) {
     }
     return 0;
 }
+
+void collision(void) {
+    uint16_t value = VL53L0X_ReadRange(0x52);       //Lidar 1
+    uint16_t value2 = VL53L0X_ReadRange(0x00);      //Lidar 2, on the right
+    
+    cereal_int16_t(value);
+    int input = 1;
+    cereal_int(input);
+    
+    cereal_int16_t(value2);
+    int input1 = 2;
+    cereal_int(input1);
+    
+    
+    
+     //Try to get 10 values for average
+     //Ensure all numbers and one not wildly different
+    //If only right reads a value, turn right.
+     //If only left reads, turn left.
+
+    if (value < 100 || value2 < 100 ) { // Change dependent on stopping distance
+        // Turn on the spot or something
+        motor_stop();
+    }
+    if (value2 < value) {  
+        motor_spin(-0.785); //Turn right
+    }
+    if (value < value2) { 
+
+}
+}
