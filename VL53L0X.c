@@ -6,6 +6,7 @@
  */
 #include <xc.h>
 #include "stdint.h"
+#define _XTAL_FREQ 20000000
 
 #include "globals.h"
 #include "VL53L0X.h"

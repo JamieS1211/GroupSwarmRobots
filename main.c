@@ -45,6 +45,7 @@
  * 28 - RB7/ICSPDAT                 - [RX2]
  */
 
+#define _XTAL_FREQ 20000000
 #pragma warning disable 520
 #pragma warning disable 2053
 #pragma warning disable 1498
