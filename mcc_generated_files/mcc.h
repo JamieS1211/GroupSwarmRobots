@@ -13,7 +13,7 @@
   @Description:
     This header file provides implementations for driver APIs for all modules selected in the GUI.
     Generation Information :
-        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.79.0
+        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.78.1
         Device            :  PIC18F27K42
         Driver Version    :  2.00
     The generated drivers are tested against the following:
@@ -54,11 +54,10 @@
 #include <conio.h>
 #include "interrupt_manager.h"
 #include "i2c2_master.h"
-#include "tmr4.h"
-#include "pwm6.h"
 #include "tmr2.h"
 #include "pwm5.h"
 #include "tmr0.h"
+#include "ext_int.h"
 #include "uart2.h"
 #include "spi1.h"
 

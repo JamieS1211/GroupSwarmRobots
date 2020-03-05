@@ -13,7 +13,7 @@
   @Description
     This source file provides APIs for TMR0.
     Generation Information :
-        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.79.0
+        Product Revision  :  PIC10 / PIC12 / PIC16 / PIC18 MCUs - 1.78.1
         Device            :  PIC18F27K42
         Driver Version    :  3.10
     The generated drivers are tested against the following:
