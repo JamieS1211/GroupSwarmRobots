@@ -31,27 +31,27 @@ uint8_t collide_check(uint16_t distance) {
     
     
     
-    // Try to get 10 values for average
-    // Ensure all numbers and one not wildly different
+     //Try to get 10 values for average
+     //Ensure all numbers and one not wildly different
     //If only right reads a value, turn right.
-    // If only left reads, turn left.
+     //If only left reads, turn left.
 
-//    uint16_t dist = distance + 500; // As can only move this at a time
-//
-//    if (distance > 500) { // Value of 500, dont want to move more than this at a time.
-//        //Send back invalid movement
-//    } else if (dist < value || dist < value2) {
-//        return 1; // You can move so send 1.
-//    } else if (value < 100 || value2 < 100 ) { // Change dependent on stopping distance
-//        // Turn on the spot or something
-//        motor_stop();
-//    } else if (value2 < value) {  
-//        //motor_spin()    //Turn right
-//        return 0;
-//    } else if (value < value2) { 
-//        //turn left
-//    } else {
-//        //Invalid movement
-//    }
-//    return 0;
+    uint16_t dist = distance + 500; // As can only move this at a time
+
+    if (distance > 500) { // Value of 500, don't want to move more than this at a time.
+        return 2;
+    } else if (dist < value || dist < value2) {
+        return 1; // You can move so send 1.
+    } else if (value < 100 || value2 < 100 ) { // Change dependent on stopping distance
+        // Turn on the spot or something
+        motor_stop();
+    } else if (value2 < value) {  
+        motor_spin(-0.785)    //Turn right
+        return 0;
+    } else if (value < value2) { 
+        motor_spin(0.785)
+    } else {
+        return 2;
+    }
+    return 0;
 }
