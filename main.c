@@ -67,12 +67,7 @@ void main(void) {
     //comp_reset();
     cereal_str("Initialize Complete$");
     
-    LATBbits.LATB0 = 0; // Ensure manually controlled VL53L0X is off
-    __delay_ms(50);
-    VL53L0X_Change_Address(0x29, 0x28); // Change the address from default to 0
-    __delay_ms(50);
-    LATBbits.LATB0 = 1; // Re-enable manually controlled VL53L0X
-    __delay_ms(50);
+
     
     // Setup both VL53L0X modules
     VL53L0X_Setup(0x28);

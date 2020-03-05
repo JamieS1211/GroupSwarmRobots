@@ -93,4 +93,5 @@ void collision(void) {
         
         cereal_str("help$");
     }
+    
 }
