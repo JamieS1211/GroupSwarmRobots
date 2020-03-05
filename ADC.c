@@ -34,7 +34,8 @@ void ADC_Setup(void) {
       
     // TRISx [Tri-state control register] - page 265
     
-    ADREFbits.PREF = 3;
+    // ADREF (ADC Reference selection register) - page 624
+    ADREFbits.PREF = 3; // Set ADC reference voltage to FVR module
     // UPDATE FOR NEW PINS TOO!!!!---------------------------------
     TRISAbits.TRISA0 = 1; // Set RA0 to Input
     TRISAbits.TRISA1 = 1; // Set RA1 to Input
