@@ -16,10 +16,8 @@
 #include "globals.h"
 
 
-/* Change Address of one Lidar */
-void Lidar_Change_Address();
-
 /*Check if movement can be completed*/
 uint8_t collide_check(uint16_t distance);
+void collision();
 
 #endif //COLLISION_H
