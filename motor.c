@@ -16,14 +16,9 @@
 
 //Pages 355 - 359 - 361 in data sheet
 
-void setDutyCycleR(uint16_t dutyCycle) {
+void setDutyCycle(int dutyCycle) {
     PWM5DCH = dutyCycle >> 2;
     PWM5DCL = (dutyCycle & 0b11) << 6;
-}
-
-void setDutyCycleL(uint16_t dutyCycle) {
-    PWM6DCH = dutyCycle >> 2;
-    PWM6DCL = (dutyCycle & 0b11) << 6;
 }
 
 /*
@@ -40,8 +35,7 @@ void motor_Setup(void) {
     PWM5CONbits.EN = 1; // page 359
     PWM6CONbits.EN = 1; 
     
-    setDutyCycleR(512); // 50% duty cycle = 512/1024
-    setDutyCycleL(512);
+    setDutyCycle(512); // 50% duty cycle = 512/1024
     
     PIR4bits.TMR2IF = 0; // page 141
     PIR7bits.TMR4IF = 0; // page 144
@@ -62,10 +56,10 @@ void motor_Setup(void) {
     TRISCbits.TRISC2 = 0;
     
     // Enable drive pins
-    TRISCbits.TRISC0 = 0;
-    TRISCbits.TRISC5 = 0;
-    TRISCbits.TRISC6 = 0;
-    TRISCbits.TRISC7 = 0; 
+    TRISBbits.TRISB0 = 0;
+    TRISBbits.TRISB1 = 0;
+    TRISBbits.TRISB2 = 0;
+    TRISBbits.TRISB4 = 0; 
 }
 
 /*
@@ -150,7 +144,7 @@ void move_dist(float angle, int distance, bool slow){
 }
 
 /*
- * motor movement to interrupt timer T6
+ * motor movement to interrupt, i.e. step-move
  */
 void motor_move(float angle) {
     motor_spin(angle);

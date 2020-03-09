@@ -26,19 +26,19 @@
  * 9  - RA7                         - [XSHUT 1]
  * 10 - RA6                         - [XSHUT 2]
  * 11 - RC0                         - [NONE]
- * 12 - RC1                         - [L Motor]      THE BEN ZONE
- * 13 - RC2                         - [L Motor]      ------------
- * 14 - RC3                         - [None]         ------------
- * 15 - RC4                         - [Enable Motors]------------
- * 16 - RC5                         - [R Motor]      ------------
- * 17 - RC6                         - [R Motor]      ------------
+ * 12 - RC1                         - [NONE]      
+ * 13 - RC2                         - [NONE]      
+ * 14 - RC3                         - [NONE]         
+ * 15 - RC4                         - [Enable Motors]
+ * 16 - RC5                         - [NONE]      
+ * 17 - RC6                         - [NONE]      
  * 18 - RC7                         - [NONE]
  * 19 - VSS                         - [+ 0V]
  * 20 - VDD                         - [+ 5V]
- * 21 - RB0                         - [GPI0]
- * 22 - RB1                         - [SDO1]
- * 23 - RB2                         - [SDI1 - SPI]
- * 24 - RB3                         - [SCK1 - SPI]
+ * 21 - RB0                         - [R Motor Backwards]
+ * 22 - RB1                         - [R Motor Forwards]
+ * 23 - RB2                         - [L Motor Backwards]
+ * 24 - RB3                         - [L Motor Forwards]
  * 25 - RB4                         - [SDA2 - I2C]
  * 26 - RB5                         - [SCL2 - I2C]
  * 27 - RB6/ICSPCLK                 - [TX2] THERE IS NO TX1
