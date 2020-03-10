@@ -100,6 +100,12 @@ void main(void) {
         setDutyCycle(1024);
         move_test();
         __delay_ms(5000);
+        
+        //LSM TEST
+        //PowerFinding();
+        //cereal_str("Light Source Located$");
+        
+        
         //collision();        
     } // End of testing loop
     
