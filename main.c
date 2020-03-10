@@ -60,6 +60,7 @@
 #include "cereal.h"
 #include "compass.h"
 #include "motor.h"
+#include "LSM.h"
 
 void main(void) {
     SYSTEM_Initialize();
