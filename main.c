@@ -60,6 +60,7 @@
 #include "cereal.h"
 #include "compass.h"
 #include "motor.h"
+#include "LSM.h"
 
 void main(void) {
     SYSTEM_Initialize();
@@ -80,15 +81,16 @@ void main(void) {
     // While loop testing ADC then Lidar then compass
     while(1){
         // Lidar Testing
-        collision();
+        //collision();
         
         //uint16_t bVoltage = ADC_Read(0);
         
         //spin_test();
         //__delay_ms(100);
         //cereal_uint16_t(bVoltage);
-        move_test();
-        __delay_ms(100);
+        //move_test();
+        //__delay_ms(100);
+        PowerFinding();
     } // End of testing loop
     
     return;
