@@ -52,14 +52,14 @@ bool PowerFinding(void) {
             uint8_t bestPos = 0;
             for (i = 1; i < 11; i++) {
                 motor_spin(M_PI / 6);
-                if (ADC_Read(0) > current) {
+                if (ADC_Read(0) < current) {
                     bestPos = i;
                     current = ADC_Read(0);
                 }
 
             }
             motor_spin((M_PI / 6)*(bestPos+1)); // --------- Check not overturning --------------
-            while ((ADC_Read(0) - ADC_Read(1)) > 0.1*ADC_Read(0) && ADC_Read(2) < 800) {
+            while (abs(ADC_Read(0) - ADC_Read(1)) > 0.1*ADC_Read(0) && ADC_Read(2) < 800) {
                 move_dist(0, 1, 0);
             }
             
