@@ -16,9 +16,7 @@
  */
 void motor_Setup(void);
 
-void setDutyCycleR(uint16_t dutyCycle);
-
-void setDutyCycleL(uint16_t dutyCycle);
+void setDutyCycle(int dutyCycle);
 
 /*
  * motor basic movement function w/ option to reduce speed
@@ -63,12 +61,12 @@ void motor_save(float angle, int distance);
 /*
  * calculating time t
  */
-long double calcanglet(float angle);
+int calcanglet(float angle);
 
 /*
  * calculating time needed to reach desired distance
  */
-long double calcdistt(int distance);
+int calcdistt(int distance);
 
 /*
  * TESTER - infinite clockwise spin

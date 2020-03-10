@@ -65,19 +65,19 @@ void motor_Setup(void) {
 /*
  * calculating time needed to reach desired distance
  */
-long double calcdistt(int distance){
-    int movetime = 10; // TO TEST - time taken to move 10 cm
-    long double disttime = movetime/(10/distance);
+int calcdistt(int distance){
+    int movetime = 40; // TO TEST - time taken to move 10 cm
+    int disttime = movetime/(200/distance);
     return disttime;
 }
 
 /*
  * calculating time t
  */
-long double calcanglet(float angle) {
-    int fstime = 10; // TO TEST - time taken to complete full rotation
+int calcanglet(float angle) {
+    int fstime = 55; // TO TEST - time taken to complete full rotation
     double pi = M_PI; // pi
-    long double spintime = fstime / (2*pi/angle); // t/(2pi/angle)
+    int spintime = fstime / (2*pi/angle); // t/(2pi/angle)
     return spintime;
 }
 
@@ -117,7 +117,7 @@ void motor_spin(float angle) {
     
     int ctime = calcanglet(angle);
     for (int t = 0; t < ctime; t++){
-        __delay_ms(1);        
+        __delay_ms(1000);        
     }
     motor_stop();
     motor_save(angle, 0);
@@ -128,8 +128,7 @@ void motor_spin(float angle) {
  */
 void move_dist(float angle, int distance, bool slow){      
     if (slow == true) {
-            setDutyCycleR(128); // Quarter duty cycle (128/1024)
-            setDutyCycleL(128);
+            setDutyCycle(128); // Quarter duty cycle (128/1024)
     }
     motor_spin(angle);
     rightForwards = 1;
@@ -203,6 +202,4 @@ void move_test(void){
     leftForwards = 1;
     rightBackwards = 0;
     leftBackwards = 0;
-    __delay_ms(1000);
-    motor_stop();
 }

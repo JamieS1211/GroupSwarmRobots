@@ -60,7 +60,7 @@ uint8_t obj_Mem_size = sizeof(obj_Mem)/sizeof(struct bubble);
 //Definitions for motor management
 #define leftForwards LATBbits.LATB3
 #define leftBackwards LATBbits.LATB2
-#define rightForwards LATBbits.LATB1
-#define rightBackwards LATBbits.LATB0
+#define rightForwards LATBbits.LATB0
+#define rightBackwards LATBbits.LATB1
 
 #endif //GLOBALS_H

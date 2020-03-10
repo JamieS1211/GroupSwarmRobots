@@ -91,6 +91,7 @@ void collision(void) {
     if (value < 100 || value2 < 100 ) { // Change dependent on stopping distance
         // Turn on the spot or something
         motor_stop();
+        __delay_ms(100);
     }
     else if (value2 < value) {  
         motor_spin(-0.785); //Turn right
@@ -106,5 +107,5 @@ void collision(void) {
         
         cereal_str("help$");
     }
-    
+    __delay_ms(1000);
 }

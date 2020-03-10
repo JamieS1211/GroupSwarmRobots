@@ -65,30 +65,41 @@ void main(void) {
     SYSTEM_Initialize();
     OSCILLATOR_Initialize();
     PMD_Initialize();
-    //comp_reset();
-    cereal_str("Initialize Complete$");
+    motor_Setup();
     
- 
-    VL53L0X_Change_Address(0x29, 0x28); // Change the address from default to 0
-
-    
-    // Setup both VL53L0X modules
+    VL53L0X_Change_Address(0x29, 0x28);
     VL53L0X_Setup(0x28);
     VL53L0X_Setup(0x29);
     
+    //comp_reset();
+    cereal_str("Initialize Complete$");
     
-    // While loop testing ADC then Lidar then compass
+// 
+//    VL53L0X_Change_Address(0x29, 0x28); // Change the address from default to 0
+//
+//    
+//    // Setup both VL53L0X modules
+//    VL53L0X_Setup(0x28);
+//    VL53L0X_Setup(0x29);
+    
+    
+    // While loop testing
     while(1){
-        // Lidar Testing
-        collision();
-        
-        //uint16_t bVoltage = ADC_Read(0);
-        
+        //motor_spin(0.785);
         //spin_test();
         //__delay_ms(100);
-        //cereal_uint16_t(bVoltage);
+        setDutyCycle(256);
         move_test();
-        __delay_ms(100);
+        __delay_ms(5000);
+        
+        setDutyCycle(512);
+        move_test();
+        __delay_ms(5000);
+        
+        setDutyCycle(1024);
+        move_test();
+        __delay_ms(5000);
+        //collision();        
     } // End of testing loop
     
     return;
