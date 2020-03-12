@@ -320,11 +320,14 @@ uint16_t VL53L0X_ReadRange(uint8_t slave_address) {
 	VL53L0X_SendData(slave_address, SYSRANGE_START, 0x01);
     
     while ((VL53L0X_Read_Register(slave_address, INTERRUPT_STATUS) & 0x07) == 0x00);
+    __delay_ms(2);
     
     uint8_t valueHI = VL53L0X_Read_Register(slave_address, RANGE_RESULT_HI);
     uint8_t valueLO = VL53L0X_Read_Register(slave_address, RANGE_RESULT_LO);
     
 	VL53L0X_SendData(slave_address, SYSTEM_INTERRUPT_CLEAR, 0x01);
+    
+    //Find average of values here???
     
     return (valueHI << 8) + valueLO;
 }

@@ -86,20 +86,23 @@ void main(void) {
     
     // While loop testing
     while(1){
-        //motor_spin(0.785);
-        //spin_test();
-        //__delay_ms(100);
-        setDutyCycle(256);
-        move_test();
-        __delay_ms(5000);
+//        //motor_spin(0.785);
+//        //spin_test();
+//        //__delay_ms(100);
+//        setDutyCycle(256);
+//        move_test();
+//        __delay_ms(5000);
+//        
+//        setDutyCycle(512);
+//        move_test();
+//        __delay_ms(5000);
+//        
+//        setDutyCycle(1024);
+//        move_test();
+//        __delay_ms(5000);
         
-        setDutyCycle(512);
-        move_test();
-        __delay_ms(5000);
-        
-        setDutyCycle(1024);
-        move_test();
-        __delay_ms(5000);
+    uint16_t value = read_value(0x00);
+    
         
         //LSM TEST
         //PowerFinding();

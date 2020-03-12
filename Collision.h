@@ -17,7 +17,14 @@
 
 
 /*Check if movement can be completed*/
-uint8_t collide_check(uint16_t distance);
-void collision();
+uint8_t collide_check(uint16_t move);
 
+/* Avoid the obstacle*/
+void initial_avoid(bool direction);
+
+/*Going around the obstacle and back to path*/
+void second_avoid( bool direction);
+
+uint16_t read_value(uint8_t address);
+        
 #endif //COLLISION_H
