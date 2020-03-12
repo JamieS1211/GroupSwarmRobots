@@ -24,6 +24,11 @@ void setDutyCycle(int dutyCycle);
 void move_dist(float angle, int distance, bool slow);
 
 /*
+ * motor collision movement function w/ option to reduce speed
+ */
+void move_coll(float angle, int distance, bool slow);
+
+/*
  * motor movement to interrupt timer T6
  */
 void motor_move(float angle);

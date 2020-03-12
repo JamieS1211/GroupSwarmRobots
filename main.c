@@ -86,7 +86,6 @@ void main(void) {
     
     // While loop testing
     while(1){
-//        //motor_spin(0.785);
 //        //spin_test();
 //        //__delay_ms(100);
 //        setDutyCycle(256);
@@ -111,6 +110,3 @@ void main(void) {
         
         //collision();        
     } // End of testing loop
-    
-    return;
-}
