@@ -16,6 +16,10 @@
 
 //Pages 355 - 359 - 361 in data sheet
 
+/*
+ * Duty Cycle, i.e. motor speed set-up - Page 358
+ * TO CHECK - PMW5 OR PMW6????? OR USE MCC
+ */
 void setDutyCycle(int dutyCycle) {
     PWM5DCH = dutyCycle >> 2;
     PWM5DCL = (dutyCycle & 0b11) << 6;
@@ -64,6 +68,7 @@ void motor_Setup(void) {
 
 /*
  * calculating time needed to reach desired distance
+ * distance in cm, time in s
  */
 int calcdistt(int distance){
     int movetime = 40; // TO TEST - time taken to move 10 cm
@@ -72,10 +77,11 @@ int calcdistt(int distance){
 }
 
 /*
- * calculating time t
+ * calculating time needed to reach desired angle
+ * angle in rad, time in s
  */
 int calcanglet(float angle) {
-    int fstime = 55; // TO TEST - time taken to complete full rotation
+    int fstime = 8; // TO TEST - time taken to complete full rotation
     double pi = M_PI; // pi
     int spintime = fstime / (2*pi/angle); // t/(2pi/angle)
     return spintime;
@@ -131,19 +137,48 @@ void move_dist(float angle, int distance, bool slow){
             setDutyCycle(128); // Quarter duty cycle (128/1024)
     }
     motor_spin(angle);
+    __delay_ms(1);
     rightForwards = 1;
     leftForwards = 1;
     int ctime = calcdistt(distance);
     
     for (int t = 0; t < ctime; t++){
-        __delay_ms(1);        
+        __delay_ms(1000);        
     }
     motor_stop();
     motor_save(angle, distance);
 }
 
 /*
- * motor movement to interrupt, i.e. step-move
+ * motor collision movement function w/ option to reduce speed
+ */
+//void move_coll(float angle, int distance, bool slow){
+//    if (slow == true) {
+//        setDutyCycle(128); // Quarter duty cycle (128/1024)
+//    }
+//    
+////    int coll_check = collide_check(distance);
+////    if (coll_check == 0){ // Check if obstacle
+////        // insert oliver movement code here
+////    }
+//    else { // no obstacle
+//        motor_spin(angle);
+//        __delay_ms(1);
+//        rightForwards = 1;
+//        leftForwards = 1;
+//        int ctime = calcdistt(distance);
+//        for (int t = 0; t < ctime; t++){
+//            __delay_ms(1000);        
+//    }
+//
+//    motor_stop();
+//    motor_save(angle, distance);    
+//}
+
+
+
+/*
+ * motor movement to interrupt timer, i.e. step-move
  */
 void motor_move(float angle) {
     motor_spin(angle);
@@ -155,7 +190,7 @@ void motor_move(float angle) {
  }
 
 /*
- * motor spin in place for a desired angle (?)
+ * motor spin in place for a desired angle in rad (?)
  */
 void motor_bearing(float angle) {
     float curr_head = comp_head();
@@ -165,21 +200,41 @@ void motor_bearing(float angle) {
 }
 
 /*
- * motor reverses (5cm) then spins to desired angle
+ * motor reverses then spins to desired angle
  */
-void motor_reverse(float angle) {
+void motor_reverse(float angle, int distance) {
     rightBackwards = 1;
     leftBackwards = 1;
-    __delay_ms(5000); // VALIDATE !!! FIgure out time taken for 5cm
-    motor_save(0, -5);
+    
+    int revtime = calcdistt(distance);
+    for (int t = 0; t < revtime; t++){
+        __delay_ms(1000);        
+    }
+    motor_stop();
+    __delay_ms(1);
     motor_spin(angle);
+    __delay_ms(1);
+    motor_stop();
+    motor_save(angle, distance);
 }
 
 /*
  * Escape from P2P charging
  */
 void motor_escape(void){
+    rightBackwards = 1;
+    leftBackwards = 1;
     
+    int esctime = calcdistt(5); // move 5cm back
+    for (int t = 0; t < esctime; t++){
+        __delay_ms(1000);        
+    }
+    motor_stop();
+    __delay_ms(1);
+    motor_spin(M_PI); // Spin 180°
+    __delay_ms(1);
+    motor_stop();
+    motor_save(M_PI, -5);
 }
 
 /*
