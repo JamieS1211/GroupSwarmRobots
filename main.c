@@ -31,7 +31,7 @@
  * 14 - RC3                         - [NONE]         
  * 15 - RC4                         - [MOTOR PWM]
  * 16 - RC5                         - [NONE]      
- * 17 - RC6                         - [LIDAR POWER 1]      
+ * 17 - RC6                         - []      
  * 18 - RC7                         - [LIDAR POWER 2]
  * 19 - VSS                         - [+ 0V]
  * 20 - VDD                         - [+ 5V]
@@ -99,8 +99,8 @@ void main(void) {
 //        setDutyCycle(1024);
 //        move_test();
 //        __delay_ms(5000);
-        
-    uint16_t value = read_value(0x00);
+     
+        collision_avoid();
     
         
         //LSM TEST
@@ -110,3 +110,4 @@ void main(void) {
         
         //collision();        
     } // End of testing loop
+}

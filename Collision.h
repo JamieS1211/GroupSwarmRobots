@@ -16,8 +16,12 @@
 #include "globals.h"
 
 
+uint16_t read_range(uint8_t address);
+
 /*Check if movement can be completed*/
 uint8_t collide_check(uint16_t move);
+
+void collision_avoid(void);
 
 /* Avoid the obstacle*/
 void initial_avoid(bool direction);
@@ -25,6 +29,6 @@ void initial_avoid(bool direction);
 /*Going around the obstacle and back to path*/
 void second_avoid( bool direction);
 
-uint16_t read_value(uint8_t address);
+
         
 #endif //COLLISION_H
