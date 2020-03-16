@@ -11,6 +11,7 @@
 #include "globals.h"
 #include "VL53L0X.h"
 #include "mcc_generated_files/examples/i2c2_master_example.h"
+#include "cereal.h"
 
 
 #define SYSRANGE_START 0x00
@@ -81,21 +82,15 @@ uint8_t VL53L0X_Read_Register(uint8_t slave_address, uint8_t register_value) {
  * Change the I2C address of the VL53L0X 
  */
 void VL53L0X_Change_Address(uint8_t oldAddress, uint8_t newAddress) {
-    TRISCbits.TRISC6 =0;
+    
     TRISCbits.TRISC7 =0;
-    LATCbits.LATC6 = 0;
     LATCbits.LATC7 = 0; // Ensure manually controlled VL53L0X is off
     __delay_ms(50);
-    
-        
-    LATCbits.LATC6 = 1;
 
     VL53L0X_SendData(oldAddress, 0x8A, newAddress);
         __delay_ms(50);
     LATCbits.LATC7 = 1; // Re-enable manually controlled VL53L0X
     __delay_ms(50);
-    
-
 }
 
 
@@ -307,7 +302,7 @@ void VL53L0X_Tuning(uint8_t slave_address) {
 
 
 /*
- * Read range from VL53L0X might need to change the way the function works for the new i2c
+ * Read range from VL53L0X 
  */
 uint16_t VL53L0X_ReadRange(uint8_t slave_address) {
 	VL53L0X_SendData(slave_address, POWER_MANAGEMENT_GO1_POWER_FORCE, 0x01);
@@ -326,8 +321,6 @@ uint16_t VL53L0X_ReadRange(uint8_t slave_address) {
     uint8_t valueLO = VL53L0X_Read_Register(slave_address, RANGE_RESULT_LO);
     
 	VL53L0X_SendData(slave_address, SYSTEM_INTERRUPT_CLEAR, 0x01);
-    
-    //Find average of values here???
     
     return (valueHI << 8) + valueLO;
 }

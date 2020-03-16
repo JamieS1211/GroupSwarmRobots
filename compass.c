@@ -14,6 +14,7 @@
 #include "globals.h"
 #include "mcc_generated_files/examples/i2c2_master_example.h"
 #include "compass.h"
+#include "mcc_generated_files/mcc.h"
 
 /*
  * QMC5883L
@@ -76,21 +77,19 @@ uint8_t comp_Read_Register(uint8_t slave_address, uint8_t register_value) {
 }
 
 void comp_reconfig_standby() {
-    //write_register(address,register,value)
-    //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_STANDBY);
-    comp_i2C_SendData(0x0D, 9, 0x80);
+    comp_i2C_SendData(0x0D, 11, 0x01);  // Define set/Reset period
+    comp_i2C_SendData(0x0D, 9, 0x00);   // set standby
 }
 
 void comp_reconfig_cont() {
-    //write_register(address,register,value)
-    //write_register(QMC5883L_ADDR,QMC5883L_CONFIG,QMC5883L_CONFIG_OS128|QMC5883L_CONFIG_2GAUSS|QMC5883L_CONFIG_10HZ|QMC5883L_CONFIG_CONT);
-    comp_i2C_SendData(0x0D, 9, 0x81);
+    comp_i2C_SendData(0x0D, 11, 0x01);  // Define set/Reset period
+    comp_i2C_SendData(0x0D, 9, 0x81);   // OSR = 128, Range = 2 Gauss, ODR = 10Hz, set continous measurement
 }
     
 void comp_reset() {
     //write_register(QMC5883L_ADDR,QMC5883L_RESET,0x01);
-    comp_i2C_SendData(0x0D, 11, 0x01);
-    comp_reconfig_standby();
+    comp_i2C_SendData(0x0D, 10, 0x80);
+    comp_reconfig_cont();
 }
 
 void comp_readRaw( int16_t *x, int16_t *y) {
@@ -98,6 +97,7 @@ void comp_readRaw( int16_t *x, int16_t *y) {
     comp_reconfig_cont();
     
     // May need to include a wait function
+    __delay_ms(100);
     
     // Read 2 axis values (may need to reconfigure if compass x isn't forwards)
     // For future reference the First value in the MSB is +/-

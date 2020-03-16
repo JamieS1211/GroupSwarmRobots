@@ -82,6 +82,18 @@ void main(void) {
 //    // Setup both VL53L0X modules
 //    VL53L0X_Setup(0x28);
 //    VL53L0X_Setup(0x29);
+
+   __delay_ms(50);
+   VL53L0X_Change_Address(0x29, 0x28);
+   cereal_str("Changed$");
+   LATCbits.LATC7 = 1;
+   VL53L0X_Setup(0x29);
+   cereal_str("Setup1$");
+   VL53L0X_Setup(0x28);
+   cereal_str("Setup2$");
+    
+    //comp_reset();
+    cereal_str("Initialize Complete$");
     
     
     // While loop testing
@@ -91,11 +103,7 @@ void main(void) {
 //        move_test();
 //        __delay_ms(2000);
 //        setDutyCycle(1024);
-        move_test();
-//
-//        uint16_t bat_level = ADC_Read(3);
-//        cereal_uint16_t(bat_level);
-//        //collision();      
+
         
 //        __delay_ms(5000);
     } // End of testing loop
