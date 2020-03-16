@@ -123,10 +123,8 @@ void motor_spin(float angle) {
         leftForwards = 1;
     }
     __delay_ms(100);
-    int ctime = calcanglet(angle);
-    for (int t = 0; t < ctime; t++){
-        __delay_ms(1000);        
-    }
+    int ctime = calcanglet(angle)*1000;
+    __delay_ms(ctime);        
     motor_stop();
     motor_save(angle, 0);
 }
