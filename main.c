@@ -67,6 +67,7 @@ void main(void) {
     OSCILLATOR_Initialize();
     PMD_Initialize();
     motor_Setup();
+    comp_reset();
     
     VL53L0X_Change_Address(0x29, 0x28);
     VL53L0X_Setup(0x28);

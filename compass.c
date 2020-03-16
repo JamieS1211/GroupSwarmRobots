@@ -87,17 +87,16 @@ void comp_reconfig_cont() {
 }
     
 void comp_reset() {
-    //write_register(QMC5883L_ADDR,QMC5883L_RESET,0x01);
-    comp_i2C_SendData(0x0D, 10, 0x80);
+    comp_i2C_SendData(0x0D, 10, 0x80);  // Soft reset (clears previous values)
     comp_reconfig_cont();
 }
 
 void comp_readRaw( int16_t *x, int16_t *y) {
     // Set compass to read
-    comp_reconfig_cont();
+    comp_reset();
     
-    // May need to include a wait function
-    __delay_ms(100);
+    // Waiting for ready
+    while (!(comp_Read_Register(0x0D, 6) & 1));
     
     // Read 2 axis values (may need to reconfigure if compass x isn't forwards)
     // For future reference the First value in the MSB is +/-
@@ -122,6 +121,10 @@ float comp_head() {
     
     // Calculate angle
     float heading = atan2(y,x);
+    
+    // Print to cereal
+    cereal_str("Compass Reading:$");
+    cereal_float(heading);
   
     return heading;
 }
