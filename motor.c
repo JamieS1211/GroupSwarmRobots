@@ -23,6 +23,8 @@
 void setDutyCycle(int dutyCycle) {
     PWM5DCH = dutyCycle >> 2;
     PWM5DCL = (dutyCycle & 0b11) << 6;
+    PWM6DCH = dutyCycle >> 2;
+    PWM6DCL = (dutyCycle & 0b11) << 6;
 }
 
 /*
@@ -71,7 +73,7 @@ void motor_Setup(void) {
  * distance in cm, time in s
  */
 int calcdistt(int distance){
-    int movetime = 40; // TO TEST - time taken to move 10 cm
+    int movetime = 10; // TO TEST - time taken to move 200 cm
     int disttime = movetime/(200/distance);
     return disttime;
 }
@@ -120,7 +122,7 @@ void motor_spin(float angle) {
         rightBackwards = 1;
         leftForwards = 1;
     }
-    
+    __delay_ms(100);
     int ctime = calcanglet(angle);
     for (int t = 0; t < ctime; t++){
         __delay_ms(1000);        
@@ -134,15 +136,18 @@ void motor_spin(float angle) {
  */
 void move_dist(float angle, int distance, bool slow){      
     if (slow == true) {
-            setDutyCycle(128); // Quarter duty cycle (128/1024)
+        setDutyCycle(128); // Eighth duty cycle (128/1024)
+    }
+    else {
+        setDutyCycle(512);
     }
     motor_spin(angle);
-    __delay_ms(1);
+    __delay_ms(250);
+    
     rightForwards = 1;
     leftForwards = 1;
     int ctime = calcdistt(distance);
-    
-    for (int t = 0; t < ctime; t++){
+    for (int t = 0; t <= ctime; t++){
         __delay_ms(1000);        
     }
     motor_stop();
@@ -184,7 +189,7 @@ void motor_move(float angle) {
     motor_spin(angle);
     rightForwards = 1;
     leftForwards = 1;
-    __delay_ms(1);
+    __delay_ms(250);
     motor_stop();
     motor_save(angle, 0);
  }
@@ -211,7 +216,7 @@ void motor_reverse(float angle, int distance) {
         __delay_ms(1000);        
     }
     motor_stop();
-    __delay_ms(1);
+    __delay_ms(250);
     motor_spin(angle);
     __delay_ms(1);
     motor_stop();
@@ -224,17 +229,17 @@ void motor_reverse(float angle, int distance) {
 void motor_escape(void){
     rightBackwards = 1;
     leftBackwards = 1;
-    
-    int esctime = calcdistt(5); // move 5cm back
-    for (int t = 0; t < esctime; t++){
-        __delay_ms(1000);        
-    }
-    motor_stop();
-    __delay_ms(1);
-    motor_spin(M_PI); // Spin 180°
-    __delay_ms(1);
-    motor_stop();
-    motor_save(M_PI, -5);
+//    
+//    int esctime = calcdistt(5); // move 5cm back
+//    for (int t = 0; t < esctime; t++){
+//        __delay_ms(1000);        
+//    }
+//    motor_stop();
+//    __delay_ms(500);
+//    motor_spin(M_PI); // Spin 180°
+//    __delay_ms(1);
+//    motor_stop();
+//    motor_save(M_PI, -5);
 }
 
 /*
@@ -245,8 +250,6 @@ void spin_test(void){
     leftForwards = 1;
     rightForwards = 0;
     leftBackwards = 0;
-    __delay_ms(1000);
-    motor_stop();
 }
 
 /*

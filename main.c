@@ -31,7 +31,7 @@
  * 14 - RC3                         - [NONE]         
  * 15 - RC4                         - [MOTOR PWM]
  * 16 - RC5                         - [NONE]      
- * 17 - RC6                         - []      
+ * 17 - RC6                         - [LIDAR POWER 1]      
  * 18 - RC7                         - [LIDAR POWER 2]
  * 19 - VSS                         - [+ 0V]
  * 20 - VDD                         - [+ 5V]
@@ -64,8 +64,8 @@
 
 void main(void) {
     SYSTEM_Initialize();
-    OSCILLATOR_Initialize();
-    PMD_Initialize();
+//    OSCILLATOR_Initialize();
+//    PMD_Initialize();
     motor_Setup();
     comp_reset();
     
@@ -83,32 +83,29 @@ void main(void) {
 //    // Setup both VL53L0X modules
 //    VL53L0X_Setup(0x28);
 //    VL53L0X_Setup(0x29);
+
+   __delay_ms(50);
+   VL53L0X_Change_Address(0x29, 0x28);
+   cereal_str("Changed$");
+   LATCbits.LATC7 = 1;
+   VL53L0X_Setup(0x29);
+   cereal_str("Setup1$");
+   VL53L0X_Setup(0x28);
+   cereal_str("Setup2$");
+    
+    //comp_reset();
+    cereal_str("Initialize Complete$");
     
     
     // While loop testing
     while(1){
-//        //spin_test();
-//        //__delay_ms(100);
-//        setDutyCycle(256);
+//        move_dist(6.8, 10, false);
+//        setDutyCycle(102);
 //        move_test();
-//        __delay_ms(5000);
-//        
-//        setDutyCycle(512);
-//        move_test();
-//        __delay_ms(5000);
-//        
+//        __delay_ms(2000);
 //        setDutyCycle(1024);
-//        move_test();
+
+        
 //        __delay_ms(5000);
-     
-        collision_avoid();
-    
-        
-        //LSM TEST
-        //PowerFinding();
-        //cereal_str("Light Source Located$");
-        
-        
-        //collision();        
     } // End of testing loop
 }

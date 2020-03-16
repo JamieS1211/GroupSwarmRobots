@@ -29,6 +29,8 @@ void initial_avoid(bool direction);
 /*Going around the obstacle and back to path*/
 void second_avoid( bool direction);
 
+void test(void);
+
 
         
 #endif //COLLISION_H

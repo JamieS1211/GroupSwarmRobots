@@ -51,7 +51,7 @@ void motor_stop(void);
 /*
  * motor reverses (5cm) then spins to desired angle
  */
-void motor_reverse(float angle);
+void motor_reverse(float angle, int distance);
 
 /*
  * Escape from P2P charging
