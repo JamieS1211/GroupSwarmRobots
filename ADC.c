@@ -4,9 +4,7 @@
  *
  * Created on 20 January 2020, 17:34
  */
-
-#define _XTAL_FREQ 20000000
-
+#include "mcc_generated_files/mcc.h"
 #include <xc.h>
 #include <pic18f27K42.h>
 #include "ADC.h"
