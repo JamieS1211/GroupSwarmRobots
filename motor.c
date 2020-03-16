@@ -242,11 +242,12 @@ void motor_escape(void){
  */
 void spin_test(void){
     rightBackwards = 1;
-    leftForwards = 1;
+    leftForwards = 0;
     rightForwards = 0;
     leftBackwards = 0;
-    __delay_ms(1000);
-    motor_stop();
+    //__delay_ms(1000);
+    //motor_stop();
+    return;
 }
 
 /*

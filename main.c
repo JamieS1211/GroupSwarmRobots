@@ -64,24 +64,21 @@
 
 void main(void) {
     SYSTEM_Initialize();
-    OSCILLATOR_Initialize();
-    PMD_Initialize();
+//    OSCILLATOR_Initialize();
+//    PMD_Initialize();
     motor_Setup();
-    
-    VL53L0X_Change_Address(0x29, 0x28);
-    VL53L0X_Setup(0x28);
-    VL53L0X_Setup(0x29);
+
+   __delay_ms(50);
+   VL53L0X_Change_Address(0x29, 0x28);
+   cereal_str("Changed$");
+   LATCbits.LATC7 = 1;
+   VL53L0X_Setup(0x29);
+   cereal_str("Setup1$");
+   VL53L0X_Setup(0x28);
+   cereal_str("Setup2$");
     
     //comp_reset();
     cereal_str("Initialize Complete$");
-    
-// 
-//    VL53L0X_Change_Address(0x29, 0x28); // Change the address from default to 0
-//
-//    
-//    // Setup both VL53L0X modules
-//    VL53L0X_Setup(0x28);
-//    VL53L0X_Setup(0x29);
     
     
     // While loop testing
@@ -100,13 +97,22 @@ void main(void) {
 //        move_test();
 //        __delay_ms(5000);
      
-        collision_avoid();
-    
+        //move_dist(0,10, false);
+            
         
+       // LATCbits.LATC7 = 1;
+        
+        //motor_spin(0.785);
+        //test();
+        //spin_test();
+        //__delay_ms(1000);
+        __delay_ms(1000);
+        collision_avoid();
+        __delay_ms(1000);
         //LSM TEST
         //PowerFinding();
-        //cereal_str("Light Source Located$");
-        
+        //cereal_str("Light Source Located$
+        //read_range(0x28);
         
         //collision();        
     } // End of testing loop
