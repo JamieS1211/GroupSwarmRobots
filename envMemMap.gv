@@ -1,0 +1,58 @@
+digraph envMem {
+    compound=true
+	node [shape=box]
+
+    subgraph cluster_glbError {
+        label="Global Error Values"
+        moveError
+        compassError
+        timeofFlightError
+    }    
+
+    subgraph cluster_moveMem {
+        label="moveMem"
+        moveMemPointer
+        prevMoveSize
+        
+        subgraph cluster_currMove {
+            label="Current Move"
+            "Polar Coordinate"
+        }
+
+        subgraph cluster_prevMove {
+            label="Previous Move"
+            "Polar Coord 0"
+            "Polar Coord 1"
+            "Polar Coord ..."
+            "Polar Coord n"
+        }
+    }
+
+    subgraph cluster_litMem {
+        label="litMem"
+        litMemPointer
+        litMemSize
+
+        subgraph cluster_litMems {
+            label="Light Sources"
+            "Bubble 0"
+            "Bubble 2"
+            "Bubble ..."
+            "Bubble n"
+        }
+    }
+
+    subgraph cluster_objMem {
+        label="objMem"
+        objMemPointer
+        objMemSize
+
+        subgraph cluster_objMems {
+            label="Objects"
+            "Bubble 0"
+            "Bubble 2"
+            "Bubble ..."
+            "Bubble n"
+        }
+    }
+}

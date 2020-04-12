@@ -50,14 +50,14 @@ struct balloon {
 };
 
 struct robot {
-    uint8_t id;
-    struct balloon loc;
-    struct balloon pos[4];
-    uint8_t pos_p;
-    struct bubble light[4];
-    uint8_t light_p;
-    struct bubble obj[4];
-    uint8_t obj_p;
+    uint8_t id;             // Robots unique identifier
+    struct balloon loc;     // Relative position of the robot
+    struct balloon pos[4];  // Previous positions of the robot
+    uint8_t pos_p;          // Pointer for position
+    struct bubble light[4]; // Passed on light sources
+    uint8_t light_p;        // Light source pointer
+    struct bubble obj[4];   // Passed on objects
+    uint8_t obj_p;          // Object pointer
 };
 
 // EnvMem functions (used by others)
