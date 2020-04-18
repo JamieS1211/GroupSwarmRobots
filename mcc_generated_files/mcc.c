@@ -53,8 +53,9 @@ void SYSTEM_Initialize(void)
     PMD_Initialize();
     PIN_MANAGER_Initialize();
     OSCILLATOR_Initialize();
-    TMR2_Initialize();
+    TMR6_Initialize();
     PWM5_Initialize();
+    TMR2_Initialize();
     EXT_INT_Initialize();
     TMR0_Initialize();
     UART2_Initialize();

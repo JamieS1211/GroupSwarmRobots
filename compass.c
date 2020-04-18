@@ -15,6 +15,8 @@
 #include "mcc_generated_files/examples/i2c2_master_example.h"
 #include "compass.h"
 #include "mcc_generated_files/mcc.h"
+#include "cereal.h"
+
 
 /*
  * QMC5883L

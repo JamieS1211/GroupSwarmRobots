@@ -11,6 +11,8 @@
 #include "compass.h"
 #include "mcc_generated_files/mcc.h"
 #include "position.h"
+#include "cereal.h"
+
 
 #include "globals.h"
 
@@ -114,6 +116,10 @@ void motor_save(float angle, int distance){
  * motor spin in place for a desired shift in angle
  */
 void motor_spin(float angle) {
+    int ctime = calcanglet(angle);      
+    TMR6_Stop();
+    TMR6_WriteTimer(100);     // Arbitary 100 value   
+    TMR6_Start();    
     if (angle > 0) { // Anti-clockwise
         rightForwards = 1;
         leftBackwards = 1;
@@ -121,10 +127,9 @@ void motor_spin(float angle) {
     else { // Clockwise
         rightBackwards = 1;
         leftForwards = 1;
-    }
-    __delay_ms(100);
-    int ctime = calcanglet(angle)*1000;
-    __delay_ms(ctime);        
+        }
+    while (TMR6_ReadTimer() != 100);
+    cereal_uint8_t(TMR6);
     motor_stop();
     motor_save(angle, 0);
 }
