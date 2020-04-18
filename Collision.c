@@ -5,7 +5,7 @@
  * Created on 30 January 2020, 18:11
  */
 
-#define _XTAL_FREQ 20000000
+//#define _XTAL_FREQ 20000000
 #include <xc.h>
 #include <stdint.h>
 //#include <pic18f27K42.h>
@@ -15,6 +15,7 @@
 #include "VL53L0X.h"
 #include "motor.h"
 #include "mcc_generated_files/examples/i2c2_master_example.h"
+#include "mcc_generated_files/mcc.h"
 #include "cereal.h"
 
 
@@ -46,13 +47,16 @@ void second_avoid( bool direction) {
     if (direction == true) {
         direc = 0.785;
         direc2 = -0.785;
+        cereal_str("Second avoid true$");
     }
     else {
         direc = -0.785;
         direc2 = 0.785;
+        cereal_str("second avoid false$");
     }
     
     uint16_t value = read_range(0x28);       //Lidar 1
+    __delay_ms(50);
     uint16_t value2 = read_range(0x29);      //Lidar 2, on the right
     
     if (value >3000 && value2 > 3000) {
@@ -61,8 +65,8 @@ void second_avoid( bool direction) {
         motor_spin(direc2);
         motor_spin(direc2);
         
-        uint16_t value = read_range(0x28);       //Lidar 1
-        uint16_t value2 = read_range(0x29);      //Lidar 2, on the right
+        value = read_range(0x28);       //Lidar 1
+        value2 = read_range(0x29);      //Lidar 2, on the right
         
         if (value < 3000 || value2 < 3000) {
             motor_spin(direc);
@@ -89,20 +93,26 @@ void initial_avoid(bool direction) {
     uint16_t value = read_range(0x28);       //Lidar 1
     uint16_t value2 = read_range(0x29);      //Lidar 2, on the right
     while (value < 2000 && value2 < 2000) {
-        motor_spin(direc); 
+        motor_spin(direc);
         value = read_range(0x28);       //Lidar 1
         value2 = read_range(0x29);      //Lidar 2, on the right    
         //Move the biggest between distance and distance2 plus some leeway
-//    }
-////    if (direc == 0.785) {
-////        second_avoid (true);
-////    }
-////    if (direc == -0.785) {
-////        second_avoid (false);
         cereal_str("In loop$");
     }
+    if (direc == 0.785) {
+        motor_stop();
+        __delay_ms(1000);
+        second_avoid(true);
+        cereal_str("Second true$");
+    }
+    if (direc == -0.785) {
+        motor_stop();
+        __delay_ms(1000);
+        second_avoid(false);
+        cereal_str("Second false$");
+    }
+    
     cereal_str("Loop exit$");
-    motor_stop();
     return;
 }
 
