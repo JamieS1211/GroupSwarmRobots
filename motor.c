@@ -164,13 +164,13 @@ void move_dist(float angle, int distance, bool slow){
 //    if (slow == true) {
 //        setDutyCycle(128); // Quarter duty cycle (128/1024)
 //    }
-//    
+//      motor_spin(angle); 
+//
 ////    int coll_check = collide_check(distance);
 ////    if (coll_check == 0){ // Check if obstacle
 ////        // insert oliver movement code here
 ////    }
 //    else { // no obstacle
-//        motor_spin(angle);
 //        __delay_ms(1);
 //        rightForwards = 1;
 //        leftForwards = 1;
