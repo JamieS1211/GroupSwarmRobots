@@ -67,7 +67,7 @@ bool PowerFinding(void) {
             motor_spin((M_PI / 6)*(bestPos+1)); // --------- Check not overturning --------------
             cereal_str("Moving until perpendicular$");
             while (abs(ADC_Read(0) - ADC_Read(1)) > 0.1*ADC_Read(0) && ADC_Read(2) < 800) {
-                move_dist(0, 1, 0);
+                move_coll(0, 1, 0);
                 // ---------------------------------Iteration Limit -----------------------------------------
             }
             cereal_str("Perpendicular$");
