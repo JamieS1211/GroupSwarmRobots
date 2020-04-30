@@ -20,15 +20,6 @@
 
 bool PowerFinding(void) {
 
-    //if (ADC_Read(2) < 600){ // ------------Check how this works as binary passed---------
-    //if (knownSourceDistance < Threshold & sourceUncertainty < Threshold2){
-    //    move(requiredTurn(sourceAngle), sourceDistance)
-    //}
-    //else {
-
-    //}
-    //}
-
     uint8_t iteration = 0;
     uint8_t iteration2 =0;
     uint8_t lightLevel = 0;
@@ -64,11 +55,11 @@ bool PowerFinding(void) {
 
             }
             cereal_str("Turning to best direction$");
-            motor_spin((M_PI / 6)*(bestPos+1)); // --------- Check not overturning --------------
+            motor_spin((M_PI / 6)*(bestPos+1)); 
             cereal_str("Moving until perpendicular$");
             while (abs(ADC_Read(0) - ADC_Read(1)) > 0.1*ADC_Read(0) && ADC_Read(2) < 800) {
                 move_coll(0, 20, 0);
-                // ---------------------------------Iteration Limit -----------------------------------------
+                // Add iteration limit here if testing reveals unstable behaviour
             }
             cereal_str("Perpendicular$");
         }
@@ -139,8 +130,56 @@ float requiredTurn(float angle) {
     }
 }
 
-
-// Crude functionality, will get close to LS. 
-// And when to give up close finding to search somewhere else (How to do this) 
-// Consider using differencing as well as single value? 
-// Full spin to find ideal point to prevent Rear light intensity increase issue
+// ------- WIP ----- LIGHT SOURCE MEMORY ----- UNTESTED ------
+//void add_to_mem(struct bubble input) {
+//    for (int i=0;i<lit_Mem_size;i++) {
+//        if (lit_Mem[i].radius == 0) {
+//            lit_Mem[i] = input;
+//            return;
+//        }      
+//    }
+//    int tbk = 0;
+//    int dist = 0;
+//    for (int i=0;i<lit_Mem_size;i++) {
+//        if (lit_Mem[i].radius > dist) {
+//            tbk = i;
+//            dist = lit_Mem[i].radius;
+//        }      
+//    }
+//    
+//    lit_Mem[tbk] = {0};
+//    lit_Mem[tbk] = input;
+//}
+//
+//struct bubble tobeadd = {1,0,0};
+//
+////tobeadd.radius = 1;
+////tobeadd.angle = 0;
+////tobeadd.r_error = 0;
+//
+//add_to_mem(tobeadd);
+//
+//struct bubble good_light_source() {
+//    int weight = 0xffffffff;
+//    int tbr = lit_Mem_size;
+//    
+//    for (int i=0;i<lit_Mem_size;i++) {
+//        int weightval = lit_Mem[i].radius * lit_Mem[i].r_error;
+//        
+//        if (weightval < weight) {
+//            tbr = i;
+//            weight = weightval;
+//        }      
+//    }
+//
+//    if (tbr < lit_Mem_size) {
+//        return lit_Mem[tbr];
+//    }
+//    else {
+//        return struct bubble = {0};
+//    }
+//}
+//
+//struct bubble good_stuff = good_light_source();
+//
+//float newangle = good_stuff.radius;
