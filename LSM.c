@@ -67,7 +67,7 @@ bool PowerFinding(void) {
             motor_spin((M_PI / 6)*(bestPos+1)); // --------- Check not overturning --------------
             cereal_str("Moving until perpendicular$");
             while (abs(ADC_Read(0) - ADC_Read(1)) > 0.1*ADC_Read(0) && ADC_Read(2) < 800) {
-                move_coll(0, 1, 0);
+                move_coll(0, 20, 0);
                 // ---------------------------------Iteration Limit -----------------------------------------
             }
             cereal_str("Perpendicular$");
@@ -83,7 +83,7 @@ bool PowerFinding(void) {
         lightLevel = ADC_Read(2);
         while (iteration2 < 20){
             while (iteration < 12) {
-                move_dist(M_PI/6, 1, 0); 
+                move_dist(M_PI/6, 10, 0); 
 
                 if (ADC_Read(2) > 800) {
                     return true;
@@ -93,7 +93,7 @@ bool PowerFinding(void) {
                     break;
                 }
                 else{
-                    move_dist(M_PI, 1, 0);
+                    move_dist(M_PI, 10, 0);
                     motor_spin(M_PI);
                 }
                 iteration += 1;
@@ -111,10 +111,10 @@ bool PowerFinding(void) {
         iteration2 = 0;
         cereal_str("Optimisation Failed$");
         cereal_str("Finding new source$");
-        move_dist(M_PI, 10, 0);
+        move_dist(M_PI, 300, 0);
         
         while (ADC_Read(1)< ADC_Read(0) && iteration < 50) {
-            move_dist(0, 5, 0);
+            move_dist(0, 450, 0);
             iteration+=1;
         }
         iteration =0;
