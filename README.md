@@ -6,8 +6,6 @@ This repository contains the code for Swarm Robots for use in MPLAB X IDE.
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-Please run every python script in it's own directory.
-
 ### Software
 
 Download this repository on your local machine. Install MPLAB X IDE and the XC8 compilers. Open the repository folder in MPLAB and you should be good to go.
